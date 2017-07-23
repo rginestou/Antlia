@@ -4,9 +4,11 @@ from sources.message import log, ERROR, WARNING, OK
 from pprint import pprint
 
 class Parser:
-	"""The Parser reads the layout and style files and builds
+	"""
+	The Parser reads the layout and style files and builds
 	an array of elements to be displayed in the GUI, taking
-	into account the style given by the user."""
+	into account the style given by the user.
+	"""
 	def __init__(self, layout_file_name, style):
 		self.style_file_name = style
 

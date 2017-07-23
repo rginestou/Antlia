@@ -1,4 +1,5 @@
 from antlia import *
+import time as ti
 
 # Create a GUI based on a layout file and a style file
 GUI = Antlia("layout", "style")
@@ -13,3 +14,10 @@ def buttonHandler():
 
 # Bind the handler to the button
 GUI.bind("hello_button", buttonHandler)
+
+GUI.start()
+while not GUI.getUserInfo().want_to_stop:
+	ti.sleep(1)
+	print("loop")
+
+GUI.quit()
