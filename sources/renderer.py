@@ -27,12 +27,14 @@ class Renderer:
 	Renderer.refresh()
 	Renderer.quit()
 	"""
-	def __init__(self, layout, onEvent):
-		self.layout = layout
+	def __init__(self, onEvent):
 		self.onEvent = onEvent
+		self.is_window_created = False
+		self.need_update = False
 
 		# OpenGL specific
-		self.shaderProgram = None
+		self.vertex_data = []
+		self.shader_program = None
 		self.VAO = None
 		self.VBO = None
 
@@ -58,38 +60,41 @@ class Renderer:
 
 		# Basic initialization
 		self._initialize()
-
-		self.refresh()
+		self.is_window_created = True
 
 		# look for events
 		self._loopForEvents()
 
-	def refresh(self):
+	def update(self, vertex_data):
+		self.vertex_data = vertex_data
+		self.need_update = True
+
+	def quit(self):
+		sdl2.SDL_GL_DeleteContext(self.context)
+		sdl2.SDL_DestroyWindow(self.window)
+		sdl2.SDL_Quit()
+
+	def _refresh(self):
 		"""
 		Draws the GUI when it needs to be updated
 		"""
-		glClearColor(0, 0, 0, 1)
+		glClearColor(1.0, 1.0, 1.0, 1.0)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
 		# Active shader program
-		glUseProgram(self.shaderProgram)
+		glUseProgram(self.shader_program)
 
 		try:
 			# Activate the array of elements
 			glBindVertexArray(self.VAO)
 
 			# Draw on the screen
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 3)
+			glDrawArrays(GL_TRIANGLES, 0, self.vertex_data_length)
 		finally:
 			glBindVertexArray(0)
 			glUseProgram(0)
 
 		sdl2.SDL_GL_SwapWindow(self.window)
-
-	def quit(self):
-		sdl2.SDL_GL_DeleteContext(self.context)
-		sdl2.SDL_DestroyWindow(self.window)
-		sdl2.SDL_Quit()
 
 	def _initialize(self):
 		# Load the shaders
@@ -99,29 +104,23 @@ class Renderer:
 		with open("sources/shader.fragment", "r") as f:
 			fragmentShader = shaders.compileShader(f.read(), GL_FRAGMENT_SHADER)
 
-		self.shaderProgram = shaders.compileProgram(vertexShader, fragmentShader)
+		self.shader_program = shaders.compileProgram(vertexShader, fragmentShader)
 
-		vertexData = numpy.array([
-			 # X,    Y,    Z     R,   G,   B,   A
-			 0.0,  0.0,  0.0,  1.0, 1.0, 0.0, 1.0,
-			 1.0,  0.0,  0.0,  1.0, 0.0, 0.0, 1.0,
-			 1.0,  1.0,  0.0,  1.0, 0.0, 0.0, 1.0,
-			 0.0,  1.0,  0.0,  1.0, 0.0, 0.0, 1.0,
-		], dtype=numpy.float32)
-
+	def _updateBuffer(self):
 		# Core OpenGL requires that at least one OpenGL vertex array be bound
 		self.VAO = glGenVertexArrays(1)
 		glBindVertexArray(self.VAO)
 
-		# Need VBO for triangle vertices and colors
+		# Need VBO for vertices and colors
 		self.VBO = glGenBuffers(1)
 		glBindBuffer(GL_ARRAY_BUFFER, self.VBO)
-		glBufferData(GL_ARRAY_BUFFER, vertexData.nbytes, vertexData,
+		glBufferData(GL_ARRAY_BUFFER, self.vertex_data.nbytes, self.vertex_data,
 			GL_STATIC_DRAW)
+		self.vertex_data_length = int(self.vertex_data.nbytes / 28)
 
 		# Enable array and set up data
-		positionAttrib = glGetAttribLocation(self.shaderProgram, 'position')
-		colorAttrib = glGetAttribLocation(self.shaderProgram, 'color')
+		positionAttrib = glGetAttribLocation(self.shader_program, 'position')
+		colorAttrib = glGetAttribLocation(self.shader_program, 'color')
 
 		glEnableVertexAttribArray(0)
 		glEnableVertexAttribArray(1)
@@ -137,6 +136,13 @@ class Renderer:
 	def _loopForEvents(self):
 		event = sdl2.SDL_Event()
 		while True:
+			# Look at the event queue
 			while sdl2.SDL_PollEvent(ctypes.byref(event)) != 0:
 				self.onEvent(event)
-			sdl2.SDL_Delay(10)
+
+			# Look for layout changes
+			if self.need_update:
+				self._updateBuffer()
+				self._refresh()
+				self.need_update = False
+			sdl2.SDL_Delay(5)

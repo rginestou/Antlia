@@ -24,14 +24,15 @@ class Parser:
 		self._buildLayout()
 
 	def _buildLayout(self):
-		# Build an array of element with position and size
-		self.layout = []
+		"""
+		Build an array of element with position and size
+		"""
+		self.layout_struct = []
 
-		pprint(self.layout)
-
+		pprint(self.layout_struct)
 
 	def getHandlers(self):
 		return {}
 
-	def getLayout(self):
-		return self.layout
+	def getLayoutStruct(self):
+		return self.layout_struct

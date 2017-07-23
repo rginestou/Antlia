@@ -1,5 +1,6 @@
 from sources.parser import Parser
 from sources.renderer import Renderer
+from sources.builder import Builder
 from sources.message import log, ERROR, WARNING, OK
 from sources.user import User
 import threading
@@ -30,19 +31,31 @@ class Antlia:
 		# the layout and style files
 		self.parser = Parser(self.layout_file_name, self.style_file_name)
 		self.handlers = self.parser.getHandlers()
-		self.layout = self.parser.getLayout()
+		self.layout_struct = self.parser.getLayoutStruct()
 
 		# The Renderer will take a reference to the layout to display it
-		self.renderer = Renderer(self.layout, self._onEvent)
+		self.renderer = Renderer(self._onEvent)
+
+		# The layout structure is passed to the builder to construct
+		# the vertex buffer data displayed by OpenGL
+		self.builder = Builder()
 
 	def start(self):
 		"""
 		The event loop needs to be launched from the thread where
 		the window has been lauched.
 		"""
+		# For instantaneity sake, precompute the data
+		layout_data = self.builder.getLayoutData(self.layout_struct)
+
 		thread = threading.Thread(target=self.renderer.createWindow, args=())
 		thread.daemon = True
 		thread.start()
+
+		# Wait until the window is ready
+		while not self.renderer.is_window_created:
+			pass
+		self.renderer.update(layout_data)
 
 	def bind(self, element_name, handler):
 		"""
@@ -68,6 +81,9 @@ class Antlia:
 		"""
 		self.is_running = False
 		self.renderer.quit()
+
+	def _update(self):
+		self.renderer.update(self.builder.getLayoutData(self.layout_struct))
 
 	def _onEvent(self, event):
 		if event.type == sdl2.SDL_QUIT:
