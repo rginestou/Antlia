@@ -1,0 +1,13 @@
+{
+	"custom_button": {
+		"parameters": {
+			"color": "#0F0",
+			"text-color": "#FFF"
+		}
+	},
+	"custom_label": {
+		"parameters": {
+			"text-color": "#CCC"
+		}
+	}
+}

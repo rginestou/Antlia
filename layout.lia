@@ -1,0 +1,30 @@
+{
+	"parameters": {
+		"resolution": {"width": 800, "height": 400}
+	},
+	"layout": [
+		{
+			"type": "grid",
+			"name": "main_grid",
+			"parameters": {
+				"rows": [40, 30, 30],
+				"cols": 1
+			},
+			"layout": [
+				[
+					{
+						"type": "custom_button",
+						"name": "hello_button"
+					}
+				],
+				[
+					{
+						"type": "custom_label",
+						"name": "hello_label"
+					}
+				],
+				[]
+			]
+		}
+	]
+}

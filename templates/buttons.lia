@@ -1,0 +1,9 @@
+{
+	"button": {
+		"parameters": {
+			"color": "#EEE",
+			"text-color": "#222",
+			"state": "released"
+		}
+	}
+}
