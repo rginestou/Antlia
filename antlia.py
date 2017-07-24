@@ -34,7 +34,7 @@ class Antlia:
 		self.layout_struct = self.parser.getLayoutStruct()
 
 		# The Renderer will take a reference to the layout to display it
-		self.renderer = Renderer(self._onEvent)
+		self.renderer = Renderer(self._onEvent, params=self.layout_struct[0])
 
 		# The layout structure is passed to the builder to construct
 		# the vertex buffer data displayed by OpenGL

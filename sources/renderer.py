@@ -27,10 +27,11 @@ class Renderer:
 	Renderer.refresh()
 	Renderer.quit()
 	"""
-	def __init__(self, onEvent):
+	def __init__(self, onEvent, params):
 		self.onEvent = onEvent
 		self.is_window_created = False
 		self.need_update = False
+		self.params = params
 
 		# OpenGL specific
 		self.vertex_data = []
@@ -44,9 +45,11 @@ class Renderer:
 			print(sdl2.SDL_GetError())
 			return -1
 
-		self.window = sdl2.SDL_CreateWindow(b"OpenGL demo",
+		self.window = sdl2.SDL_CreateWindow(self.params["name"].encode(),
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,
-					   sdl2.SDL_WINDOWPOS_UNDEFINED, 800, 600,
+					   sdl2.SDL_WINDOWPOS_UNDEFINED,
+					   self.params["resolution"]["width"],
+					   self.params["resolution"]["height"],
 					   sdl2.SDL_WINDOW_OPENGL)
 		if not self.window:
 			print(sdl2.SDL_GetError())

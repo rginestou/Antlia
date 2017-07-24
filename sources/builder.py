@@ -10,7 +10,8 @@ class Builder(object):
 
 	def getLayoutData(self, layout_struct):
 		"""
-
+		Given a Layout file in JSON (dict), returns the corresponding array of
+		triangles and colors to display the GUI
 		"""
 
 		return numpy.array([
