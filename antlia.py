@@ -46,7 +46,7 @@ class Antlia:
 		the window has been lauched.
 		"""
 		# For instantaneity sake, precompute the data
-		layout_data = self.builder.getLayoutData(self.layout_struct)
+		layout_data = self.builder.computeLayoutData(self.layout_struct, [])
 
 		thread = threading.Thread(target=self.renderer.createWindow, args=())
 		thread.daemon = True

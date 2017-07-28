@@ -33,6 +33,10 @@ class Renderer:
 		self.need_update = False
 		self.params = params
 
+		# Params
+		self.window_width = self.params["resolution"]["width"]
+		self.window_height = self.params["resolution"]["height"]
+
 		# OpenGL specific
 		self.vertex_data = []
 		self.shader_program = None
@@ -48,8 +52,8 @@ class Renderer:
 		self.window = sdl2.SDL_CreateWindow(self.params["name"].encode(),
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,
-					   self.params["resolution"]["width"],
-					   self.params["resolution"]["height"],
+					   self.window_width,
+					   self.window_height,
 					   sdl2.SDL_WINDOW_OPENGL)
 		if not self.window:
 			print(sdl2.SDL_GetError())
@@ -86,6 +90,8 @@ class Renderer:
 
 		# Active shader program
 		glUseProgram(self.shader_program)
+		glUniformMatrix4fv(self.viewportUniform, 1, GL_FALSE, self.viewportMatrix)
+
 
 		try:
 			# Activate the array of elements
@@ -124,6 +130,14 @@ class Renderer:
 		# Enable array and set up data
 		positionAttrib = glGetAttribLocation(self.shader_program, 'position')
 		colorAttrib = glGetAttribLocation(self.shader_program, 'color')
+
+		# Set uniform
+		self.viewportMatrix = numpy.zeros((4,4), dtype=numpy.float32)
+		self.viewportMatrix[0,0] = 2.0 / self.window_width;
+		self.viewportMatrix[1,1] = -2.0 / self.window_height
+		self.viewportMatrix[3,0] = -1.0; self.viewportMatrix[3,1] = 1.0
+		self.viewportMatrix[3,3] = 1
+		self.viewportUniform = glGetUniformLocation(self.shader_program, 'viewport')
 
 		glEnableVertexAttribArray(0)
 		glEnableVertexAttribArray(1)

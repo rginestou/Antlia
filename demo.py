@@ -20,8 +20,8 @@ GUI.start()
 
 # Main loop, wait for stop event
 while not GUI.getUserInfo().want_to_stop:
-	ti.sleep(1)
-	print("loop")
+	ti.sleep(0.1)
+	# print("loop")
 
 # Destroy the GUI properly
 GUI.quit()
