@@ -1,6 +1,5 @@
 # Antlia
-## OpenGL-based GUI for Python
+## SDL2-based GUI for Python
 
 # Requirements
-* `pyopengl`
 * `colorama`

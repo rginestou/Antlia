@@ -1,14 +1,25 @@
+import os
+
+os.environ["PYSDL2_DLL_PATH"] = "lib/"
+try:
+	import sdl2
+	import sdl2.ext
+except ImportError:
+	import traceback
+	traceback.print_exc()
+	sys.exit(1)
+
 class Primitive:
-	"""docstring for Primitive."""
-	def __init__(self):
-		self.vertices = None
-		self.color_id = None
+	"""
+	Defines a basic building bloc of a GUI element.
+	It has some positionning attributes, and a Draw method.
+	x, y, w, h are assumed to be within [0, 1]
+	"""
+	def __init__(self, x, y, w, h):
+		self.x = x
+		self.y = y
+		self.w = w
+		self.h = h
 
-	def getVerticies(self):
-		return self.vertices
-
-	def getColorId(self):
-		return self.color_id
-
-	def setColorId(self, c):
-		self.color_id = c
+	def draw(self, renderer, rect):
+		pass

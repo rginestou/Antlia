@@ -31,10 +31,12 @@ class Antlia:
 		# the layout and style files
 		self.parser = Parser(self.layout_file_name, self.style_file_name)
 		self.handlers = self.parser.getHandlers()
-		self.layout_struct = self.parser.getLayoutStruct()
+		self.layout_elements = self.parser.getLayoutElements()
+		self.layout_tree = self.parser.getLayoutTree()
+		self.layout_rects = None
 
 		# The Renderer will take a reference to the layout to display it
-		self.renderer = Renderer(self._onEvent, params=self.layout_struct[0])
+		self.renderer = Renderer(self._onEvent, params=self.layout_elements[0].getAttributes())
 
 		# The layout structure is passed to the builder to construct
 		# the vertex buffer data displayed by OpenGL
@@ -46,16 +48,14 @@ class Antlia:
 		the window has been lauched.
 		"""
 		# For instantaneity sake, precompute the data
-		layout_data = self.builder.computeLayoutData(self.layout_struct, [])
+		self.layout_rects = self.builder.computeLayoutRects(self.layout_elements, self.layout_tree)
 
 		thread = threading.Thread(target=self.renderer.createWindow, args=())
 		thread.daemon = True
 		thread.start()
 
-		# Wait until the window is ready
-		while not self.renderer.is_window_created:
-			pass
-		self.renderer.update(layout_data)
+		# Fill the renderer with the layout elements to draw
+		self.renderer.update(self.layout_elements, self.layout_rects)
 
 	def bind(self, element_name, handler):
 		"""
@@ -83,7 +83,7 @@ class Antlia:
 		self.renderer.quit()
 
 	def _update(self):
-		self.renderer.update(self.builder.getLayoutData(self.layout_struct))
+		self.renderer.update(self.layout_rects)
 
 	def _onEvent(self, event):
 		if event.type == sdl2.SDL_QUIT:

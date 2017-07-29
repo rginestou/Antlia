@@ -2,7 +2,14 @@ import json
 import copy
 import os.path
 from sources.message import log, ERROR, WARNING, OK
+from .elements.color import C
+from .elements.const import *
 from pprint import pprint
+
+# Elements
+from sources.elements.window import Window
+from sources.elements.grid import Grid
+from sources.elements.button import Button
 
 class Parser:
 	"""
@@ -57,14 +64,14 @@ class Parser:
 		"""
 		Build an array of element with absolute position, size and other parameters
 		"""
-		self.layout_struct = [{
-			"name": "Untitled window",
-			"resolution": {"width": 800, "height": 400},
-			"fullscreen": False
-		}]
-		# self.layout_struct.append(self._loadTemplate("templates/window", self.user_layout["parameters"]))
+		w = Window()
+		w.setAttribute("name", "Demo window")
 
-		pprint(self.layout_struct)
+		self.layout_elements = [w, Grid(), Button(), Button()]
+		self.layout_elements[1].settle() #TODO
+		self.layout_elements[3].setAttribute("state", HOVERED) #TODO
+
+		self.layout_tree = [[1], [2, 3], [], []]
 
 	def _loadTemplate(self, template_name, user_template={}):
 		"""
@@ -118,5 +125,8 @@ class Parser:
 	def getHandlers(self):
 		return {}
 
-	def getLayoutStruct(self):
-		return self.layout_struct
+	def getLayoutElements(self):
+		return self.layout_elements
+
+	def getLayoutTree(self):
+		return self.layout_tree

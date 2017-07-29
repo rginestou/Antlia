@@ -1,10 +1,4 @@
-import numpy
-from sources.elements.button import Button
-
-class Rect:
-	def __init__(self, x, y, w, h):
-		self.x = x; self.y = y
-		self.w = w; self.h = h
+from .rect import Rect
 
 class Builder(object):
 	"""
@@ -14,37 +8,34 @@ class Builder(object):
 	def __init__(self):
 		pass
 
-	def computeLayoutData(self, layout_elements, layout_tree):
+	def computeLayoutRects(self, layout_elements, layout_tree):
 		"""
 		Given a layout tree of elements, returns the corresponding array of
-		triangles and colors to display the GUI (absolute position).
+		rects where the GUI elements have to be drawn (absolute position).
 		The given elements have a parenting relation described by the tree,
 		and a relative positionning.
 		"""
 
-		layout_elements = [Button(), Button()]
-
-		layout_tree = [[], []]
-
 		# Each data chunk is ordered this way :
 		# X,	Y,    Z,	R,	G,	B,	A
-		layout = []
+		global layout
+		layout_rects = []
 
-		def _aux(subtree, rect):
-			for node in subtree:
-				if len(node) > 0:
-					# This is not a leaf
-					_aux(node, )
+		def _aux(subtree, node_index, rect):
+			global layout
+			node_element = layout_elements[node_index]
+			# Each element has its verticies written in absolute coordinates
+			# in the layout buffer
+			layout_rects.append(rect)
 
-		_aux(layout_tree, Rect(0, 0, 800, 400))
+			# Recursively apply it to the children
+			for child_index, node_index in enumerate(subtree):
+				c_rect = node_element.child_rects[child_index].fitRect(rect)
+				_aux(layout_tree[node_index], node_index, c_rect)
 
+		_aux(layout_tree[0], 0, Rect(0, 0, 800, 400))
 
-		# Each element has its verticies written in absolute coordinates
-		# in the layout buffer
-		for el in l:
-			layout += self._relativeToAbsolute(el, Rect(0, 0, 400, 400))
-
-		return numpy.array(layout, dtype=numpy.float32)
+		return layout_rects
 
 	def _relativeToAbsolute(self, element, rect):
 		"""
