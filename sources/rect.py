@@ -22,6 +22,10 @@ class Rect:
 	def getTuple(self):
 		return (self.x, self.y, self.w, self.h)
 
+	def isOver(self, X, Y):
+		return self.x < X < self.x + self.w and\
+		 		self.y < Y < self.y + self.h
+
 	def __str__(self):
 		return "Rect(" + str(self.x) + ", " + str(self.y) + ", " +\
 		 		str(self.w) + ", " + str(self.h) + ")"

@@ -30,4 +30,4 @@ def log(typ, title, content=""):
 		col = bcolors._WARNING
 
 	print(col + header + title + bcolors._ENDC)
-	print(content)
+	print("\t" + content)

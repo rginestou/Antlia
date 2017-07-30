@@ -13,5 +13,6 @@ class C:
 	orange = Color(243,156,17)
 	green = Color(14,227,75)
 	grey = Color(129,129,129)
+	lightgrey = Color(212,212,212)
 	darkgrey = Color(86,84,81)
 	white = Color(255,255,255)

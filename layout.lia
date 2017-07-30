@@ -1,11 +1,9 @@
-.parameters
-	.name Demo
-	.resolution 800 400
-.layout
-	grid main_grid
-		.parameters
-			.rows 40% 30% 30%
-			.cols 1
-		.layout
-			custom_button hello_button
-			custom_label hello_label
+.title Demo
+.resolution 800 400
+
+grid main_grid
+	.rows 0.5 0.5
+	.cols 1
+
+	button hello_button
+	button hello_label

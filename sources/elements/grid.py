@@ -5,8 +5,8 @@ from .color import C
 from .const import *
 
 class Grid(Element):
-	def __init__(self):
-		super(Grid, self).__init__()
+	def __init__(self, name):
+		super(Grid, self).__init__(name)
 		# Specific to the Grid element
 		self.attributes = {
 			"alignment": VERTICAL,

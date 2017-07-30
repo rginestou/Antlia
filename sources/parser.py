@@ -4,6 +4,7 @@ import os.path
 from sources.message import log, ERROR, WARNING, OK
 from .elements.color import C
 from .elements.const import *
+from .elements.table import EL_TABLE
 from pprint import pprint
 
 # Elements
@@ -17,104 +18,108 @@ class Parser:
 	an array of elements to be displayed in the GUI, taking
 	into account the style given by the user.
 	"""
-	def __init__(self, layout_file_name, style):
-		self.style_file_name = style
+	def __init__(self, layout_file_name, style_file_name):
+		self.style_file_name = style_file_name
 
 		# Check if layout file exists
 		if not os.path.exists(layout_file_name + ".lia"):
 			log(ERROR, "Layout file does not exist", "Import a valid .lia file")
 			exit(1)
 
-		self.layout = {
-			"parameters": {
-				"resolution": {"width": 800, "height": 400}
-			},
-			"layout": [
-				{
-					"type": "grid",
-					"name": "main_grid",
-					"parameters": {
-						"rows": [40, 30, 30],
-						"cols": 1
-					},
-					"layout": [
-						[
-							{
-								"type": "custom_button",
-								"name": "hello_button"
-							}
-						],
-						[
-							{
-								"type": "custom_label",
-								"name": "hello_label"
-							}
-						],
-						[]
-					]
-				}
-			]
-		}
-		# self._loadTemplate(layout_file_name)
-
 		# Transform the user defined layout in array of elements
-		self._buildLayout()
+		self._buildLayout(layout_file_name)
 
-	def _buildLayout(self):
+	def _buildLayout(self, layout_file_name):
 		"""
-		Build an array of element with absolute position, size and other parameters
+		Build an array of element and their rects
 		"""
-		w = Window()
-		w.setAttribute("name", "Demo window")
+		w = Window("window")
 
-		self.layout_elements = [w, Grid(), Button(), Button()]
-		self.layout_elements[1].settle() #TODO
-		self.layout_elements[3].setAttribute("state", HOVERED) #TODO
+		self.layout_elements, self.layout_tree, self.layout_table = self._loadTemplate(layout_file_name)
 
-		self.layout_tree = [[1], [2, 3], [], []]
+		# # Store the actual objects as a list
+		# self.layout_elements = [w, Grid("main_grid"), Grid("sec_grid"), Button("b1"), Button("hello_button"), Button("bf")]
+		# self.layout_elements[1].settle()
+		# self.layout_elements[2].setAttribute("alignment", HORIZONTAL)
+		# self.layout_elements[2].settle()
+		# self.layout_elements[3].setAttribute("state", HOVERED) #TODO
 
-	def _loadTemplate(self, template_name, user_template={}):
+		# # Stores the parent/child relations as a tree of indices
+		# # refering to the position of the elements in the
+		# # layout_elements list
+		# self.layout_tree = [[1], [2, 3], [4, 5], [], [], []]
+
+		# # Used to convert names as string to actual indices
+		# self.layout_table = {
+		# 	"main_grid": 1,
+		# 	"hello_button": 4
+		# }
+
+	def _loadTemplate(self, template_name):
 		"""
 		Load the full default template and customize it with the user defined props
 		recursively using the layout file specified
 		"""
+		# Declare the layout variables
+		layout_elements = [Window("window")]
+		layout_tree = [[]]
+		layout_table = {
+			"window": 0
+		}
 
 		# Open and read the file
 		with open(template_name + ".lia", "r") as template_file:
-			lines = template_file.readlines()
+			index_pile = [0]
+			element_indent = -1
+			n_element = 1
+			for line in template_file:
+				# Get data
+				indent, data = self._parseLine(line)
 
-		# Build the layout recursively
-		prev = None
-		i = 0
-		n_lines = len(lines)
-		def _aux(prev_indent, obj):
-			# Don't go too far
-			if i > n_lines:
-				return obj
+				# Jump to next line if empty
+				if len(data) == 0 or data[0] == "":
+					continue
 
-			# Get data
-			indent, data = self._parseLine(lines[i])
+				# print(data, layout_tree, index_pile)
 
-			# If line empty, go to next
-			if len(data) == 0:
+				# Look for indentation
+				i = indent
+				while i <= element_indent:
+					child_index = index_pile[-1]
+					layout_elements[child_index].settle()
+					index_pile.pop()
+					layout_tree[index_pile[-1]].append(child_index)
+					i += 1
+
+				if data[0][0] == ".":
+					# Parse properties (start with .)
+					new_att = data[1:]
+					if len(new_att) == 1:
+						new_att = new_att[0]
+					layout_elements[index_pile[-1]].setAttribute(data[0][1:], new_att)
+					continue
+				else:
+					# Parse new element
+					layout_elements.append(EL_TABLE[data[0]](data[1]))
+					layout_tree.append([])
+					layout_table[data[1]] = n_element
+					element_indent = indent
+
+					# Add to the pile
+					index_pile.append(n_element)
+
+					n_element += 1
+
+			# Process the remaining items in the pile
+			i = 0
+			while i <= element_indent:
+				child_index = index_pile[-1]
+				layout_elements[child_index].settle()
+				index_pile.pop()
+				layout_tree[index_pile[-1]].append(child_index)
 				i += 1
-				_aux(prev_indent, obj)
 
-			# Process data
-			# TODO
-
-		# Get the full layout
-		layout = _aux(0, {})
-
-		# TODO
-		for prop in user_template:
-			try:
-				template[prop] = user_template[prop]
-			except KeyError:
-				log(WARNING, prop + " is not a valid property", "")
-
-
-		return layout
+		return layout_elements, layout_tree, layout_table
 
 	def _parseLine(self, line):
 		indent = 0
@@ -130,3 +135,6 @@ class Parser:
 
 	def getLayoutTree(self):
 		return self.layout_tree
+
+	def getLayoutTable(self):
+		return self.layout_table

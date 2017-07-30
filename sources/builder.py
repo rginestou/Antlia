@@ -5,8 +5,8 @@ class Builder(object):
 	The Builder takes the GUI layout as a tree and
 	will produce a vertex array understandable by openGL
 	"""
-	def __init__(self):
-		pass
+	def __init__(self, params):
+		self.window_parameters = params
 
 	def computeLayoutRects(self, layout_elements, layout_tree):
 		"""
@@ -21,11 +21,12 @@ class Builder(object):
 		global layout
 		layout_rects = []
 
+		print(layout_elements, layout_tree)
+
 		def _aux(subtree, node_index, rect):
 			global layout
 			node_element = layout_elements[node_index]
-			# Each element has its verticies written in absolute coordinates
-			# in the layout buffer
+
 			layout_rects.append(rect)
 
 			# Recursively apply it to the children
@@ -33,7 +34,9 @@ class Builder(object):
 				c_rect = node_element.child_rects[child_index].fitRect(rect)
 				_aux(layout_tree[node_index], node_index, c_rect)
 
-		_aux(layout_tree[0], 0, Rect(0, 0, 800, 400))
+		_aux(layout_tree[0], 0, Rect(0, 0,
+								int(self.window_parameters["resolution"][0]),
+								int(self.window_parameters["resolution"][1])))
 
 		return layout_rects
 

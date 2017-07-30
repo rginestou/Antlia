@@ -4,8 +4,8 @@ from .color import C
 from .const import *
 
 class Button(Element):
-	def __init__(self):
-		super(Button, self).__init__()
+	def __init__(self, name):
+		super(Button, self).__init__(name)
 		# Specific to the Button element
 		self.attributes = {
 			"state": RELEASED,
@@ -14,8 +14,8 @@ class Button(Element):
 
 		self.colors = {
 			"released-color": C.white,
-			"pressed-color": C.grey,
-			"hovered-color": C.blue,
+			"pressed-color": C.blue,
+			"hovered-color": C.lightgrey,
 			"text-color": C.darkgrey
 		}
 
@@ -28,3 +28,17 @@ class Button(Element):
 			self.blueprint[0].draw(renderer, rect, self.colors["released-color"])
 		elif self.attributes["state"] == HOVERED:
 			self.blueprint[0].draw(renderer, rect, self.colors["hovered-color"])
+		elif self.attributes["state"] == PRESSED:
+			self.blueprint[0].draw(renderer, rect, self.colors["pressed-color"])
+
+	def onClick(self):
+		self.setAttribute("state", PRESSED)
+
+	def onRelease(self):
+		self.setAttribute("state", HOVERED)
+
+	def onHover(self):
+		self.setAttribute("state", HOVERED)
+
+	def onOut(self):
+		self.setAttribute("state", RELEASED)

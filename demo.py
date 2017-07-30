@@ -5,15 +5,15 @@ import time as ti
 GUI = Antlia("layout", "style")
 
 # Define a handler for the button
-def buttonHandler():
+def buttonClickHandler():
 	print("Hello World")
 
 	# Change the content of the label with something else
-	GUI.change("hello_label", "parameter.text",
+	GUI.change("hello_label", "text",
 			"Hello World !")
 
 # Bind the handler to the button
-GUI.bind("hello_button", buttonHandler)
+GUI.bind("hello_button", buttonClickHandler)
 
 # Open the GUI window
 GUI.start()

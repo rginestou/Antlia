@@ -2,8 +2,8 @@ from .element import Element
 from ..rect import Rect
 
 class Window(Element):
-	def __init__(self):
-		super(Window, self).__init__()
+	def __init__(self, name):
+		super(Window, self).__init__(name)
 		# Specific to the Button element
 		self.attributes = {
 			"title": "Untitled window",

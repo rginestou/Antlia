@@ -30,8 +30,8 @@ class Renderer:
 		self.params = params
 
 		# Params
-		self.window_width = self.params["resolution"]["width"]
-		self.window_height = self.params["resolution"]["height"]
+		self.window_width = int(self.params["resolution"][0])
+		self.window_height = int(self.params["resolution"][1])
 
 	def createWindow(self):
 		# Create the window context
@@ -39,7 +39,7 @@ class Renderer:
 			print(sdl2.SDL_GetError())
 			return -1
 
-		self.window = sdl2.SDL_CreateWindow(self.params["name"].encode(),
+		self.window = sdl2.SDL_CreateWindow(self.params["title"].encode(),
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,
 					   self.window_width,
