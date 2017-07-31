@@ -65,12 +65,14 @@ class Antlia:
 		# Give the info to the renderer
 		self._update()
 
-	def bind(self, element_name, handler):
+	def bind(self, element_name, event_type, handler, arg=None):
 		"""
 		Binds an element of the GUI with an handler.
 		"""
 		try:
-			self.handlers[element_name] = handler
+			if element_name not in self.handlers:
+				self.handlers[element_name] = {}
+			self.handlers[element_name][event_type] = (handler, arg)
 		except KeyError:
 			log(WARNING, element_name + " does not exist in the layout")
 
@@ -86,11 +88,8 @@ class Antlia:
 			return
 
 		# Change the parameter
-		try:
-			self.layout_elements[element_index].setAttribute(parameter, value)
-		except:
-			log(WARNING, parameter + " is not a parameter of " + element_name)
-			return
+		self.layout_elements[element_index].setAttribute(parameter, value)
+		self.layout_elements[element_index].build()
 
 		# Need to refresh the GUI
 		self._update()
@@ -130,7 +129,9 @@ class Antlia:
 			old_indices = [i for i in self.hovered_indices if i not in current_indices]
 
 			for i in new_indices:
-				self.layout_elements[i].onHover()
+				el = self.layout_elements[i]
+				self._callHandler(el.name, "hover")
+				el.onHover()
 			for i in old_indices:
 				self.layout_elements[i].onOut()
 			if len(new_indices) + len(old_indices) > 0:
@@ -140,12 +141,16 @@ class Antlia:
 			self.hovered_indices = current_indices
 		if event.type == sdl2.SDL_MOUSEBUTTONDOWN:
 			for i in self.hovered_indices:
-				self.layout_elements[i].onClick()
+				el = self.layout_elements[i]
+				self._callHandler(el.name, "click")
+				el.onClick()
 			if len(self.hovered_indices) > 0:
 				self._update()
 		if event.type == sdl2.SDL_MOUSEBUTTONUP:
 			for i in self.hovered_indices:
-				self.layout_elements[i].onRelease()
+				el = self.layout_elements[i]
+				self._callHandler(el.name, "release")
+				el.onRelease()
 			if len(self.hovered_indices) > 0:
 				self._update()
 		# KEYBOARD events
@@ -167,3 +172,11 @@ class Antlia:
 				hovered_indices.append(i)
 
 		return hovered_indices
+
+	def _callHandler(self, element_name, event_type):
+		if element_name in self.handlers and event_type in self.handlers[element_name]:
+			params = self.handlers[element_name][event_type][1]
+			if params is not None:
+				self.handlers[element_name][event_type][0](params)
+			else:
+				self.handlers[element_name][event_type][0]()

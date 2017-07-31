@@ -1,0 +1,59 @@
+.title Calculator
+.resolution 400 500
+
+grid main_grid
+	.rows 0.2 0.8
+	.cols 1.0
+
+	label result_label
+		.label 0
+		.align right
+
+	grid main_grid
+		.rows 0.25 0.25 0.25 0.25
+		.cols 0.25 0.25 0.25 0.25
+
+		button 7
+			.label 7
+		button 8
+			.label 8
+		button 9
+			.label 9
+		button +
+			.label +
+			.released-color belize_hole
+			.pressed-color belize_hole
+			.hovered-color belize_hole
+		button 4
+			.label 4
+		button 5
+			.label 5
+		button 6
+			.label 6
+		button -
+			.label -
+			.released-color belize_hole
+			.pressed-color belize_hole
+			.hovered-color belize_hole
+		button 1
+			.label 1
+		button 2
+			.label 2
+		button 3
+			.label 3
+		button *
+			.label *
+			.released-color belize_hole
+			.pressed-color belize_hole
+			.hovered-color belize_hole
+		button clear
+			.label C
+		button 0
+			.label 0
+		button enter
+			.label =
+		button /
+			.label /
+			.released-color belize_hole
+			.pressed-color belize_hole
+			.hovered-color belize_hole

@@ -10,20 +10,38 @@ class Button(Element):
 		# Specific to the Button element
 		self.attributes = {
 			"state": RELEASED,
-			"label": "Button"
+			"label": "Button",
+			"align": "center",
+			"released-color": "peter_river",
+			"pressed-color": "belize_hole",
+			"hovered-color": "peter_river",
+			"text-color": "white"
 		}
 
+	def build(self):
+		self.blueprint = []
+
+		# Fetch colors
 		self.colors = {
-			"released-color": Color["peter_river"],
-			"pressed-color": Color["belize_hole"],
-			"hovered-color": lighthen(Color["peter_river"]),
-			"text-color": Color["white"]
+			"released-color": Color[self.attributes["released-color"]],
+			"pressed-color": Color[self.attributes["pressed-color"]],
+			"hovered-color": lighthen(Color[self.attributes["hovered-color"]]),
+			"text-color": Color[self.attributes["text-color"]]
 		}
 
 		# Bluid blueprint
 		R = Rectangle(0.0, 0.0, 1.0, 1.0)
 		self.blueprint.append(R)
-		T = Text(0.5, 0.5, "Button", b"resources/roboto-reg.ttf", Color["white"], align="center")
+		x = 0.5
+		if self.attributes["align"] == "left":
+			x = 0.0
+		elif self.attributes["align"] == "right":
+			x = 1.0
+		T = Text(x, 0.5,
+				self.attributes["label"],
+				b"resources/roboto-reg.ttf",
+				self.colors["text-color"],
+				self.attributes["align"])
 		self.blueprint.append(T)
 
 	def draw(self, renderer, rect):

@@ -17,11 +17,7 @@ class Grid(Element):
 			"background-color": Color["peter_river"]
 		}
 
-		# Bluid blueprint
-		R = Rectangle(0.0, 0.0, 1.0, 1.0)
-		self.blueprint.append(R)
-
-	def settle(self):
+	def build(self):
 		# Create rects based on the rows and columns proportions
 		s = 0.0
 
@@ -40,6 +36,10 @@ class Grid(Element):
 				sc += c
 			sr += r
 			sc = 0.0
+
+		# Bluid blueprint
+		R = Rectangle(0.0, 0.0, 1.0, 1.0)
+		self.blueprint.append(R)
 
 	def draw(self, renderer, rect):
 		self.blueprint[0].draw(renderer, rect, self.colors["background-color"])

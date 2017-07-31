@@ -1,0 +1,12 @@
+.title Hello
+.resolution 600 200
+
+grid main_grid
+	.rows 1.0
+	.cols 0.5 0.5
+
+	button hello_button
+		.label Hello
+	label hello_label
+		.label No
+		.align center

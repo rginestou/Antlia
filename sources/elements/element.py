@@ -20,10 +20,11 @@ class Element:
 		# List of primitives that defines the visual of the element
 		self.blueprint = []
 
-	def settle(self):
+	def build(self):
 		"""
 		Method to call after all the attributes are setup.
 		It will perform operations required for each element
+		and finaly build them
 		"""
 		return
 

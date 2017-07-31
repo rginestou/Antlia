@@ -10,6 +10,8 @@ Color = {
 	"peter_river": (52,152,219,255),
 	"belize_hole": (41,128,185,255),
 	"white": (255,255,255,255),
+	"dark_grey": (52,52,52,52),
+	"black": (0,0,0,255)
 }
 
 def lighthen(color):

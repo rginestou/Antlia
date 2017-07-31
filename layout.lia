@@ -10,10 +10,14 @@ grid main_grid
 		.cols 0.3 0.7
 
 		button hello_button
-		button hello_label
+			.label 1
+		label hello_label
+			.label Fine
 	grid main_grid
 		.rows 1.0
 		.cols 0.7 0.3
 
-		button hello_button
-		button hello_label
+		button hello_button2
+			.label OK
+		button hello_label3
+			.label 2
