@@ -1,7 +1,7 @@
 from ..blueprint.rectangle import Rectangle
 from .element import Element
 from ..rect import Rect
-from .color import C
+from .color import Color
 from .const import *
 
 class Grid(Element):
@@ -14,7 +14,7 @@ class Grid(Element):
 		}
 
 		self.colors = {
-			"background-color": C.darkgrey
+			"background-color": Color["peter_river"]
 		}
 
 		# Bluid blueprint

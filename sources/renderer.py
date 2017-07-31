@@ -8,7 +8,7 @@ from numpy import array
 os.environ["PYSDL2_DLL_PATH"] = "lib/"
 try:
 	import sdl2
-	import sdl2.ext
+	import sdl2.sdlttf as sdl2ttf
 except ImportError:
 	import traceback
 	traceback.print_exc()
@@ -38,6 +38,7 @@ class Renderer:
 		if sdl2.SDL_Init(sdl2.SDL_INIT_VIDEO) != 0:
 			print(sdl2.SDL_GetError())
 			return -1
+		sdl2ttf.TTF_Init()
 
 		self.window = sdl2.SDL_CreateWindow(self.params["title"].encode(),
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,

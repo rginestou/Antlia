@@ -2,7 +2,7 @@ import json
 import copy
 import os.path
 from sources.message import log, ERROR, WARNING, OK
-from .elements.color import C
+from .elements.color import Color
 from .elements.const import *
 from .elements.table import EL_TABLE
 from pprint import pprint
@@ -36,24 +36,6 @@ class Parser:
 		w = Window("window")
 
 		self.layout_elements, self.layout_tree, self.layout_table = self._loadTemplate(layout_file_name)
-
-		# # Store the actual objects as a list
-		# self.layout_elements = [w, Grid("main_grid"), Grid("sec_grid"), Button("b1"), Button("hello_button"), Button("bf")]
-		# self.layout_elements[1].settle()
-		# self.layout_elements[2].setAttribute("alignment", HORIZONTAL)
-		# self.layout_elements[2].settle()
-		# self.layout_elements[3].setAttribute("state", HOVERED) #TODO
-
-		# # Stores the parent/child relations as a tree of indices
-		# # refering to the position of the elements in the
-		# # layout_elements list
-		# self.layout_tree = [[1], [2, 3], [4, 5], [], [], []]
-
-		# # Used to convert names as string to actual indices
-		# self.layout_table = {
-		# 	"main_grid": 1,
-		# 	"hello_button": 4
-		# }
 
 	def _loadTemplate(self, template_name):
 		"""

@@ -11,5 +11,5 @@ class Rectangle(Primitive):
 		abs_rect = sdl2.SDL_Rect(*rectangle_rect.fitRect(rect).getTuple())
 
 		# Draw with SDL2
-		sdl2.SDL_SetRenderDrawColor(renderer, color.R, color.G, color.B, 255)
+		sdl2.SDL_SetRenderDrawColor(renderer, *color)
 		sdl2.SDL_RenderFillRect(renderer, abs_rect)

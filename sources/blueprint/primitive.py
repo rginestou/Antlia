@@ -3,7 +3,8 @@ import os
 os.environ["PYSDL2_DLL_PATH"] = "lib/"
 try:
 	import sdl2
-	import sdl2.ext
+	import sdl2.ext as sdl2ext
+	import sdl2.sdlttf as sdl2ttf
 except ImportError:
 	import traceback
 	traceback.print_exc()

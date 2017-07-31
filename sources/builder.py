@@ -21,8 +21,6 @@ class Builder(object):
 		global layout
 		layout_rects = []
 
-		print(layout_elements, layout_tree)
-
 		def _aux(subtree, node_index, rect):
 			global layout
 			node_element = layout_elements[node_index]
