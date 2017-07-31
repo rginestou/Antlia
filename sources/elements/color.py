@@ -14,5 +14,6 @@ class C:
 	green = Color(14,227,75)
 	grey = Color(129,129,129)
 	lightgrey = Color(212,212,212)
+	lightergrey = Color(232,232,232)
 	darkgrey = Color(86,84,81)
 	white = Color(255,255,255)

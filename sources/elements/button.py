@@ -13,10 +13,10 @@ class Button(Element):
 		}
 
 		self.colors = {
-			"released-color": C.white,
+			"released-color": C.lightergrey,
 			"pressed-color": C.blue,
 			"hovered-color": C.lightgrey,
-			"text-color": C.darkgrey
+			"text-color": C.white
 		}
 
 		# Bluid blueprint

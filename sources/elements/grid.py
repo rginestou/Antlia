@@ -9,12 +9,12 @@ class Grid(Element):
 		super(Grid, self).__init__(name)
 		# Specific to the Grid element
 		self.attributes = {
-			"alignment": VERTICAL,
-			"proportions": [0.5, 0.5]
+			"rows": [0.5, 0.5],
+			"cols": [1.0]
 		}
 
 		self.colors = {
-			"background-color": C.blue
+			"background-color": C.darkgrey
 		}
 
 		# Bluid blueprint
@@ -22,15 +22,24 @@ class Grid(Element):
 		self.blueprint.append(R)
 
 	def settle(self):
-		# Create rects based on the proportions and alignment
+		# Create rects based on the rows and columns proportions
 		s = 0.0
-		for p in self.attributes["proportions"]:
-			if self.attributes["alignment"] == VERTICAL:
-				r = Rect(0.0, s, 1.0, p)
-			elif self.attributes["alignment"] == HORIZONTAL:
-				r = Rect(s, 0.0, p, 1.0)
-			s += p
-			self.child_rects.append(r)
+
+		# TODO
+		if type(self.attributes["rows"]) != list:
+			self.attributes["rows"] = [self.attributes["rows"]]
+		if type(self.attributes["cols"]) != list:
+			self.attributes["cols"] = [self.attributes["cols"]]
+		rows = list(map(float, self.attributes["rows"]))
+		cols = list(map(float, self.attributes["cols"]))
+
+		sr = 0.0; sc = 0.0
+		for r in rows:
+			for c in cols:
+				self.child_rects.append(Rect(sc, sr, c, r))
+				sc += c
+			sr += r
+			sc = 0.0
 
 	def draw(self, renderer, rect):
 		self.blueprint[0].draw(renderer, rect, self.colors["background-color"])
