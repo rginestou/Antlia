@@ -1,0 +1,5 @@
+button styled-button
+	.text-size 20
+	.released-color asphalt
+	.pressed-color wet-asphalt
+	.hovered-color asphalt

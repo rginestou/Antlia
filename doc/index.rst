@@ -7,6 +7,7 @@ Antlia's documentation!
 
    introduction
    examples
+   elements
 
 Indices and tables
 -----------------

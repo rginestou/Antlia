@@ -11,7 +11,8 @@ class Button(Element):
 		self.attributes = {
 			"state": RELEASED,
 			"label": "Button",
-			"align": "center",
+			"text-align": "center",
+			"text-size": 12,
 			"released-color": "peter-river",
 			"pressed-color": "belize-hole",
 			"hovered-color": "peter-river",
@@ -40,14 +41,15 @@ class Button(Element):
 		self.blueprint.append(R)
 
 		x = 0.5
-		if self.attributes["align"] == "left":
+		if self.attributes["text-align"] == "left":
 			x = 0.0
-		elif self.attributes["align"] == "right":
+		elif self.attributes["text-align"] == "right":
 			x = 1.0
 		T = Text(x, 0.5,
 				self.attributes["label"],
-				b"resources/roboto-reg.ttf",
-				self.attributes["align"])
+				b"resources/lato-regular.ttf",
+				self.attributes["text-size"],
+				self.attributes["text-align"])
 		T.build(renderer, rect, colors["text-color"])
 		self.blueprint.append(T)
 

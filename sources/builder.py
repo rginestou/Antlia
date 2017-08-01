@@ -1,3 +1,4 @@
+from .elements.translate import toArrayOfSizes
 from .rect import Rect
 
 class Builder(object):
@@ -6,7 +7,8 @@ class Builder(object):
 	will produce an array of rects for SDL2
 	"""
 	def __init__(self, params):
-		self.window_parameters = params
+		resolution, _ = toArrayOfSizes(params["resolution"])
+		self.window_width, self.window_height = resolution
 
 	def computeLayoutRects(self, layout_elements, layout_tree):
 		"""
@@ -27,15 +29,16 @@ class Builder(object):
 
 			layout_rects.append(rect)
 
+			print(node_element.child_rects, node_element.name, subtree)
+
 			# Recursively apply it to the children
 			for child_index, node_index in enumerate(subtree):
 				c_rect = node_element.child_rects[child_index].fitRect(rect)
 				_aux(layout_tree[node_index], node_index, c_rect)
 
 		_aux(layout_tree[0], 0, Rect(0, 0,
-								int(self.window_parameters["resolution"][0]),
-								int(self.window_parameters["resolution"][1])))
-
+								int(self.window_width),
+								int(self.window_height)))
 		return layout_rects
 
 	def _relativeToAbsolute(self, element, rect):

@@ -7,7 +7,7 @@ class Window(Element):
 		# Specific to the Button element
 		self.attributes = {
 			"title": "Untitled window",
-			"resolution": {"width": 800, "height": 400},
+			"resolution": "800px 400px",
 			"fullscreen": False
 		}
 

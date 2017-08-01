@@ -15,21 +15,26 @@ class Picture(Primitive):
 			print(errors)
 			return
 
-		w = imgSurface.contents.w
-		h = imgSurface.contents.h
+		imW = imgSurface.contents.w
+		imH = imgSurface.contents.h
 
 		# Compute the square in absolute coordinates
-		text_rect = Rect(self.x, self.y, self.w, self.h)
-		_rect = Rect(*text_rect.fitRect(rect).getTuple())
-		X = _rect.x
-		Y = int(_rect.y - h/2)
-		if self.adjust == "center":
-			X = int(X - w/2)
-		if self.adjust == "right":
-			X = int(X - w)
-		self.abs_rect = sdl2.SDL_Rect(X, Y, w, h)
+		box_rect = Rect(self.x, self.y, self.w, self.h)
+		self.abs_rect = sdl2.SDL_Rect(*box_rect.fitRect(rect).getTuple())
+		W = self.abs_rect.w
+		H = self.abs_rect.h
+
+		if self.adjust == "fill": #TODO
+			self.img_rect = sdl2.SDL_Rect(0, 0, imW, imH)
+		elif self.adjust == "stretch":
+			self.img_rect = sdl2.SDL_Rect(0, 0, imW, imH)
+		elif self.adjust == "center":
+			self.img_rect = sdl2.SDL_Rect(int(imW / 2 - W / 2), int(imH / 2 - W / 2), W, H)
+		else:
+			self.img_rect = sdl2.SDL_Rect(int(imW / 2 - W / 2), int(imH / 2 - W / 2), W, H)
 
 		self.imgTexture = sdl2.SDL_CreateTextureFromSurface(renderer, imgSurface)
+		sdl2.SDL_FreeSurface(imgSurface)
 
 	def draw(self, renderer):
-		sdl2.SDL_RenderCopy(renderer, self.imgTexture, None, self.abs_rect)
+		sdl2.SDL_RenderCopy(renderer, self.imgTexture, self.img_rect, self.abs_rect)

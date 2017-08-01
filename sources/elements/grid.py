@@ -1,3 +1,4 @@
+from .translate import toArrayOfSizes
 from ..blueprint.rectangle import Rectangle
 from .element import Element
 from ..rect import Rect
@@ -9,21 +10,17 @@ class Grid(Element):
 		super(Grid, self).__init__(name)
 		# Specific to the Grid element
 		self.attributes = {
-			"rows": [0.5, 0.5],
-			"cols": [1.0],
-			"background-color": "peter-river"
+			"rows": "100%",
+			"cols": "100%",
+			"background-color": "none"
 		}
 
 	def placeChildren(self):
 		# Create rects based on the rows and columns proportions
 		s = 0.0
 
-		if type(self.attributes["rows"]) != list:
-			self.attributes["rows"] = [self.attributes["rows"]]
-		if type(self.attributes["cols"]) != list:
-			self.attributes["cols"] = [self.attributes["cols"]]
-		rows = list(map(float, self.attributes["rows"]))
-		cols = list(map(float, self.attributes["cols"]))
+		rows, _ = toArrayOfSizes(self.attributes["rows"])
+		cols, _ = toArrayOfSizes(self.attributes["cols"])
 
 		sr = 0.0; sc = 0.0
 		for r in rows:
@@ -39,6 +36,7 @@ class Grid(Element):
 		}
 
 		# Bluid blueprint
-		R = Rectangle(0.0, 0.0, 1.0, 1.0)
-		R.build(renderer, rect, colors["background-color"])
-		self.blueprint.append(R)
+		if colors["background-color"] is not None:
+			R = Rectangle(0.0, 0.0, 1.0, 1.0)
+			R.build(renderer, rect, colors["background-color"])
+			self.blueprint.append(R)

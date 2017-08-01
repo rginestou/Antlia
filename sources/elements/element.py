@@ -50,6 +50,11 @@ class Element:
 		pass
 
 	def setAttribute(self, att, value):
+		"""
+		Set a particular attribute to a new value.
+		A translation if performed if the default type differs from
+		the value
+		"""
 		if att in self.attributes:
 			self.attributes[att] = value
 		else:

@@ -1,4 +1,5 @@
 from .rect import Rect
+from .elements.translate import toArrayOfSizes
 import os
 import sys
 import ctypes
@@ -31,8 +32,8 @@ class Renderer:
 		self.params = params
 
 		# Params
-		self.window_width = int(self.params["resolution"][0])
-		self.window_height = int(self.params["resolution"][1])
+		resolution, _ = toArrayOfSizes(self.params["resolution"])
+		self.window_width, self.window_height = resolution
 
 	def createWindow(self):
 		# Create the window context

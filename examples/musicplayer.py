@@ -8,11 +8,17 @@ from tinytag import TinyTag
 # tag = TinyTag.get('/some/music.mp3', image=True)
 # image_data = tag.get_image()
 
+is_running = True
+
 # Create a GUI based on a layout file and a style file
 GUI = Antlia("examples/musicplayer_layout")
 
 # Define a handler for the button
-def buttonClickHandler():
+def quitClickHandler():
+	global is_running
+	is_running = False
+
+def openClickHandler():
 	# Change the content of the label with something else
 	GUI.change("hello_label", "label",
 			"Hello World !")
@@ -24,7 +30,7 @@ GUI.bind("hello_button", "click", buttonClickHandler)
 GUI.start()
 
 # Main loop, wait for stop event
-while not GUI.getUserInfo().want_to_stop:
+while is_running and not GUI.getUserInfo().want_to_stop:
 	ti.sleep(0.1)
 
 # Destroy the GUI properly

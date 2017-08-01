@@ -11,7 +11,8 @@ Color = {
 	"belize-hole": (41,128,185,255),
 	"white": (255,255,255,255),
 	"dark-grey": (52,52,52,52),
-	"black": (0,0,0,255)
+	"black": (0,0,0,255),
+	"none": None
 }
 
 def lighthen(color):

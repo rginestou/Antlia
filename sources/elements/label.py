@@ -12,7 +12,8 @@ class Label(Element):
 			"label": "Button",
 			"align": "left",
 			"background-color": "clouds",
-			"text-color": "dark-grey"
+			"text-color": "dark-grey",
+			"text-size": 12
 		}
 
 	def build(self, renderer, rect):
@@ -34,6 +35,7 @@ class Label(Element):
 		T = Text(x, 0.5,
 				self.attributes["label"],
 				b"resources/roboto-reg.ttf",
+				self.attributes["text-size"],
 				align=self.attributes["align"])
 		T.build(renderer, rect, colors["text-color"])
 		self.blueprint.append(T)
