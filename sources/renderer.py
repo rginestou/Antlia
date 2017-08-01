@@ -9,6 +9,7 @@ os.environ["PYSDL2_DLL_PATH"] = "lib/"
 try:
 	import sdl2
 	import sdl2.sdlttf as sdl2ttf
+	import sdl2.sdlimage as sdl2img
 except ImportError:
 	import traceback
 	traceback.print_exc()
@@ -39,6 +40,7 @@ class Renderer:
 			print(sdl2.SDL_GetError())
 			return -1
 		sdl2ttf.TTF_Init()
+		sdl2img.IMG_Init(sdl2img.IMG_INIT_PNG)
 
 		self.window = sdl2.SDL_CreateWindow(self.params["title"].encode(),
 					   sdl2.SDL_WINDOWPOS_UNDEFINED,
@@ -54,6 +56,9 @@ class Renderer:
 		self.renderer = sdl2.SDL_CreateRenderer(self.window, -1,
             sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_PRESENTVSYNC)
 
+		# Build the GUI
+		self.buildElements()
+
 		# look for events
 		self._loopForEvents()
 
@@ -61,6 +66,10 @@ class Renderer:
 		self.layout_elements = layout_elements
 		self.layout_rects = layout_rects
 		self.need_update = True
+
+	def buildElements(self):
+		for i, el in enumerate(self.layout_elements):
+			el.build(self.renderer, self.layout_rects[i])
 
 	def quit(self):
 		sdl2.SDL_DestroyRenderer(self.renderer)
@@ -77,8 +86,8 @@ class Renderer:
 		sdl2.SDL_RenderClear(self.renderer)
 
 		# For each element of the layout, call its draw method
-		for i, el in enumerate(self.layout_elements):
-			el.draw(self.renderer, self.layout_rects[i])
+		for el in self.layout_elements:
+			el.draw(self.renderer)
 
 		# Render to the screen
 		sdl2.SDL_RenderPresent(self.renderer)

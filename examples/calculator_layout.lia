@@ -9,7 +9,7 @@ grid main_grid
 		.label 0
 		.align right
 
-	grid main_grid
+	grid pad_grid
 		.rows 0.25 0.25 0.25 0.25
 		.cols 0.25 0.25 0.25 0.25
 
@@ -21,9 +21,9 @@ grid main_grid
 			.label 9
 		button +
 			.label +
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 		button 4
 			.label 4
 		button 5
@@ -32,9 +32,9 @@ grid main_grid
 			.label 6
 		button -
 			.label -
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 		button 1
 			.label 1
 		button 2
@@ -43,9 +43,9 @@ grid main_grid
 			.label 3
 		button *
 			.label *
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 		button clear
 			.label C
 		button 0
@@ -54,6 +54,6 @@ grid main_grid
 			.label =
 		button /
 			.label /
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole

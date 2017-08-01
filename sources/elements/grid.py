@@ -10,18 +10,14 @@ class Grid(Element):
 		# Specific to the Grid element
 		self.attributes = {
 			"rows": [0.5, 0.5],
-			"cols": [1.0]
+			"cols": [1.0],
+			"background-color": "peter-river"
 		}
 
-		self.colors = {
-			"background-color": Color["peter_river"]
-		}
-
-	def build(self):
+	def placeChildren(self):
 		# Create rects based on the rows and columns proportions
 		s = 0.0
 
-		# TODO
 		if type(self.attributes["rows"]) != list:
 			self.attributes["rows"] = [self.attributes["rows"]]
 		if type(self.attributes["cols"]) != list:
@@ -37,9 +33,12 @@ class Grid(Element):
 			sr += r
 			sc = 0.0
 
+	def build(self, renderer, rect):
+		colors = {
+			"background-color": Color[self.attributes["background-color"]]
+		}
+
 		# Bluid blueprint
 		R = Rectangle(0.0, 0.0, 1.0, 1.0)
+		R.build(renderer, rect, colors["background-color"])
 		self.blueprint.append(R)
-
-	def draw(self, renderer, rect):
-		self.blueprint[0].draw(renderer, rect, self.colors["background-color"])

@@ -20,16 +20,22 @@ class Element:
 		# List of primitives that defines the visual of the element
 		self.blueprint = []
 
-	def build(self):
+	def build(self, renderer, rect):
 		"""
 		Method to call after all the attributes are setup.
 		It will perform operations required for each element
 		and finaly build them
 		"""
-		return
-
-	def draw(self, renderer, rect):
 		pass
+
+	def placeChildren(self):
+		"""
+		The elements that have children will compute their rects
+		"""
+		pass
+
+	def draw(self, renderer):
+		for e in self.blueprint: e.draw(renderer)
 
 	def onClick(self):
 		pass

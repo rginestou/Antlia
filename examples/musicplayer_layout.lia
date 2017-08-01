@@ -1,0 +1,10 @@
+.title Music
+.resolution 400 450
+
+grid main_grid
+	.rows 0.1 0.9 0.1
+	.cols 1.0
+
+	button header
+	image cover_image
+	empty e

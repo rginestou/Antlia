@@ -3,7 +3,7 @@ from .rect import Rect
 class Builder(object):
 	"""
 	The Builder takes the GUI layout as a tree and
-	will produce a vertex array understandable by openGL
+	will produce an array of rects for SDL2
 	"""
 	def __init__(self, params):
 		self.window_parameters = params

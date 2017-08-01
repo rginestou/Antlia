@@ -1,10 +1,11 @@
-import os
+import os, sys
 
 os.environ["PYSDL2_DLL_PATH"] = "lib/"
 try:
 	import sdl2
 	import sdl2.ext as sdl2ext
 	import sdl2.sdlttf as sdl2ttf
+	import sdl2.sdlimage as sdl2img
 except ImportError:
 	import traceback
 	traceback.print_exc()
@@ -22,5 +23,8 @@ class Primitive:
 		self.w = w
 		self.h = h
 
-	def draw(self, renderer, rect):
+	def build(self, renderer, rect, color):
+		pass
+
+	def draw(self, renderer):
 		pass

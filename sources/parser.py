@@ -68,7 +68,7 @@ class Parser:
 				i = indent
 				while i <= element_indent:
 					child_index = index_pile[-1]
-					layout_elements[child_index].build()
+					layout_elements[child_index].placeChildren()
 					index_pile.pop()
 					layout_tree[index_pile[-1]].append(child_index)
 					i += 1
@@ -96,7 +96,7 @@ class Parser:
 			i = 0
 			while i <= element_indent:
 				child_index = index_pile[-1]
-				layout_elements[child_index].build()
+				layout_elements[child_index].placeChildren()
 				index_pile.pop()
 				layout_tree[index_pile[-1]].append(child_index)
 				i += 1

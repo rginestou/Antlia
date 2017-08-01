@@ -10,20 +10,22 @@ class Label(Element):
 		# Specific to the Button element
 		self.attributes = {
 			"label": "Button",
-			"align": "left"
+			"align": "left",
+			"background-color": "clouds",
+			"text-color": "dark-grey"
 		}
 
-		self.colors = {
-			"background-color": Color["clouds"],
-			"text-color": Color["dark_grey"]
+	def build(self, renderer, rect):
+		colors = {
+			"background-color": Color[self.attributes["background-color"]],
+			"text-color": Color[self.attributes["text-color"]]
 		}
-
-	def build(self):
-		self.blueprint = []
 
 		# Bluid blueprint
 		R = Rectangle(0.0, 0.0, 1.0, 1.0)
+		R.build(renderer, rect, colors["background-color"])
 		self.blueprint.append(R)
+
 		x = 0.0
 		if self.attributes["align"] == "center":
 			x = 0.5
@@ -32,10 +34,6 @@ class Label(Element):
 		T = Text(x, 0.5,
 				self.attributes["label"],
 				b"resources/roboto-reg.ttf",
-				self.colors["text-color"],
 				align=self.attributes["align"])
+		T.build(renderer, rect, colors["text-color"])
 		self.blueprint.append(T)
-
-	def draw(self, renderer, rect):
-		self.blueprint[0].draw(renderer, rect, self.colors["background-color"])
-		self.blueprint[1].draw(renderer, rect, self.colors["text-color"])

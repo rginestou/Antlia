@@ -89,10 +89,12 @@ class Antlia:
 
 		# Change the parameter
 		self.layout_elements[element_index].setAttribute(parameter, value)
-		self.layout_elements[element_index].build()
+		self.renderer.buildElements() #TODO
+		# self.layout_elements[element_index].build()
 
 		# Need to refresh the GUI
 		self._update()
+		self.renderer.buildElements()
 
 	def getUserInfo(self):
 		return self.user
@@ -135,8 +137,8 @@ class Antlia:
 			for i in old_indices:
 				self.layout_elements[i].onOut()
 			if len(new_indices) + len(old_indices) > 0:
-				# Update if need be
 				self._update()
+				self.renderer.buildElements()
 
 			self.hovered_indices = current_indices
 		if event.type == sdl2.SDL_MOUSEBUTTONDOWN:
@@ -146,6 +148,7 @@ class Antlia:
 				el.onClick()
 			if len(self.hovered_indices) > 0:
 				self._update()
+				self.renderer.buildElements()
 		if event.type == sdl2.SDL_MOUSEBUTTONUP:
 			for i in self.hovered_indices:
 				el = self.layout_elements[i]
@@ -153,6 +156,7 @@ class Antlia:
 				el.onRelease()
 			if len(self.hovered_indices) > 0:
 				self._update()
+				self.renderer.buildElements()
 		# KEYBOARD events
 		elif event.type == sdl2.SDL_KEYDOWN:
 			# A key has been pressed
