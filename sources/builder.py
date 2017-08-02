@@ -29,8 +29,6 @@ class Builder(object):
 
 			layout_rects.append(rect)
 
-			print(node_element.child_rects, node_element.name, subtree)
-
 			# Recursively apply it to the children
 			for child_index, node_index in enumerate(subtree):
 				c_rect = node_element.child_rects[child_index].fitRect(rect)

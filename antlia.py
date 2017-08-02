@@ -4,6 +4,7 @@ from sources.builder import Builder
 from sources.message import log, ERROR, WARNING, OK
 from sources.user import User
 from sources.elements.const import *
+from sources.dialog import getOpenFileName
 import threading
 import os
 import ctypes
@@ -105,6 +106,9 @@ class Antlia:
 		"""
 		self.is_running = False
 		self.renderer.quit()
+
+	def openFileDialog(self, title, default_extension, filter_string, initialPath):
+		return getOpenFileName(title, default_extension, filter_string, initialPath).replace("\x00", "")
 
 	def _update(self):
 		"""

@@ -1,59 +1,76 @@
 .title Calculator
-.resolution 400 500
+.resolution 400px 500px
 
 grid main_grid
-	.rows 0.2 0.8
-	.cols 1.0
+	.rows 20% 80%
+	.cols 100%
 
 	label result_label
 		.label 0
+		.text-size 40
 		.align right
 
 	grid pad_grid
-		.rows 0.25 0.25 0.25 0.25
-		.cols 0.25 0.25 0.25 0.25
+		.rows 25% 25% 25% 25%
+		.cols 25% 25% 25% 25%
 
 		button 7
 			.label 7
+			.text-size 40
 		button 8
 			.label 8
+			.text-size 40
 		button 9
 			.label 9
+			.text-size 40
 		button +
 			.label +
+			.text-size 40
 			.released-color belize-hole
 			.pressed-color belize-hole
 			.hovered-color belize-hole
 		button 4
 			.label 4
+			.text-size 40
 		button 5
 			.label 5
+			.text-size 40
 		button 6
 			.label 6
+			.text-size 40
 		button -
 			.label -
+			.text-size 40
 			.released-color belize-hole
 			.pressed-color belize-hole
 			.hovered-color belize-hole
 		button 1
 			.label 1
+			.text-size 40
 		button 2
 			.label 2
+			.text-size 40
 		button 3
 			.label 3
+			.text-size 40
 		button *
 			.label *
+			.text-size 40
 			.released-color belize-hole
 			.pressed-color belize-hole
 			.hovered-color belize-hole
 		button clear
 			.label C
+			.text-size 40
 		button 0
 			.label 0
+			.text-size 40
 		button enter
 			.label =
+			.text-size 40
 		button /
 			.label /
+			.text-size 40
 			.released-color belize-hole
 			.pressed-color belize-hole
 			.hovered-color belize-hole

@@ -1,5 +1,5 @@
 from .rect import Rect
-from .elements.translate import toArrayOfSizes
+from .elements.translate import toArrayOfSizes, toBoolean
 import os
 import sys
 import ctypes
@@ -31,9 +31,10 @@ class Renderer:
 		self.need_update = False
 		self.params = params
 
-		# Params
+		# Translation of the window parameters
 		resolution, _ = toArrayOfSizes(self.params["resolution"])
 		self.window_width, self.window_height = resolution
+		self.show_borders = toBoolean(self.params["show-borders"])
 
 	def createWindow(self):
 		# Create the window context
@@ -49,6 +50,7 @@ class Renderer:
 					   self.window_width,
 					   self.window_height,
 					   sdl2.SDL_WINDOW_OPENGL)
+		sdl2.SDL_SetWindowBordered(self.window, self.show_borders)
 		if not self.window:
 			print(sdl2.SDL_GetError())
 			return -1

@@ -1,12 +1,14 @@
 .title Hello
-.resolution 600 200
+.resolution 600px 200px
 
 grid main_grid
-	.rows 1.0
-	.cols 0.5 0.5
+	.rows 100%
+	.cols 50% 50%
 
 	button hello_button
 		.label Hello
+		.text-size 35
 	label hello_label
 		.label No
+		.text-size 35
 		.align center

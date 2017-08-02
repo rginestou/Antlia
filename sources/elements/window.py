@@ -8,7 +8,8 @@ class Window(Element):
 		self.attributes = {
 			"title": "Untitled window",
 			"resolution": "800px 400px",
-			"fullscreen": False
+			"fullscreen": False,
+			"show-borders": True
 		}
 
 		# By default, the window has only one child

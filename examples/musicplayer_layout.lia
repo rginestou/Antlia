@@ -1,5 +1,6 @@
 .title Music
 .resolution 400px 450px
+.show-borders false
 
 # Main Layout
 grid main_grid
@@ -12,8 +13,8 @@ grid main_grid
 		.cols 15% 70% 15%
 
 		button open-file_button
-			.label Open
-			.text-size 20
+			.label #library_music#
+			.text-size 30
 			.released-color asphalt
 			.pressed-color wet-asphalt
 			.hovered-color asphalt
@@ -21,8 +22,8 @@ grid main_grid
 		empty _
 
 		button quit_button
-			.label Quit
-			.text-size 20
+			.label #exit_to_app#
+			.text-size 30
 			.released-color asphalt
 			.pressed-color wet-asphalt
 			.hovered-color asphalt

@@ -15,3 +15,11 @@ def toArrayOfSizes(arg):
 	else:
 		print(arg)
 	return values, type_
+
+def toBoolean(arg):
+	if type(arg) == bool:
+		return arg
+	if arg == "true":
+		return True
+	elif arg == "false":
+		return False

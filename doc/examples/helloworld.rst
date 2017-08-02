@@ -98,5 +98,5 @@ The full Python script used for this example is given below.::
 Here is the result:
 
 .. image:: hello_world.png
-	:width: 600px
+	:width: 500px
 	:align: center

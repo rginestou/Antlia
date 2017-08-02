@@ -10,7 +10,7 @@ The GUI will display an area to show the numbers being added or multiplied, as w
 Here is what will look like our basic calculator:
 
 .. image:: calculator.png
-	:width: 400px
+	:width: 300px
 	:align: center
 
 Layout file

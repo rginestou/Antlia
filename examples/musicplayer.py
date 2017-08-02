@@ -20,18 +20,28 @@ def quitClickHandler():
 
 def openClickHandler():
 	# Change the content of the label with something else
-	GUI.change("hello_label", "label",
-			"Hello World !")
+	file_path = GUI.openFileDialog("Open a song", ".mp3", "", None)
+	print(file_path)
+
+	# from pygame import mixer # Load the required library
+	#
+	# mixer.init()
+	# mixer.music.load('D:/ghost.mp3')
+	# mixer.music.play()
+	# ti.sleep(1)
+	# mixer.music.stop()
 
 # Bind the handler to the button
-GUI.bind("hello_button", "click", buttonClickHandler)
+GUI.bind("open-file_button", "click", openClickHandler)
+GUI.bind("quit_button", "click", quitClickHandler)
+
 
 # Open the GUI window
 GUI.start()
 
 # Main loop, wait for stop event
 while is_running and not GUI.getUserInfo().want_to_stop:
-	ti.sleep(0.1)
+	pass
 
 # Destroy the GUI properly
 GUI.quit()
