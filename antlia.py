@@ -8,10 +8,12 @@ from sources.dialog import getOpenFileName
 import threading
 import os
 import ctypes
+import time as ti
 
 os.environ["PYSDL2_DLL_PATH"] = "lib/"
 try:
 	import sdl2
+	import sdl2.sdlttf as sdl2ttf
 except ImportError:
 	import traceback
 	traceback.print_exc()
@@ -28,6 +30,8 @@ class Antlia:
 		self.style_file_name = style
 		self.is_running = True
 		self.user = User()
+		self.is_window_focused = True
+		self.path = os.getcwd()
 
 		# The Parser that will read all informations from both
 		# the layout and style files
@@ -100,6 +104,9 @@ class Antlia:
 	def getUserInfo(self):
 		return self.user
 
+	def stop(self):
+		self.user.want_to_stop = True
+
 	def quit(self):
 		"""
 		Before the program stops, clean everything properly
@@ -108,7 +115,17 @@ class Antlia:
 		self.renderer.quit()
 
 	def openFileDialog(self, title, default_extension, filter_string, initialPath):
-		return getOpenFileName(title, default_extension, filter_string, initialPath).replace("\x00", "")
+		file_path_buff = getOpenFileName(title, default_extension, filter_string, initialPath)
+
+		if file_path_buff is not None:
+			file_path = file_path_buff.replace("\x00", "")
+		else:
+			file_path = None
+
+		# Change current directory !
+		os.chdir(self.path)
+
+		return file_path
 
 	def _update(self):
 		"""
@@ -117,12 +134,20 @@ class Antlia:
 		"""
 		self.renderer.update(self.layout_elements, self.layout_rects)
 
+	def _buildElements(self):
+		self.renderer.buildElements()
+
+	def _buildElement(self, element_index):
+		self.renderer.buildElement(element_index)
+
 	def _onEvent(self, event):
+		el_indices_to_rebuild = []
+
 		# QUIT event
 		if event.type == sdl2.SDL_QUIT:
 			self.user.want_to_stop = True
 		# MOUSE MOTION events
-		if event.type == sdl2.SDL_MOUSEMOTION:
+		elif event.type == sdl2.SDL_MOUSEMOTION:
 			X = event.motion.x
 			Y = event.motion.y
 
@@ -134,33 +159,37 @@ class Antlia:
 			new_indices = [i for i in current_indices if i not in self.hovered_indices]
 			old_indices = [i for i in self.hovered_indices if i not in current_indices]
 
+			# Fire hover handlers
 			for i in new_indices:
 				el = self.layout_elements[i]
 				self._callHandler(el.name, "hover")
 				el.onHover()
+
+				# Need to be rebuilt
+				el_indices_to_rebuild.append(i)
 			for i in old_indices:
 				self.layout_elements[i].onOut()
-			if len(new_indices) + len(old_indices) > 0:
-				self._update()
-				self.renderer.buildElements()
+
+				# Need to be rebuilt
+				el_indices_to_rebuild.append(i)
 
 			self.hovered_indices = current_indices
-		if event.type == sdl2.SDL_MOUSEBUTTONDOWN:
+		elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
 			for i in self.hovered_indices:
 				el = self.layout_elements[i]
 				self._callHandler(el.name, "click")
 				el.onClick()
-			if len(self.hovered_indices) > 0:
-				self._update()
-				self.renderer.buildElements()
-		if event.type == sdl2.SDL_MOUSEBUTTONUP:
+
+				# Need to be rebuilt
+				el_indices_to_rebuild.append(i)
+		elif event.type == sdl2.SDL_MOUSEBUTTONUP:
 			for i in self.hovered_indices:
 				el = self.layout_elements[i]
 				self._callHandler(el.name, "release")
 				el.onRelease()
-			if len(self.hovered_indices) > 0:
-				self._update()
-				self.renderer.buildElements()
+
+				# Need to be rebuilt
+				el_indices_to_rebuild.append(i)
 		# KEYBOARD events
 		elif event.type == sdl2.SDL_KEYDOWN:
 			# A key has been pressed
@@ -168,6 +197,17 @@ class Antlia:
 				self.user.want_to_stop = True
 			elif event.key.keysym.sym == sdl2.SDLK_SPACE:
 				pass
+		# WINDOW events
+		if event.type == sdl2.SDL_WINDOWEVENT:
+			if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_GAINED:
+				self.is_window_focused = True
+			if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
+				self.is_window_focused = False
+
+		# Rebuild all the elements
+		for i in list(set(el_indices_to_rebuild)):
+			self._buildElement(i)
+			self.renderer.setUpdateNeed(True)
 
 	def _findHoveredElements(self, X, Y):
 		"""

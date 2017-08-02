@@ -8,23 +8,22 @@ from tinytag import TinyTag
 # tag = TinyTag.get('/some/music.mp3', image=True)
 # image_data = tag.get_image()
 
-is_running = True
-
 # Create a GUI based on a layout file and a style file
 GUI = Antlia("examples/musicplayer_layout")
 
 # Define a handler for the button
 def quitClickHandler():
-	global is_running
-	is_running = False
+	GUI.stop()
 
 def openClickHandler():
 	# Change the content of the label with something else
 	file_path = GUI.openFileDialog("Open a song", ".mp3", "", None)
-	print(file_path)
+
+	if file_path is not None:
+		pass
 
 	# from pygame import mixer # Load the required library
-	#
+
 	# mixer.init()
 	# mixer.music.load('D:/ghost.mp3')
 	# mixer.music.play()
@@ -40,8 +39,9 @@ GUI.bind("quit_button", "click", quitClickHandler)
 GUI.start()
 
 # Main loop, wait for stop event
-while is_running and not GUI.getUserInfo().want_to_stop:
-	pass
+while not GUI.getUserInfo().want_to_stop:
+	# Give some rest to the CPU
+	ti.sleep(0.1)
 
 # Destroy the GUI properly
 GUI.quit()

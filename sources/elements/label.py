@@ -12,7 +12,7 @@ class Label(Element):
 			"label": "Button",
 			"align": "left",
 			"background-color": "clouds",
-			"text-color": "dark-grey",
+			"text-color": "white",
 			"text-size": 12
 		}
 
@@ -34,7 +34,7 @@ class Label(Element):
 			x = 1.0
 		T = Text(x, 0.5,
 				self.attributes["label"],
-				b"resources/roboto-reg.ttf",
+				b"resources/roboto-regular.ttf",
 				self.attributes["text-size"],
 				align=self.attributes["align"])
 		T.build(renderer, rect, colors["text-color"])

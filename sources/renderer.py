@@ -4,6 +4,7 @@ import os
 import sys
 import ctypes
 import numpy
+import time as ti
 from numpy import array
 
 os.environ["PYSDL2_DLL_PATH"] = "lib/"
@@ -74,23 +75,38 @@ class Renderer:
 		for i, el in enumerate(self.layout_elements):
 			el.build(self.renderer, self.layout_rects[i])
 
+	def buildElement(self, i):
+		self.layout_elements[i].build(self.renderer, self.layout_rects[i])
+
+	def setUpdateNeed(self, b):
+		self.need_update = b
+
 	def quit(self):
 		sdl2.SDL_DestroyRenderer(self.renderer)
 		sdl2.SDL_HideWindow(self.window)
 		sdl2.SDL_DestroyWindow(self.window)
 		sdl2.SDL_Quit()
 
+	def _refreshElement(self, i):
+		"""
+		Only draw one element
+		"""
+		self.layout_elements[i].draw(self.renderer)
+		sdl2.SDL_RenderPresent(self.renderer)
+
 	def _refresh(self):
 		"""
-		Draws the GUI when it needs to be updated
+		Draws the entire GUI when it needs to be updated
 		"""
 		# Clear with white
 		sdl2.SDL_SetRenderDrawColor(self.renderer, 255, 255, 255, 255);
 		sdl2.SDL_RenderClear(self.renderer)
 
 		# For each element of the layout, call its draw method
+		# T = ti.time()
 		for el in self.layout_elements:
 			el.draw(self.renderer)
+		# print(ti.time()-T)
 
 		# Render to the screen
 		sdl2.SDL_RenderPresent(self.renderer)
@@ -106,4 +122,4 @@ class Renderer:
 			if self.need_update:
 				self._refresh()
 				self.need_update = False
-			sdl2.SDL_Delay(5)
+			# sdl2.SDL_Delay(1)
