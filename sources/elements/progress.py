@@ -1,4 +1,4 @@
-from .translate import toArrayOfSizes
+from .translate import toArrayOfSizes, toInt
 from ..blueprint.rectangle import Rectangle
 from ..blueprint.text import Text
 from ..blueprint.circle import Circle
@@ -42,11 +42,12 @@ class Progress(Element):
 				colors["empty-color"])
 		self.blueprint.append(R)
 
+		completion = toInt(self.attributes["completed"])
 		S = Rectangle(0.0, 0.0, 1.0, 1.0)
 		S.build(renderer,
 				Rect(rect.x + int(thickness / 2),
 					rect.y + int(height / 2 - thickness / 2),
-					(rect.w - thickness) * self.attributes["completed"] / 100.0,
+					(rect.w - thickness) * completion / 100.0,
 					thickness),
 				colors["full-color"])
 		self.blueprint.append(S)

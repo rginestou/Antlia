@@ -16,6 +16,11 @@ def toArrayOfSizes(arg):
 		print(arg)
 	return values, type_
 
+def toInt(arg):
+	if type(arg) == int:
+		return arg
+	return int(arg)
+
 def toBoolean(arg):
 	if type(arg) == bool:
 		return arg
