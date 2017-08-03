@@ -1,16 +1,12 @@
-from sources.parser import Parser
-from sources.renderer import Renderer
-from sources.builder import Builder
-from sources.message import log, ERROR, WARNING, OK
-from sources.user import User
-from sources.elements.const import *
-from sources.dialog import getOpenFileName
-import threading
 import os
+import threading
 import ctypes
 import time as ti
+import pkg_resources
 
-os.environ["PYSDL2_DLL_PATH"] = "lib/"
+LIB_PATH = pkg_resources.resource_filename('antlia', 'lib/')
+
+os.environ["PYSDL2_DLL_PATH"] = LIB_PATH
 try:
 	import sdl2
 	import sdl2.sdlttf as sdl2ttf
@@ -18,6 +14,14 @@ except ImportError:
 	import traceback
 	traceback.print_exc()
 	sys.exit(1)
+
+from .parser import Parser
+from .renderer import Renderer
+from .builder import Builder
+from .message import log, ERROR, WARNING, OK
+from .user import User
+from .elements.const import *
+from .dialog import getOpenFileName
 
 class Antlia:
 	"""

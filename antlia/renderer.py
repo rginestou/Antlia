@@ -3,11 +3,12 @@ from .elements.translate import toArrayOfSizes, toBoolean
 import os
 import sys
 import ctypes
-import numpy
 import time as ti
-from numpy import array
+import pkg_resources
 
-os.environ["PYSDL2_DLL_PATH"] = "lib/"
+LIB_PATH = pkg_resources.resource_filename('antlia', 'lib/')
+
+os.environ["PYSDL2_DLL_PATH"] = LIB_PATH
 try:
 	import sdl2
 	import sdl2.sdlttf as sdl2ttf
@@ -58,7 +59,7 @@ class Renderer:
 
 		# Renderer
 		self.renderer = sdl2.SDL_CreateRenderer(self.window, -1,
-            sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_PRESENTVSYNC)
+			sdl2.SDL_RENDERER_ACCELERATED|sdl2.SDL_RENDERER_PRESENTVSYNC)
 
 		# Build the GUI
 		self.buildElements()

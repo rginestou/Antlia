@@ -1,4 +1,4 @@
-from sources.message import log, ERROR, WARNING, OK
+from ..message import log, ERROR, WARNING, OK
 
 class Element:
 	"""

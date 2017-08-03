@@ -1,16 +1,16 @@
 import json
 import copy
 import os.path
-from sources.message import log, ERROR, WARNING, OK
+from .message import log, ERROR, WARNING, OK
 from .elements.color import Color
 from .elements.const import *
 from .elements.table import EL_TABLE
 from pprint import pprint
 
 # Elements
-from sources.elements.window import Window
-from sources.elements.grid import Grid
-from sources.elements.button import Button
+from .elements.window import Window
+from .elements.grid import Grid
+from .elements.button import Button
 
 class Parser:
 	"""

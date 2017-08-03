@@ -11,11 +11,13 @@ class Text(Primitive):
 
 		self.text = text
 		self.size = int(size)
-		self.font = sdl2ttf.TTF_OpenFont(font, self.size)
+		# self.font = sdl2ttf.TTF_OpenFont(font, self.size)
 		self.align = align
 
-		self.font_icon = sdl2ttf.TTF_OpenFont(b"resources/material-icons.ttf", self.size)
-		self.font_text = sdl2ttf.TTF_OpenFont(b"resources/lato-regular.ttf", self.size)
+		icon_path = RESOURCES_PATH + "material-icons.ttf"
+		text_path = RESOURCES_PATH + "lato-light.ttf"
+		self.font_icon = sdl2ttf.TTF_OpenFont(icon_path.encode(), self.size)
+		self.font_text = sdl2ttf.TTF_OpenFont(text_path.encode(), self.size)
 
 	def build(self, renderer, rect, color):
 		# Test if icon

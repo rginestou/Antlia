@@ -1,6 +1,10 @@
 import os, sys
+import pkg_resources
 
-os.environ["PYSDL2_DLL_PATH"] = "lib/"
+RESOURCES_PATH = pkg_resources.resource_filename('antlia', 'resources/')
+LIB_PATH = pkg_resources.resource_filename('antlia', 'lib/')
+
+os.environ["PYSDL2_DLL_PATH"] = LIB_PATH
 try:
 	import sdl2
 	import sdl2.ext as sdl2ext
