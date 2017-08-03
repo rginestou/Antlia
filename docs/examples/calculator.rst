@@ -21,17 +21,17 @@ We start by creating the layout file. Let's call it ``calculator_layout.lia``.
 These first two lines specify parameters relevant to the window.::
 
 	.title Calculator
-	.resolution 400 500
+	.resolution 400px 500px
 
-The window will thereby have *Calculator* as a title, and have a resolution of 400x500.
+The window will thereby have *Calculator* as a title, and a resolution of 400x500px.
 
-The most basic tool to structure a layout is the grid. Like any other element, we declare a grid by writting the ``grid`` keyword followed by its name, here ``main_grid``.
+The most basic tool to structure a layout is the grid. Like any other element, we declare a grid by writing the ``grid`` keyword followed by its name, here ``main_grid``.
 
 The following two lines are the grid parameters. Here, we only need two rows, the first will take 20% of the space, the other 80%.::
 
-	grid man_grid
-		.rows 0.2 0.8
-		.cols 1.0
+	grid main_grid
+		.rows 20% 80%
+		.cols 100%
 
 The two rows need to be filled with elements.
 
@@ -39,58 +39,76 @@ Let's add a label to show the result of the calculator's computations.::
 
 	label result_label
 		.label 0
+		.text-size 40
 		.align right
+		.text-color dark-grey
 
 The second row will be filled with another grid. This time, it will have 4 rows and 4 columns. The grid itself will be filled with 16 buttons, whose name and label are specified in order.::
 
 	grid pad_grid
-		.rows 0.25 0.25 0.25 0.25
-		.cols 0.25 0.25 0.25 0.25
+		.rows 25% 25% 25% 25%
+		.cols 25% 25% 25% 25%
 
 		button 7
 			.label 7
+			.text-size 40
 		button 8
 			.label 8
+			.text-size 40
 		button 9
 			.label 9
+			.text-size 40
 		button +
 			.label +
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.text-size 40
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 		button 4
 			.label 4
+			.text-size 40
 		button 5
 			.label 5
+			.text-size 40
 		button 6
 			.label 6
+			.text-size 40
 		button -
 			.label -
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.text-size 40
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 		button 1
 			.label 1
+			.text-size 40
 		button 2
 			.label 2
+			.text-size 40
 		button 3
 			.label 3
+			.text-size 40
 		button *
 			.label *
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.text-size 40
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 		button clear
 			.label C
+			.text-size 40
 		button 0
 			.label 0
+			.text-size 40
 		button enter
 			.label =
+			.text-size 40
 		button /
 			.label /
-			.released-color belize_hole
-			.pressed-color belize_hole
-			.hovered-color belize_hole
+			.text-size 40
+			.released-color belize-hole
+			.pressed-color belize-hole
+			.hovered-color belize-hole
 
 The layout is already done!
 
@@ -106,7 +124,7 @@ Create the GUI based on the layout file we just created::
 
 	GUI = Antlia("calculator_layout")
 
-For this simple calculator projet, we need to store the expression to evaluate. Here, an ``expression`` list will eventually store two values, and the ``operation`` string will store the type of operation to apply (add, substract, multiply or divide).::
+For this simple calculator projet, we need to store the expression to evaluate. Here, an ``expression`` list will eventually store two values, and the ``operation`` string will store the type of operation to apply (add, subtract, multiply or divide).::
 
 	expression = [0]
 	operation = None
@@ -201,11 +219,14 @@ Full code
 
 Here is the full Python script::
 
+import sys, os
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 	from antlia import *
 	import time as ti
 
 	# Create a GUI based on a layout file and a style file
-	GUI = Antlia("calculator_layout")
+	GUI = Antlia("examples/calculator_layout")
 
 	# Store the expression to be calculated
 	expression = [0]
@@ -285,61 +306,79 @@ Here is the full Python script::
 And the layout file::
 
 	.title Calculator
-	.resolution 400 500
+	.resolution 400px 500px
 
 	grid main_grid
-		.rows 0.2 0.8
-		.cols 1.0
+		.rows 20% 80%
+		.cols 100%
 
 		label result_label
 			.label 0
+			.text-size 40
 			.align right
+			.text-color dark-grey
 
 		grid pad_grid
-			.rows 0.25 0.25 0.25 0.25
-			.cols 0.25 0.25 0.25 0.25
+			.rows 25% 25% 25% 25%
+			.cols 25% 25% 25% 25%
 
 			button 7
 				.label 7
+				.text-size 40
 			button 8
 				.label 8
+				.text-size 40
 			button 9
 				.label 9
+				.text-size 40
 			button +
 				.label +
-				.released-color belize_hole
-				.pressed-color belize_hole
-				.hovered-color belize_hole
+				.text-size 40
+				.released-color belize-hole
+				.pressed-color belize-hole
+				.hovered-color belize-hole
 			button 4
 				.label 4
+				.text-size 40
 			button 5
 				.label 5
+				.text-size 40
 			button 6
 				.label 6
+				.text-size 40
 			button -
 				.label -
-				.released-color belize_hole
-				.pressed-color belize_hole
-				.hovered-color belize_hole
+				.text-size 40
+				.released-color belize-hole
+				.pressed-color belize-hole
+				.hovered-color belize-hole
 			button 1
 				.label 1
+				.text-size 40
 			button 2
 				.label 2
+				.text-size 40
 			button 3
 				.label 3
+				.text-size 40
 			button *
 				.label *
-				.released-color belize_hole
-				.pressed-color belize_hole
-				.hovered-color belize_hole
+				.text-size 40
+				.released-color belize-hole
+				.pressed-color belize-hole
+				.hovered-color belize-hole
 			button clear
 				.label C
+				.text-size 40
 			button 0
 				.label 0
+				.text-size 40
 			button enter
 				.label =
+				.text-size 40
 			button /
 				.label /
-				.released-color belize_hole
-				.pressed-color belize_hole
-				.hovered-color belize_hole
+				.text-size 40
+				.released-color belize-hole
+				.pressed-color belize-hole
+				.hovered-color belize-hole
