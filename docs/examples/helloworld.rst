@@ -3,7 +3,7 @@
 Hello World!
 =================
 
-This very basic example demonstrates the simplicity of making GUI with Antlia.
+This very basic example demonstrates how simple it is to get started with Antlia.
 
 The goal here is to show a button that, once clicked, will change the text displayed by a label next to it.
 
@@ -24,22 +24,26 @@ Even though this layout file has a ``.lia`` extension, only its name has to be p
 
 Open the ``helloworld_layout.lia`` file, and write the following lines::
 
-	.title Hello
-	.resolution 600 200
+	.title Hello World
+	.resolution 600px 200px
 
 	grid main_grid
-		.rows 1.0
-		.cols 0.5 0.5
+		.rows 100%
+		.cols 50% 50%
 
 		button hello_button
 			.label Hello
+			.text-size 45
+
 		label hello_label
 			.label No
+			.text-size 45
 			.align center
+			.text-color dark-grey
 
-The structure of this file is quite easy to understand. The elements composing the GUI are declared by their names, and some attributes starting with ``.`` can then be specified.
+The structure of this file is quite easy to understand. The **elements** composing the GUI are declared by their names, and some **attributes** starting with ``.`` are given in the following lines.
 
-The first attributes are linked to the window.
+The attributes specified at the beginning of the layout file are relevant to the window.
 
 Back to the Python script, it is time to define the button's handler.::
 
@@ -74,7 +78,7 @@ The full Python script used for this example is given below.::
 	import time as ti
 
 	# Create a GUI based on a layout file
-	GUI = Antlia("ehelloworld_layout")
+	GUI = Antlia("helloworld_layout")
 
 	# Define a handler for the button
 	def buttonClickHandler():
