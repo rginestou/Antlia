@@ -12,12 +12,8 @@ grid main_grid
 		.rows 100%
 		.cols 15% 70% 15%
 
-		button open-file_button
+		styled-button open-file_button
 			.label #library_music#
-			.text-size 30
-			.released-color asphalt
-			.pressed-color wet-asphalt
-			.hovered-color asphalt
 
 		grid info_grid
 			.rows 60% 40%
@@ -33,12 +29,8 @@ grid main_grid
 				.text-size 16
 				.background-color asphalt
 
-		button quit_button
+		styled-button quit_button
 			.label #exit_to_app#
-			.text-size 30
-			.released-color asphalt
-			.pressed-color wet-asphalt
-			.hovered-color asphalt
 
 	image cover_image
 		.source examples/default.png
@@ -48,19 +40,11 @@ grid main_grid
 		.rows 100%
 		.cols 15% 15% 15% 55%
 
-		button play-pause_button
+		styled-button play-pause_button
 			.label #play_arrow#
-			.text-size 30
-			.released-color asphalt
-			.pressed-color wet-asphalt
-			.hovered-color asphalt
 
-		button stop_button
+		styled-button stop_button
 			.label #stop#
-			.text-size 30
-			.released-color asphalt
-			.pressed-color wet-asphalt
-			.hovered-color asphalt
 
 		label time_label
 			.label 00:00

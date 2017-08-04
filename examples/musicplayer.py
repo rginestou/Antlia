@@ -16,7 +16,7 @@ song_loaded = False
 is_running = True
 
 # Create a GUI based on a layout file and a style file
-GUI = Antlia("examples/musicplayer_layout")
+GUI = Antlia("examples/musicplayer_layout", "examples/musicplayer_style")
 
 # Define a handler for the button
 def quitClickHandler():
