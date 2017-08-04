@@ -20,44 +20,47 @@ class Text(Primitive):
 		self.font_text = sdl2ttf.TTF_OpenFont(text_path.encode(), self.size)
 
 	def build(self, renderer, rect, color):
-		# Test if icon
-		icon = re.compile(r'#(.+)#')
+		if self.text != "":
+			# Test if icon
+			icon = re.compile(r'#(.+)#')
 
-		s = icon.search(self.text)
-		if s is not None:
-			# Icon found !
-			icon_name = s.group(1)
-			self.text = NAME_TO_UNICODE[icon_name]
+			s = icon.search(self.text)
+			if s is not None:
+				# Icon found !
+				icon_name = s.group(1)
+				self.text = NAME_TO_UNICODE[icon_name]
 
-			font = self.font_icon
-		else:
-			font = self.font_text
+				font = self.font_icon
+			else:
+				font = self.font_text
 
-		textSurface = sdl2ttf.TTF_RenderUTF8_Blended(font, self.text.encode(), sdl2.SDL_Color(*color), sdl2.SDL_Color(52,73,94,255))
-		errors = sdl2ttf.TTF_GetError()
-		if errors:
-			print("Text", errors)
-		w = textSurface.contents.w
-		h = textSurface.contents.h
+			textSurface = sdl2ttf.TTF_RenderUTF8_Blended(font, self.text.encode(), sdl2.SDL_Color(*color), sdl2.SDL_Color(52,73,94,255))
+			errors = sdl2ttf.TTF_GetError()
+			if errors:
+				print("Text", errors)
+			w = textSurface.contents.w
+			h = textSurface.contents.h
 
-		# Compute the square in absolute coordinates
-		text_rect = Rect(self.x, self.y, self.w, self.h)
-		_rect = Rect(*text_rect.fitRect(rect).getTuple())
-		X = _rect.x
-		Y = int(_rect.y - h/2)
-		if self.align == "center":
-			X = int(X - w/2)
-		if self.align == "right":
-			X = int(X - w)
-		self.abs_rect = sdl2.SDL_Rect(X, Y, w, h)
+			# Compute the square in absolute coordinates
+			text_rect = Rect(self.x, self.y, self.w, self.h)
+			_rect = Rect(*text_rect.fitRect(rect).getTuple())
+			X = _rect.x
+			Y = int(_rect.y - h/2)
+			if self.align == "center":
+				X = int(X - w/2)
+			if self.align == "right":
+				X = int(X - w)
+			self.abs_rect = sdl2.SDL_Rect(X, Y, w, h)
 
-		self.textTexture = sdl2.SDL_CreateTextureFromSurface(renderer, textSurface)
-		sdl2.SDL_FreeSurface(textSurface)
+			self.textTexture = sdl2.SDL_CreateTextureFromSurface(renderer, textSurface)
+			sdl2.SDL_FreeSurface(textSurface)
 
 	def draw(self, renderer):
-		sdl2.SDL_RenderCopy(renderer, self.textTexture, None, self.abs_rect)
+		if self.text != "":
+			sdl2.SDL_RenderCopy(renderer, self.textTexture, None, self.abs_rect)
 
 	def destroy(self):
-		sdl2.SDL_DestroyTexture(self.textTexture)
+		if self.text != "":
+			sdl2.SDL_DestroyTexture(self.textTexture)
 		sdl2ttf.TTF_CloseFont(self.font_icon)
 		sdl2ttf.TTF_CloseFont(self.font_text)

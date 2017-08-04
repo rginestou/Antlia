@@ -110,10 +110,8 @@ class Renderer:
 		sdl2.SDL_RenderClear(self.renderer)
 
 		# For each element of the layout, call its draw method
-		# T = ti.time()
 		for el in self.layout_elements:
 			el.draw(self.renderer)
-		# print(ti.time()-T)
 
 		# Render to the screen
 		sdl2.SDL_RenderPresent(self.renderer)

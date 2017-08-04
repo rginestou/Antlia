@@ -206,13 +206,10 @@ class Antlia:
 			if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
 				self.is_window_focused = False
 
-		# Rebuild all the elements
-		# for i in list(set(el_indices_to_rebuild)):
-		# 	self._buildElement(i)
-		# 	self.renderer.setUpdateNeed(True)
-
-		self._buildElements()
-		self.renderer.setUpdateNeed(True)
+		# Rebuild if necessary
+		if len(el_indices_to_rebuild) > 0:
+			self._buildElements()
+			self.renderer.setUpdateNeed(True)
 
 	def _findHoveredElements(self, X, Y):
 		"""

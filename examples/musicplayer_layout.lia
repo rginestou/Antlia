@@ -24,10 +24,12 @@ grid main_grid
 			.cols 100%
 
 			label title_label
+				.label
 				.text-size 22
 				.background-color asphalt
 
 			label artist_label
+				.label
 				.text-size 16
 				.background-color asphalt
 

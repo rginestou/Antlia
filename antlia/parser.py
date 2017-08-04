@@ -33,7 +33,14 @@ class Parser:
 		"""
 		Build an array of element and their rects
 		"""
-		layout_elements, layout_tree, layout_table, root_indices, root_att = self._loadTemplate(layout_file_name, offset=1)
+
+		# Fetch the custom elements
+		if style_file_name is not None:
+			style_chunks = self._loadStyle(style_file_name)
+		else:
+			style_chunks = {}
+
+		layout_elements, layout_tree, layout_table, root_indices, root_att = self._loadLayout(layout_file_name, style_chunks, offset=1)
 
 		# Add the window object
 		window = Window("window")
@@ -46,11 +53,7 @@ class Parser:
 		self.layout_table = layout_table
 		self.layout_table["window"] = 0
 
-		# print(self.layout_elements, "\n")
-		# print(self.layout_tree, "\n")
-		# print(self.layout_table, "\n")
-
-	def _loadTemplate(self, template_name, style_elements=[], style_tree=[], style_table={}, offset=0):
+	def _loadLayout(self, layout_name, style_chunks, offset=0):
 		"""
 		Load a template file and parse its content.
 		The tree is generated according to the file's structure.
@@ -65,36 +68,34 @@ class Parser:
 		root_indices = []
 		root_att = {}
 
-		# Open and read the file
-		with open(template_name + ".lia", "r") as template_file:
-			template_lines = template_file.readlines()
-			template_lines.append("\n")
-
 		index_pile = []
 		last_element_indent = -1
 		n_element = offset
-		n_lines = len(template_lines)
 
-		for line_number, line in enumerate(template_lines):
+		def _loadLineInfo(line_number, line, n_lines, off_indent=0):
+			# Access out of scope variables
+			nonlocal layout_elements, layout_tree, layout_table
+			nonlocal root_indices, root_att, index_pile
+			nonlocal last_element_indent, n_element
+
 			# Get indent and data of the line
 			indent, data = self._parseLine(line)
+			indent += off_indent
 
 			if line_number != n_lines-1:
 				# Jump to next line if empty or if it is a comment
 				if len(data) == 0 or data[0] == "" or data[0][0] == "#":
 					line_number += 1
-					continue
+					return
 
-				# Check if the data contains two blocks
+				# If the data doesnt contain two blocks, add empty string
 				if len(data) != 2:
-					log(ERROR, "Syntax error at line " + str(line_number+1))
-					exit(1)
+					data.append("")
 
 			# Look for indentation differentials
 			while last_element_indent >= indent:
 				# Fetch last element
 				last_element_index = index_pile[-1]
-
 				# This last element is fully setup
 				layout_elements[last_element_index].placeChildren()
 				index_pile.pop()
@@ -114,7 +115,7 @@ class Parser:
 
 			if len(data) != 2:
 				# For end of file
-				continue
+				return
 
 			if data[0][0] == ".":
 				# Look for new properties
@@ -133,7 +134,16 @@ class Parser:
 
 				# Parse this new element
 				if element_type in EL_TABLE:
+					# Regular element
 					layout_elements.append(EL_TABLE[element_type](element_name))
+				elif element_type in style_chunks:
+					# Curstomed defined element
+					definition = style_chunks[element_type]
+					layout_elements.append(EL_TABLE[definition[0]](element_name))
+				else:
+					# Does not exist
+					log(ERROR, element_type + " is not a valid element, line " + str(line_number))
+					exit(1)
 
 				layout_tree.append([])
 				layout_table[element_name] = n_element
@@ -144,7 +154,56 @@ class Parser:
 
 				n_element += 1
 
+				# Loop through the style if custom element
+				if element_type in style_chunks:
+					definition = style_chunks[element_type]
+					for style_line in definition[1:]:
+						_loadLineInfo(line_number, style_line, n_lines, off_indent=indent)
+
+		# Open and read the file
+		with open(layout_name + ".lia", "r") as layout_file:
+			layout_lines = layout_file.readlines()
+			layout_lines.append("\n")
+
+		n_lines = len(layout_lines)
+
+		# Loop through all the lines
+		for line_number, line in enumerate(layout_lines):
+			_loadLineInfo(line_number, line, n_lines)
+
 		return layout_elements, layout_tree, layout_table, root_indices, root_att
+
+	def _loadStyle(self, style_file_name):
+		style_chunks = {}
+
+		# Open and read the file
+		with open(style_file_name + ".lia", "r") as style_file:
+			style_lines = style_file.readlines()
+			style_lines.append("\n")
+
+		n_lines = len(style_lines)
+		last_element_name = ""
+
+		# Loop through all the lines
+		for line_number, line in enumerate(style_lines):
+			indent, data = self._parseLine(line)
+
+			# Jump to next line if empty or if it is a comment
+			if len(data) == 0 or data[0] == "" or data[0][0] == "#":
+				continue
+
+			# If the data doesnt contain two blocks, add empty string
+			if len(data) != 2:
+				data.append("")
+
+			if indent == 0:
+				# New custom element
+				last_element_name = data[1]
+				style_chunks[last_element_name] = [data[0]]
+			else:
+				style_chunks[last_element_name].append(line)
+
+		return style_chunks
 
 	def _parseLine(self, line):
 		indent = 0
