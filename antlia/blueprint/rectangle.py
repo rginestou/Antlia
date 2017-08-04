@@ -13,5 +13,6 @@ class Rectangle(Primitive):
 
 	def draw(self, renderer):
 		# Draw with SDL2
-		sdl2.SDL_SetRenderDrawColor(renderer, *self.color)
-		sdl2.SDL_RenderFillRect(renderer, self.abs_rect)
+		if self.color is not None:
+			sdl2.SDL_SetRenderDrawColor(renderer, *self.color)
+			sdl2.SDL_RenderFillRect(renderer, self.abs_rect)

@@ -42,6 +42,7 @@ Let's add a label to show the result of the calculator's computations.::
 		.text-size 40
 		.align right
 		.text-color dark-grey
+		.background-color clouds
 
 The second row will be filled with another grid. This time, it will have 4 rows and 4 columns. The grid itself will be filled with 16 buttons, whose name and label are specified in order.::
 
@@ -314,6 +315,7 @@ And the layout file::
 			.text-size 40
 			.align right
 			.text-color dark-grey
+			.background-color clouds
 
 		grid pad_grid
 			.rows 25% 25% 25% 25%

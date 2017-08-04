@@ -32,6 +32,7 @@ class Renderer:
 		self.is_window_created = False
 		self.need_update = False
 		self.params = params
+		self.is_running = True
 
 		# Translation of the window parameters
 		resolution, _ = toArrayOfSizes(self.params["resolution"])
@@ -83,6 +84,11 @@ class Renderer:
 		self.need_update = b
 
 	def quit(self):
+		self.is_running = False
+		# Give time for the other thread to end
+		ti.sleep(0.05)
+
+		# Destroy the SDL context
 		sdl2.SDL_DestroyRenderer(self.renderer)
 		sdl2.SDL_HideWindow(self.window)
 		sdl2.SDL_DestroyWindow(self.window)
@@ -114,13 +120,14 @@ class Renderer:
 
 	def _loopForEvents(self):
 		event = sdl2.SDL_Event()
-		while True:
+		while self.is_running:
 			# Look at the event queue
 			while sdl2.SDL_PollEvent(ctypes.byref(event)) != 0:
 				self.onEvent(event)
 
 			# Look for layout changes
 			if self.need_update:
+				self.buildElements()
 				self._refresh()
 				self.need_update = False
 			# sdl2.SDL_Delay(1)

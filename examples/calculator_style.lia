@@ -1,0 +1,8 @@
+button pad-button
+	.text-size 40
+
+button side-button
+	.text-size 40
+	.released-color belize-hole
+	.pressed-color belize-hole
+	.hovered-color belize-hole

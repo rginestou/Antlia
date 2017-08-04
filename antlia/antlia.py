@@ -98,12 +98,7 @@ class Antlia:
 
 		# Change the parameter
 		self.layout_elements[element_index].setAttribute(parameter, value)
-		self.renderer.buildElements() #TODO
-		# self.layout_elements[element_index].build()
-
-		# Need to refresh the GUI
 		self._update()
-		self.renderer.buildElements()
 
 	def getUserInfo(self):
 		return self.user
@@ -130,6 +125,9 @@ class Antlia:
 		os.chdir(self.path)
 
 		return file_path
+
+	def isRunning(self):
+		return self.is_running
 
 	def _update(self):
 		"""
@@ -209,9 +207,12 @@ class Antlia:
 				self.is_window_focused = False
 
 		# Rebuild all the elements
-		for i in list(set(el_indices_to_rebuild)):
-			self._buildElement(i)
-			self.renderer.setUpdateNeed(True)
+		# for i in list(set(el_indices_to_rebuild)):
+		# 	self._buildElement(i)
+		# 	self.renderer.setUpdateNeed(True)
+
+		self._buildElements()
+		self.renderer.setUpdateNeed(True)
 
 	def _findHoveredElements(self, X, Y):
 		"""

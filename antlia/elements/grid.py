@@ -31,6 +31,8 @@ class Grid(Element):
 			sc = 0.0
 
 	def build(self, renderer, rect):
+		self._clearBlueprint()
+
 		colors = {
 			"background-color": Color[self.attributes["background-color"]]
 		}

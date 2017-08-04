@@ -13,6 +13,8 @@ class Image(Element):
 		}
 
 	def build(self, renderer, rect):
+		self._clearBlueprint()
+
 		# Bluid blueprint
 		I = Picture(self.attributes["source"], self.attributes["adjust"])
 		I.build(renderer, rect, None)

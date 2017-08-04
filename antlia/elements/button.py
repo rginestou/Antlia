@@ -10,7 +10,7 @@ class Button(Element):
 		# Specific to the Button element
 		self.attributes = {
 			"state": RELEASED,
-			"label": "Button",
+			"label": name,
 			"text-align": "center",
 			"text-size": 12,
 			"released-color": "peter-river",
@@ -20,6 +20,8 @@ class Button(Element):
 		}
 
 	def build(self, renderer, rect):
+		self._clearBlueprint()
+
 		# Fetch colors
 		colors = {
 			"released-color": Color[self.attributes["released-color"]],

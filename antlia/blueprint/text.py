@@ -34,6 +34,9 @@ class Text(Primitive):
 			font = self.font_text
 
 		textSurface = sdl2ttf.TTF_RenderUTF8_Blended(font, self.text.encode(), sdl2.SDL_Color(*color), sdl2.SDL_Color(52,73,94,255))
+		errors = sdl2ttf.TTF_GetError()
+		if errors:
+			print("Text", errors)
 		w = textSurface.contents.w
 		h = textSurface.contents.h
 
@@ -53,3 +56,8 @@ class Text(Primitive):
 
 	def draw(self, renderer):
 		sdl2.SDL_RenderCopy(renderer, self.textTexture, None, self.abs_rect)
+
+	def destroy(self):
+		sdl2.SDL_DestroyTexture(self.textTexture)
+		sdl2ttf.TTF_CloseFont(self.font_icon)
+		sdl2ttf.TTF_CloseFont(self.font_text)

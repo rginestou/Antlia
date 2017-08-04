@@ -19,7 +19,17 @@ grid main_grid
 			.pressed-color wet-asphalt
 			.hovered-color asphalt
 
-		empty _
+		grid info_grid
+			.rows 60% 40%
+			.cols 100%
+
+			label title_label
+				.text-size 22
+				.background-color asphalt
+
+			label artist_label
+				.text-size 16
+				.background-color asphalt
 
 		button quit_button
 			.label #exit_to_app#
@@ -29,7 +39,7 @@ grid main_grid
 			.hovered-color asphalt
 
 	image cover_image
-		.source examples/cover.png
+		.source examples/default.png
 		.adjust fill
 
 	grid footer_grid
@@ -53,8 +63,9 @@ grid main_grid
 		label time_label
 			.label 00:00
 			.align center
-			.text-size 16
+			.text-size 20
 			.background-color asphalt
 
 		progress time_progress
+			.completed 0
 			.full-color peter-river

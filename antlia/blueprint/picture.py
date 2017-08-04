@@ -12,7 +12,7 @@ class Picture(Primitive):
 		imgSurface = sdl2img.IMG_Load(self.src.encode());
 		errors = sdl2img.IMG_GetError()
 		if errors:
-			print(errors)
+			print("Picture", errors)
 			return
 
 		imW = imgSurface.contents.w
@@ -38,3 +38,6 @@ class Picture(Primitive):
 
 	def draw(self, renderer):
 		sdl2.SDL_RenderCopy(renderer, self.imgTexture, self.img_rect, self.abs_rect)
+
+	def destroy(self):
+		sdl2.SDL_DestroyTexture(self.imgTexture)

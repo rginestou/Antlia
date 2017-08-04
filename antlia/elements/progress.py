@@ -13,12 +13,14 @@ class Progress(Element):
 		self.attributes = {
 			"selectable": False,
 			"thickness": "12px",
-			"completed": 80,
+			"completed": 50,
 			"empty-color": "clouds",
 			"full-color": "green-sea"
 		}
 
 	def build(self, renderer, rect):
+		self._clearBlueprint()
+
 		colors = {
 			"empty-color": Color[self.attributes["empty-color"]],
 			"full-color": Color[self.attributes["full-color"]]

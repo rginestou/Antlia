@@ -34,6 +34,12 @@ class Element:
 		"""
 		pass
 
+	def _clearBlueprint(self):
+		# Clear previous primitives
+		for p in self.blueprint:
+			p.destroy()
+		self.blueprint = []
+
 	def draw(self, renderer):
 		for e in self.blueprint: e.draw(renderer)
 

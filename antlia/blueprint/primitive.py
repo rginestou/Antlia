@@ -30,5 +30,8 @@ class Primitive:
 	def build(self, renderer, rect, color):
 		pass
 
+	def destroy(self):
+		pass
+
 	def draw(self, renderer):
 		pass
