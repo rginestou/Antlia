@@ -15,7 +15,7 @@ See the full doc [here](https://antlia.data-ensta.fr/).
 
 `hello_world.py` :
 
-```
+```python
 from antlia import *
 import time as ti
 
