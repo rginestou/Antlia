@@ -28,7 +28,7 @@ class Progress(Element):
 
 		height = rect.h
 
-		t, typ_ = toArrayOfSizes(self.attributes["thickness"])
+		t, typ_, err = toArrayOfSizes(self.attributes["thickness"])
 		if typ_ == "px":
 			thickness = t[0]
 		else:

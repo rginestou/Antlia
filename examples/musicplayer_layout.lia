@@ -22,11 +22,13 @@ grid main_grid
 			label title_label
 				.label
 				.text-size 22
+				.drag-window true
 				.background-color asphalt
 
 			label artist_label
 				.label
 				.text-size 16
+				.drag-window true
 				.background-color asphalt
 
 		styled-button quit_button

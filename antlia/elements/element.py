@@ -69,6 +69,12 @@ class Element:
 	def getAttributes(self):
 		return self.attributes
 
+	def getAttribute(self, att):
+		if att in self.attributes:
+			return self.attributes[att]
+		else:
+			return None
+
 	def __str__(self):
 		string = "----> " + self.name + "\n"
 		for a in self.attributes:

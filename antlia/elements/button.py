@@ -13,6 +13,7 @@ class Button(Element):
 			"label": name,
 			"text-align": "center",
 			"text-size": 12,
+			"drag-window": False,
 			"released-color": "peter-river",
 			"pressed-color": "belize-hole",
 			"hovered-color": "peter-river",

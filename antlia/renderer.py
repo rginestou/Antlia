@@ -35,7 +35,10 @@ class Renderer:
 		self.is_running = True
 
 		# Translation of the window parameters
-		resolution, _ = toArrayOfSizes(self.params["resolution"])
+		resolution, _, err = toArrayOfSizes(self.params["resolution"])
+		if err is not None:
+			log(ERROR, ".resolution: ", err)
+			exit(1)
 		self.window_width, self.window_height = resolution
 		self.show_borders = toBoolean(self.params["show-borders"])
 
@@ -82,6 +85,17 @@ class Renderer:
 
 	def setUpdateNeed(self, b):
 		self.need_update = b
+
+	def getWindowPosition(self):
+		# Use pointers
+		X = ctypes.pointer(ctypes.c_long(0))
+		Y = ctypes.pointer(ctypes.c_long(0))
+		sdl2.SDL_GetWindowPosition(self.window, X, Y)
+
+		return X.contents.value, Y.contents.value
+
+	def setWindowPosition(self, x, y):
+		sdl2.SDL_SetWindowPosition(self.window, x, y)
 
 	def quit(self):
 		self.is_running = False

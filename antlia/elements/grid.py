@@ -1,5 +1,6 @@
 from .translate import toArrayOfSizes
 from ..blueprint.rectangle import Rectangle
+from ..message import log, ERROR, WARNING, OK
 from .element import Element
 from ..rect import Rect
 from .color import Color
@@ -12,6 +13,7 @@ class Grid(Element):
 		self.attributes = {
 			"rows": "100%",
 			"cols": "100%",
+			"drag-window": False,
 			"background-color": "none"
 		}
 
@@ -19,9 +21,16 @@ class Grid(Element):
 		# Create rects based on the rows and columns proportions
 		s = 0.0
 
-		rows, _ = toArrayOfSizes(self.attributes["rows"])
-		cols, _ = toArrayOfSizes(self.attributes["cols"])
+		rows, _, err = toArrayOfSizes(self.attributes["rows"])
+		if err is not None:
+			log(ERROR, self.name + " .rows:" + err)
+			exit(1)
+		cols, _, err = toArrayOfSizes(self.attributes["cols"])
+		if err is not None:
+			log(ERROR, self.name + " .cols: " + err)
+			exit(1)
 
+		# TODO
 		sr = 0.0; sc = 0.0
 		for r in rows:
 			for c in cols:

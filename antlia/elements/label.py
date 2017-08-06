@@ -11,6 +11,7 @@ class Label(Element):
 		self.attributes = {
 			"label": name,
 			"align": "left",
+			"drag-window": False,
 			"background-color": "none",
 			"text-color": "white",
 			"text-size": 12

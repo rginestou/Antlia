@@ -3,7 +3,7 @@
 
 grid main_grid
 	.rows 20% 80%
-	.cols 100%
+	.cols 1
 
 	label result_label
 		.label 0
@@ -13,8 +13,8 @@ grid main_grid
 		.background-color clouds
 
 	grid pad_grid
-		.rows 25% 25% 25% 25%
-		.cols 25% 25% 25% 25%
+		.rows 4
+		.cols 4
 
 		pad-button 7
 		pad-button 8

@@ -10,14 +10,17 @@ os.environ["PYSDL2_DLL_PATH"] = LIB_PATH
 try:
 	import sdl2
 	import sdl2.sdlttf as sdl2ttf
+	import sdl2.sdlgfx as sdl2gfx
 except ImportError:
 	import traceback
 	traceback.print_exc()
 	sys.exit(1)
 
 from .parser import Parser
+from .mouse import Mouse
 from .renderer import Renderer
 from .builder import Builder
+from .elements.translate import toBoolean
 from .message import log, ERROR, WARNING, OK
 from .user import User
 from .elements.const import *
@@ -36,6 +39,9 @@ class Antlia:
 		self.user = User()
 		self.is_window_focused = True
 		self.path = os.getcwd()
+
+		# Mouse
+		self.mouse = Mouse()
 
 		# The Parser that will read all informations from both
 		# the layout and style files
@@ -150,11 +156,35 @@ class Antlia:
 			self.user.want_to_stop = True
 		# MOUSE MOTION events
 		elif event.type == sdl2.SDL_MOUSEMOTION:
+			# Local mouse coordonates
 			X = event.motion.x
 			Y = event.motion.y
 
+			# Global mouse coordonates
+			gX = ctypes.pointer(ctypes.c_long(0))
+			gY = ctypes.pointer(ctypes.c_long(0))
+			sdl2.SDL_GetGlobalMouseState(gX, gY)
+			global_X = gX.contents.value
+			global_Y = gY.contents.value
+
 			# Get the hovered elements
 			current_indices = self._findHoveredElements(X, Y)
+
+			# Look for draggable elements
+			if self.mouse.left_click:
+				dx = 0; dy = 0
+				need_moving = False
+				for i in current_indices:
+					el = self.layout_elements[i]
+
+					if toBoolean(el.getAttribute("drag-window")):
+						dx = global_X - self.mouse.global_X
+						dy = global_Y - self.mouse.global_Y
+						need_moving = True
+
+				if need_moving:
+					wx, wy = self.renderer.getWindowPosition()
+					self.renderer.setWindowPosition(wx + dx, wy + dy)
 
 			# Look for the elements that are now hovered,
 			# and those who are no more
@@ -176,7 +206,15 @@ class Antlia:
 				el_indices_to_rebuild.append(i)
 
 			self.hovered_indices = current_indices
+
+			# Update mouse position
+			self.mouse.X = X
+			self.mouse.Y = Y
+
+			self.mouse.global_X = global_X
+			self.mouse.global_Y = global_Y
 		elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
+			self.mouse.left_click = True
 			for i in self.hovered_indices:
 				el = self.layout_elements[i]
 				self._callHandler(el.name, "click")
@@ -185,6 +223,7 @@ class Antlia:
 				# Need to be rebuilt
 				el_indices_to_rebuild.append(i)
 		elif event.type == sdl2.SDL_MOUSEBUTTONUP:
+			self.mouse.left_click = False
 			for i in self.hovered_indices:
 				el = self.layout_elements[i]
 				self._callHandler(el.name, "release")

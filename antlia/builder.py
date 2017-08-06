@@ -7,7 +7,10 @@ class Builder(object):
 	will produce an array of rects for SDL2
 	"""
 	def __init__(self, params):
-		resolution, _ = toArrayOfSizes(params["resolution"])
+		resolution, _, err = toArrayOfSizes(params["resolution"])
+		if err is not None:
+			log(ERROR, ".resolution: " + err)
+			exit(1)
 		self.window_width, self.window_height = resolution
 
 	def computeLayoutRects(self, layout_elements, layout_tree):
