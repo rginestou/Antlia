@@ -12,7 +12,7 @@ class Progress(Element):
 		# Specific to the Button element
 		self.attributes = {
 			"selectable": False,
-			"thickness": "12px",
+			"thickness": "10px",
 			"completed": 50,
 			"empty-color": "clouds",
 			"full-color": "green-sea"
@@ -27,6 +27,7 @@ class Progress(Element):
 		}
 
 		height = rect.h
+		width = rect.w
 
 		t, typ_, err = toArrayOfSizes(self.attributes["thickness"])
 		if typ_ == "px":
@@ -34,22 +35,51 @@ class Progress(Element):
 		else:
 			thickness = int(t[0] * height)
 
+		Cleft = Circle(0.5, 0.5, 0.5)
+		Cleft.build(renderer, Rect(rect.x,
+								rect.y + int(height / 2 - thickness / 2),
+								thickness, thickness),
+				colors["empty-color"])
+		self.blueprint.append(Cleft)
+		Cright = Circle(0.5, 0.5, 0.5)
+		Cright.build(renderer, Rect(rect.x + width - thickness,
+								rect.y + int(height / 2 - thickness / 2),
+								thickness, thickness),
+				colors["empty-color"])
+		self.blueprint.append(Cright)
+
 		# Bluid blueprint
 		R = Rectangle(0.0, 0.0, 1.0, 1.0)
 		R.build(renderer,
 				Rect(rect.x + int(thickness / 2),
 					rect.y + int(height / 2 - thickness / 2),
 					rect.w - thickness,
-					thickness),
+					thickness+1), # For the circle to be aligned
 				colors["empty-color"])
 		self.blueprint.append(R)
 
 		completion = toInt(self.attributes["completed"])
-		S = Rectangle(0.0, 0.0, 1.0, 1.0)
-		S.build(renderer,
-				Rect(rect.x + int(thickness / 2),
-					rect.y + int(height / 2 - thickness / 2),
-					(rect.w - thickness) * completion / 100.0,
-					thickness),
-				colors["full-color"])
-		self.blueprint.append(S)
+		if completion > 0:
+			comp_width = (rect.w - thickness) * completion / 100.0
+
+			Ccompleft = Circle(0.5, 0.5, 0.5)
+			Ccompleft.build(renderer, Rect(rect.x,
+									rect.y + int(height / 2 - thickness / 2),
+									thickness, thickness),
+					colors["full-color"])
+			self.blueprint.append(Ccompleft)
+			Ccompright = Circle(0.5, 0.5, 0.5)
+			Ccompright.build(renderer, Rect(rect.x + comp_width,
+									rect.y + int(height / 2 - thickness / 2),
+									thickness, thickness),
+					colors["full-color"])
+			self.blueprint.append(Ccompright)
+
+			S = Rectangle(0.0, 0.0, 1.0, 1.0)
+			S.build(renderer,
+					Rect(rect.x + int(thickness / 2),
+						rect.y + int(height / 2 - thickness / 2),
+						comp_width,
+						thickness+1),
+					colors["full-color"])
+			self.blueprint.append(S)

@@ -10,11 +10,13 @@ class Circle(Primitive):
 
 	def build(self, renderer, rect, color):
 		self.color = color
-		# Compute the square in absolute coordinates
-		rectangle_rect = Rect(self.x, self.y, self.w, self.h)
-		self.abs_rect = sdl2.SDL_Rect(*rectangle_rect.fitRect(rect).getTuple())
+		diam = 2 * self.radius
+
+		self.X = int(rect.x + rect.w * self.x)
+		self.Y = int(rect.y + rect.h * self.y)
+		self.Radius = int(rect.w * self.radius)
 
 	def draw(self, renderer):
 		# Draw with SDL2
-		sdl2.SDL_SetRenderDrawColor(renderer, *self.color)
-		sdl2.SDL_RenderFillRect(renderer, self.abs_rect)
+		sdl2gfx.filledCircleRGBA(renderer, self.X, self.Y, self.Radius, *self.color)
+		sdl2gfx.aacircleRGBA(renderer, self.X, self.Y, self.Radius, *self.color)

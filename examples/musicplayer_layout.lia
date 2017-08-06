@@ -55,5 +55,5 @@ grid main_grid
 			.background-color asphalt
 
 		progress time_progress
-			.completed 0
+			.completed 80
 			.full-color peter-river

@@ -10,6 +10,7 @@ try:
 	import sdl2.ext as sdl2ext
 	import sdl2.sdlttf as sdl2ttf
 	import sdl2.sdlimage as sdl2img
+	import sdl2.sdlgfx as sdl2gfx
 except ImportError:
 	import traceback
 	traceback.print_exc()
