@@ -9,22 +9,39 @@ def toArrayOfSizes(arg):
 		err = "The specified value is incorrect"
 		return None, None, err
 	array = arg.split(" ")
-	if array[0].endswith("%"):
-		# Percentage
-		typ = "%"
-		values = [float(x[:-1]) / 100.0 for x in array]
-	elif array[0].endswith("x"):
-		# Pixels
-		typ = "px"
-		values = [int(x[:-2]) for x in array]
-	elif arg.isdigit():
+
+	if array[0].isdigit():
 		# Number
 		n = int(arg)
-		typ = "%"
-		values = [1.0 / n for _ in range(n)]
+		if len(array) == 1:
+			t = "%"
+			v = 1.0 / n
+		elif len(array) == 2:
+			if array[1].endswith("%"):
+				# Percentage
+				t = "%"
+				v = float(array[1][:-1]) / 100.0
+			elif array[1].endswith("px"):
+				# Pixels
+				t = "px"
+				v = int(array[1][:-2])
+		typ = [t] * n
+		values = [v] * n
 	else:
-		err = "The specified value has no known format"
-		return None, None, err
+		typ = []
+		values = []
+		for v in array:
+			if v.endswith("%"):
+				# Percentage
+				typ.append("%")
+				values.append(float(v[:-1]) / 100.0)
+			elif v.endswith("px"):
+				# Pixels
+				typ.append("px")
+				values.append(int(v[:-2]))
+			else:
+				err = "The specified value has no known format"
+				return None, None, err
 	return values, typ, None
 
 def toInt(arg):

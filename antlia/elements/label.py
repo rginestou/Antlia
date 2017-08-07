@@ -13,8 +13,10 @@ class Label(Element):
 			"align": "left",
 			"drag-window": False,
 			"background-color": "none",
+			"font": "lato-light",
 			"text-color": "white",
-			"text-size": 12
+			"text-size": 12,
+			"padding": "0px"
 		}
 
 	def build(self, renderer, rect):
@@ -23,6 +25,9 @@ class Label(Element):
 			"background-color": Color[self.attributes["background-color"]],
 			"text-color": Color[self.attributes["text-color"]]
 		}
+
+		# Apply padding
+		text_rect = rect.getPaddingRect(self.attributes["padding"])
 
 		# Bluid blueprint
 		if colors["background-color"] is not None:
@@ -37,9 +42,9 @@ class Label(Element):
 			x = 1.0
 		T = Text(x, 0.5,
 				self.attributes["label"],
-				b"resources/roboto-regular.ttf",
+				self.attributes["font"],
 				self.attributes["text-size"],
 				align=self.attributes["align"])
 
-		T.build(renderer, rect, colors["text-color"])
+		T.build(renderer, text_rect, colors["text-color"])
 		self.blueprint.append(T)

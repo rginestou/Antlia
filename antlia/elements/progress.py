@@ -1,4 +1,4 @@
-from .translate import toArrayOfSizes, toInt
+from .translate import toArrayOfSizes, toFloat
 from ..blueprint.rectangle import Rectangle
 from ..blueprint.text import Text
 from ..blueprint.circle import Circle
@@ -15,7 +15,8 @@ class Progress(Element):
 			"thickness": "10px",
 			"completed": 50,
 			"empty-color": "clouds",
-			"full-color": "green-sea"
+			"full-color": "green-sea",
+			"padding": "0px"
 		}
 
 	def build(self, renderer, rect):
@@ -25,6 +26,9 @@ class Progress(Element):
 			"empty-color": Color[self.attributes["empty-color"]],
 			"full-color": Color[self.attributes["full-color"]]
 		}
+
+		# Apply padding
+		rect = rect.getPaddingRect(self.attributes["padding"])
 
 		height = rect.h
 		width = rect.w
@@ -58,8 +62,8 @@ class Progress(Element):
 				colors["empty-color"])
 		self.blueprint.append(R)
 
-		completion = toInt(self.attributes["completed"])
-		if completion > 0:
+		completion = toFloat(self.attributes["completed"])
+		if completion > 0.0:
 			comp_width = (rect.w - thickness) * completion / 100.0
 
 			Ccompleft = Circle(0.5, 0.5, 0.5)

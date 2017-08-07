@@ -17,6 +17,7 @@ class Button(Element):
 			"released-color": "peter-river",
 			"pressed-color": "belize-hole",
 			"hovered-color": "peter-river",
+			"font": "lato-light",
 			"text-color": "white"
 		}
 
@@ -50,7 +51,7 @@ class Button(Element):
 			x = 1.0
 		T = Text(x, 0.5,
 				self.attributes["label"],
-				b"resources/lato-regular.ttf",
+				self.attributes["font"],
 				self.attributes["text-size"],
 				self.attributes["text-align"])
 		T.build(renderer, rect, colors["text-color"])

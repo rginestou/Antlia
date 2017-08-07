@@ -1,5 +1,6 @@
 import os, sys
 import pkg_resources
+from ..font import FontManager
 
 RESOURCES_PATH = pkg_resources.resource_filename('antlia', 'resources/')
 LIB_PATH = pkg_resources.resource_filename('antlia', 'lib/')
@@ -15,6 +16,9 @@ except ImportError:
 	import traceback
 	traceback.print_exc()
 	sys.exit(1)
+
+# Unique instance of FontManager
+font_manager = FontManager()
 
 class Primitive:
 	"""

@@ -9,6 +9,7 @@ grid main_grid
 		.label 0
 		.text-size 40
 		.align right
+		.padding 0px 15px
 		.text-color dark-grey
 		.background-color clouds
 
