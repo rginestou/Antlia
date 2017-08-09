@@ -114,7 +114,7 @@ while not GUI.getUserInfo().want_to_stop and is_running:
 
 		GUI.change("time_label", "label", elapsed)
 		GUI.change("time_progress", "completed",
-					int(sec_passed / duration * 100))
+					float(sec_passed) / duration * 100.0)
 
 	# Give some rest to the CPU
 	ti.sleep(0.1)

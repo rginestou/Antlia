@@ -16,6 +16,7 @@ class Image(Element):
 		self._clearBlueprint()
 
 		# Bluid blueprint
-		I = Picture(self.attributes["source"], self.attributes["adjust"])
-		I.build(renderer, rect, None)
-		self.blueprint.append(I)
+		if self.attributes["source"] != "":
+			I = Picture(self.attributes["source"], self.attributes["adjust"])
+			I.build(renderer, rect, None)
+			self.blueprint.append(I)

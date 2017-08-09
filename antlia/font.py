@@ -60,7 +60,7 @@ class FontManager:
 		self.font_id += 1
 		return self.font_id - 1
 
-	def getGlyph(self, font_id, character):
+	def getGlyphFromChar(self, font_id, character):
 		return self.font_table[font_id][1].get(character)
 
 	def getFont(self, font_id):

@@ -63,7 +63,7 @@ class Button(Element):
 	def onRelease(self):
 		self.setAttribute("state", HOVERED)
 
-	def onHover(self):
+	def onHover(self, local_x, local_y):
 		self.setAttribute("state", HOVERED)
 
 	def onOut(self):

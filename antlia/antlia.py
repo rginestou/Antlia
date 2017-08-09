@@ -154,6 +154,10 @@ class Antlia:
 		# QUIT event
 		if event.type == sdl2.SDL_QUIT:
 			self.user.want_to_stop = True
+		elif event.type == sdl2.SDL_TEXTINPUT:
+			# Fire a text event to all elements
+			for el in self.layout_elements:
+				el.onTextInput(event.text.text.decode())
 		# MOUSE MOTION events
 		elif event.type == sdl2.SDL_MOUSEMOTION:
 			# Local mouse coordonates
@@ -168,14 +172,14 @@ class Antlia:
 			global_Y = gY.contents.value
 
 			# Get the hovered elements
-			current_indices = self._findHoveredElements(X, Y)
+			current_hovered = self._findHoveredElements(X, Y)
 
 			# Look for draggable elements
 			if self.mouse.left_click:
 				dx = 0; dy = 0
 				need_moving = False
-				for i in current_indices:
-					el = self.layout_elements[i]
+				for h in current_hovered:
+					el = self.layout_elements[h[0]]
 
 					if toBoolean(el.getAttribute("drag-window")):
 						dx = global_X - self.mouse.global_X
@@ -188,24 +192,39 @@ class Antlia:
 
 			# Look for the elements that are now hovered,
 			# and those who are no more
-			new_indices = [i for i in current_indices if i not in self.hovered_indices]
-			old_indices = [i for i in self.hovered_indices if i not in current_indices]
+			new_hovered = [x for x in current_hovered if x[0] not in self.hovered_indices]
+			old_indices = []
+			for o in self.hovered_indices:
+				still = False
+				for n in current_hovered:
+					if n[0] == o:
+						# Still hovered
+						still = True
+						break
+				if not still:
+					old_indices.append(o)
 
 			# Fire hover handlers
-			for i in new_indices:
-				el = self.layout_elements[i]
+			for h in new_hovered:
+				new_index = h[0]
+				el = self.layout_elements[new_index]
 				self._callHandler(el.name, "hover")
-				el.onHover()
+
+				# Pass local coordinates too
+				el.onHover(h[1], h[2])
 
 				# Need to be rebuilt
-				el_indices_to_rebuild.append(i)
-			for i in old_indices:
-				self.layout_elements[i].onOut()
+				el_indices_to_rebuild.append(new_index)
+			for h in old_indices:
+				self.layout_elements[o].onOut()
 
 				# Need to be rebuilt
-				el_indices_to_rebuild.append(i)
+				el_indices_to_rebuild.append(o)
 
-			self.hovered_indices = current_indices
+			# Update hovered indices
+			self.hovered_indices = []
+			for h in current_hovered:
+				self.hovered_indices.append(h[0])
 
 			# Update mouse position
 			self.mouse.X = X
@@ -258,7 +277,7 @@ class Antlia:
 		hovered_indices = []
 		for i, rect in enumerate(self.layout_rects):
 			if rect.isOver(X, Y):
-				hovered_indices.append(i)
+				hovered_indices.append((i, X - rect.x, Y - rect.y))
 
 		return hovered_indices
 

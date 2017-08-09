@@ -5,20 +5,22 @@ from .element import Element
 from .color import Color, lighthen
 from .const import *
 
-class Label(Element):
+class TextInput(Element):
 	def __init__(self, name):
-		super(Label, self).__init__(name)
+		super(TextInput, self).__init__(name)
 		# Specific to the Button element
 		self.attributes = {
-			"label": name,
-			"drag-window": False,
+			"placeholder": name,
+			"align": "left",
 			"background-color": "none",
 			"font": "lato-light",
 			"text-color": "white",
-			"text-align": "left",
 			"text-size": 12,
 			"padding": "0px"
 		}
+
+		# State of the input
+		self.state = ACTIVE # TODO
 
 	def build(self, renderer, rect):
 		self._clearBlueprint()
@@ -37,16 +39,22 @@ class Label(Element):
 			self.blueprint.append(R)
 
 		x = 0.0
-		if self.attributes["text-align"] == "center":
+		if self.attributes["align"] == "center":
 			x = 0.5
-		elif self.attributes["text-align"] == "right":
+		elif self.attributes["align"] == "right":
 			x = 1.0
 		T = Text(x, 0.5,
 				self.attributes["label"],
 				self.attributes["font"],
 				self.attributes["text-size"],
-				align=self.attributes["text-align"])
-
+				align=self.attributes["align"])
 		T.build(renderer, text_rect, colors["text-color"])
-		# print(font_manager.getGlyphFromChar(T.getFontId(), "H").advance)
 		self.blueprint.append(T)
+
+	def onHover(self, local_x, local_y):
+		print(local_x, local_y)
+		print(font_manager.getGlyphFromChar(T.getFontId(), "H").advance)
+
+	def onTextInput(self, text):
+		if self.state == ACTIVE:
+			print(text)

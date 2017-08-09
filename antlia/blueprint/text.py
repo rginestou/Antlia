@@ -12,28 +12,26 @@ class Text(Primitive):
 		self.size = int(size)
 		self.align = align
 
-		# Add font to the font manager
-		text_font_id = font_manager.addFont(font_path, self.size)
-		self.text_font = font_manager.getFont(text_font_id)
-		icon_font_id = font_manager.addFont("icons", self.size)
-		self.icon_font = font_manager.getFont(icon_font_id)
+		# Test if icon
+		icon = re.compile(r'#(.+)#')
+
+		s = icon.search(self.text)
+		if s is not None:
+			# Icon found !
+			icon_name = s.group(1)
+			self.text = NAME_TO_UNICODE[icon_name]
+
+			# Add font to the font manager
+			self.font_id = font_manager.addFont("icons", self.size)
+		else:
+			self.font_id = font_manager.addFont(font_path, self.size)
+		self.font = font_manager.getFont(self.font_id)
 
 	def build(self, renderer, rect, color):
 		if self.text != "":
-			# Test if icon
-			icon = re.compile(r'#(.+)#')
-
-			s = icon.search(self.text)
-			if s is not None:
-				# Icon found !
-				icon_name = s.group(1)
-				self.text = NAME_TO_UNICODE[icon_name]
-
-				font = self.icon_font
-			else:
-				font = self.text_font
-
-			textSurface = sdl2ttf.TTF_RenderUTF8_Blended(font, self.text.encode(), sdl2.SDL_Color(*color), sdl2.SDL_Color(52,73,94,255))
+			textSurface = sdl2ttf.TTF_RenderUTF8_Blended(self.font, self.text.encode(),
+														sdl2.SDL_Color(*color),
+														sdl2.SDL_Color(52,73,94,255))
 			errors = sdl2ttf.TTF_GetError()
 			if errors:
 				print("Text", errors)
@@ -57,6 +55,9 @@ class Text(Primitive):
 	def draw(self, renderer):
 		if self.text != "":
 			sdl2.SDL_RenderCopy(renderer, self.textTexture, None, self.abs_rect)
+
+	def getFontId(self):
+		return self.font_id
 
 	def destroy(self):
 		if self.text != "":

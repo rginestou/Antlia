@@ -1,0 +1,40 @@
+.title Gallery
+.resolution 1200px 800px
+.show-borders false
+
+grid main-grid
+	.rows 10% 84% 6%
+	.cols 18% 58% 24%
+	.background-color white
+
+	label app_name
+		.label GALLERY
+		.text-size 26
+		.text-align center
+		.background-color peter-river
+	empty _
+	label attributes_label
+		.label ATTRIBUTES
+		.text-size 26
+		.text-align center
+		.background-color wet-asphalt
+
+	label domain_list
+		.background-color clouds
+	grid display_grid
+		.rows 35% 65%
+		.cols 1
+
+		image cover
+			.source examples/cover_gallery.png
+		label content
+	label list_of_attributes
+		.background-color asphalt
+
+	label void
+		.label
+		.background-color clouds
+	label credits
+	label end
+		.label
+		.background-color wet-asphalt

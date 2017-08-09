@@ -132,6 +132,8 @@ class Renderer:
 
 	def _loopForEvents(self):
 		event = sdl2.SDL_Event()
+
+		sdl2.SDL_StartTextInput()
 		while self.is_running:
 			# Look at the event queue
 			while sdl2.SDL_PollEvent(ctypes.byref(event)) != 0:

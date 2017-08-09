@@ -49,10 +49,13 @@ class Element:
 	def onRelease(self):
 		pass
 
-	def onHover(self):
+	def onHover(self, local_x, local_y):
 		pass
 
 	def onOut(self):
+		pass
+
+	def onTextInput(self, text):
 		pass
 
 	def setAttribute(self, att, value):

@@ -34,7 +34,7 @@ class Progress(Element):
 		width = rect.w
 
 		t, typ_, err = toArrayOfSizes(self.attributes["thickness"])
-		if typ_ == "px":
+		if typ_[0] == "px":
 			thickness = t[0]
 		else:
 			thickness = int(t[0] * height)

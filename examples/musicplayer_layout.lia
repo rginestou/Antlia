@@ -5,11 +5,11 @@
 # Main Layout
 grid main_grid
 	.rows 10% 80% 10%
-	.cols 100%
+	.cols 1
 	.background-color asphalt
 
 	grid header_grid
-		.rows 100%
+		.rows 1
 		.cols 15% 70% 15%
 
 		styled-button open-file_button
@@ -17,7 +17,7 @@ grid main_grid
 
 		grid info_grid
 			.rows 60% 40%
-			.cols 100%
+			.cols 1
 
 			label title_label
 				.label
@@ -39,7 +39,7 @@ grid main_grid
 		.adjust fill
 
 	grid footer_grid
-		.rows 100%
+		.rows 1
 		.cols 15% 15% 15% 55%
 
 		styled-button play-pause_button

@@ -26,6 +26,11 @@ class Parser:
 			log(ERROR, "Layout file does not exist", "Import a valid .lia file")
 			exit(1)
 
+		# Check if style file exist
+		if style_file_name is not None and not os.path.exists(style_file_name + ".lia"):
+			log(ERROR, "Style file does not exist", "Import a valid .lia file")
+			exit(1)
+
 		# Transform the user defined layout in array of elements
 		self._buildLayout(layout_file_name, style_file_name)
 
