@@ -194,6 +194,7 @@ class Antlia:
 			# and those who are no more
 			new_hovered = [x for x in current_hovered if x[0] not in self.hovered_indices]
 			old_indices = []
+
 			for o in self.hovered_indices:
 				still = False
 				for n in current_hovered:
@@ -216,10 +217,10 @@ class Antlia:
 				# Need to be rebuilt
 				el_indices_to_rebuild.append(new_index)
 			for h in old_indices:
-				self.layout_elements[o].onOut()
+				self.layout_elements[h].onOut()
 
 				# Need to be rebuilt
-				el_indices_to_rebuild.append(o)
+				el_indices_to_rebuild.append(h)
 
 			# Update hovered indices
 			self.hovered_indices = []

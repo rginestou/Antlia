@@ -51,7 +51,6 @@ class Parser:
 		window = Window("window")
 		for a in root_att:
 			window.setAttribute(a, root_att[a])
-		window.placeChildren()
 
 		self.layout_elements = [window] + layout_elements
 		self.layout_tree = [root_indices] + layout_tree
@@ -102,7 +101,6 @@ class Parser:
 				# Fetch last element
 				last_element_index = index_pile[-1]
 				# This last element is fully setup
-				layout_elements[last_element_index].placeChildren()
 				index_pile.pop()
 
 				# Set parent-child relation

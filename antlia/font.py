@@ -29,6 +29,8 @@ class FontManager:
 		self.supported_fonts_path = {
 			"icons": RESOURCES_PATH + "material-icons.ttf",
 			"roboto-light": RESOURCES_PATH + "roboto-light.ttf",
+			"roboto-regular": RESOURCES_PATH + "roboto-regular.ttf",
+			"roboto-bold": RESOURCES_PATH + "roboto-bold.ttf",
 			"lato-light": RESOURCES_PATH + "lato-light.ttf"
 		}
 		# (TTF, Glyph, font_id)

@@ -1,0 +1,38 @@
+# Attribute score
+grid attribute
+	.rows 40% 60%
+	.cols 85% 15%
+
+	label title_label
+		.label No name
+		.text-size 16
+		.text-color white
+		.font roboto-regular
+	empty _
+	progress attribute_progress
+	label check_label
+		.label #check_circle#
+		.text-size 26
+		.padding 7px
+
+# Theme selection
+group theme
+	button theme_button
+		.label
+		.released-color clouds
+		.hovered-color clouds
+		.pressed-color peter-river
+
+	grid theme_grid
+		.cols 30px ?
+		.padding 0px 20px
+
+		label theme_icon
+			.label #add#
+			.text-size 20
+			.text-color peter-river
+		label theme_label
+			.label No Name
+			.text-size 20
+			.text-color dark-grey
+			.font roboto-regular

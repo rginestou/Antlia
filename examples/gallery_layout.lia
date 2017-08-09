@@ -1,10 +1,10 @@
 .title Gallery
-.resolution 1200px 800px
+.resolution 1400px 1000px
 .show-borders false
 
 grid main-grid
-	.rows 10% 84% 6%
-	.cols 18% 58% 24%
+	.rows 90px ? 70px
+	.cols 250px ? 280px
 	.background-color white
 
 	label app_name
@@ -19,8 +19,15 @@ grid main-grid
 		.text-align center
 		.background-color wet-asphalt
 
-	label domain_list
+	grid theme_list
+		.rows 14
 		.background-color clouds
+		.padding 20px 0px
+
+		theme nature_theme
+		theme nature_theme
+		theme nature_theme
+		theme nature_theme
 	grid display_grid
 		.rows 35% 65%
 		.cols 1
@@ -28,8 +35,15 @@ grid main-grid
 		image cover
 			.source examples/cover_gallery.png
 		label content
-	label list_of_attributes
+	grid attribute_list
+		.rows 14
+		.padding 15px 10% 15px 10%
 		.background-color asphalt
+
+		attribute list_of_attributes
+		attribute list_of_attributes
+		attribute list_of_attributes
+		attribute list_of_attributes
 
 	label void
 		.label

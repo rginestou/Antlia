@@ -30,11 +30,15 @@ class Builder(object):
 			global layout
 			node_element = layout_elements[node_index]
 
+			# Set the rect of the current element
 			layout_rects.append(rect)
+
+			# Compute the child rects
+			node_element.placeChildren(rect, len(subtree))
 
 			# Recursively apply it to the children
 			for child_index, node_index in enumerate(subtree):
-				c_rect = node_element.child_rects[child_index].fitRect(rect)
+				c_rect = node_element.child_rects[child_index]
 				_aux(layout_tree[node_index], node_index, c_rect)
 
 		_aux(layout_tree[0], 0, Rect(0, 0,

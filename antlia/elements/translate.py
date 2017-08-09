@@ -1,9 +1,9 @@
 from ..message import log, ERROR, WARNING, OK
 
-def toArrayOfSizes(arg):
+def toArrayOfSizes(arg, length=None):
 	"""
 	Parse an attribute data to get an array of sizes.
-	Supported types : px, %, number.
+	Supported types : px, %, number, ?.
 	"""
 	if arg == "":
 		err = "The specified value is incorrect"
@@ -28,9 +28,12 @@ def toArrayOfSizes(arg):
 		typ = [t] * n
 		values = [v] * n
 	else:
+		# Look for ?
 		typ = []
 		values = []
-		for v in array:
+		unknown = []
+		sum_px = 0
+		for i, v in enumerate(array):
 			if v.endswith("%"):
 				# Percentage
 				typ.append("%")
@@ -39,9 +42,24 @@ def toArrayOfSizes(arg):
 				# Pixels
 				typ.append("px")
 				values.append(int(v[:-2]))
+				sum_px += int(v[:-2])
+			elif v == "?":
+				if length is None:
+					log(ERROR, "Can't use '?' in this context")
+					exit(1)
+				else:
+					unknown.append(i)
+					typ.append("px")
+					values.append(None)
 			else:
 				err = "The specified value has no known format"
 				return None, None, err
+
+		# Fill ? values
+		if length is not None and len(unknown) > 0:
+			v = (length - sum_px) / len(unknown)
+			for i in unknown:
+				values[i] = v
 	return values, typ, None
 
 def toInt(arg):

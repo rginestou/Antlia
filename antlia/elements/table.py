@@ -5,6 +5,7 @@ from .image import Image
 from .progress import Progress
 from .grid import Grid
 from .empty import Empty
+from .group import Group
 
 EL_TABLE = {
 	"button": Button,
@@ -12,5 +13,6 @@ EL_TABLE = {
 	"label": Label,
 	"image": Image,
 	"progress": Progress,
+	"group": Group,
 	"empty": Empty
 }

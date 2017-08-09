@@ -14,3 +14,6 @@ class Window(Element):
 
 		# By default, the window has only one child
 		self.child_rects = [Rect(0.0, 0.0, 1.0, 1.0)]
+
+	def placeChildren(self, rect, n_child):
+		self.child_rects = [rect] * n_child

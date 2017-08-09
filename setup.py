@@ -9,7 +9,7 @@ setup(
 	name = 'antlia',
 	packages = find_packages(exclude=['doc', 'examples']), # this must be the same as the name above
 	package_data = { 'antlia': ['lib/*', 'resources/*'] },
-	version = '0.1.11',
+	version = '0.1.12',
 	description = 'Flat Design GUI for Python based on SDL2',
 	author = 'Romain Ginestou',
 	author_email = 'romain.ginestou@gmail.com',

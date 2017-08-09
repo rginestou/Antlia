@@ -28,7 +28,7 @@ class Element:
 		"""
 		pass
 
-	def placeChildren(self):
+	def placeChildren(self, rect, n_child):
 		"""
 		The elements that have children will compute their rects
 		"""

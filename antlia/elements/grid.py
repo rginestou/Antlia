@@ -11,33 +11,43 @@ class Grid(Element):
 		super(Grid, self).__init__(name)
 		# Specific to the Grid element
 		self.attributes = {
-			"rows": "100%",
-			"cols": "100%",
+			"rows": "1",
+			"cols": "1",
 			"drag-window": False,
-			"background-color": "none"
+			"background-color": "none",
+			"padding": "0px"
 		}
 
-	def placeChildren(self):
+	def placeChildren(self, rect, n_child):
+		# Apply padding
+		grid_rect = rect.getPaddingRect(self.attributes["padding"])
+
 		# Create rects based on the rows and columns proportions
 		s = 0.0
 
-		rows, _, err = toArrayOfSizes(self.attributes["rows"])
+		rows, rows_typ, err = toArrayOfSizes(self.attributes["rows"], grid_rect.h)
 		if err is not None:
 			log(ERROR, self.name + " .rows:" + err)
 			exit(1)
-		cols, _, err = toArrayOfSizes(self.attributes["cols"])
+		cols, cols_typ, err = toArrayOfSizes(self.attributes["cols"], grid_rect.w)
 		if err is not None:
 			log(ERROR, self.name + " .cols: " + err)
 			exit(1)
 
-		# TODO
-		sr = 0.0; sc = 0.0
-		for r in rows:
-			for c in cols:
-				self.child_rects.append(Rect(sc, sr, c, r))
-				sc += c
-			sr += r
-			sc = 0.0
+		sr = grid_rect.y; sc = grid_rect.x
+		for r, row_ in enumerate(rows):
+			row = row_
+			if rows_typ[r] == "%":
+				row = row_ * grid_rect.h
+			for c, col_ in enumerate(cols):
+				col = col_
+				if cols_typ[c] == "%":
+					col = col_ * grid_rect.w
+
+				self.child_rects.append(Rect(sc, sr, col, row))
+				sc += col
+			sr += row
+			sc = grid_rect.x
 
 	def build(self, renderer, rect):
 		self._clearBlueprint()

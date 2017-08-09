@@ -2,7 +2,7 @@
 .resolution 600px 200px
 
 grid main_grid
-	.rows 100%
+	.rows 1
 	.cols 50% 50%
 
 	button hello_button
@@ -12,5 +12,5 @@ grid main_grid
 	label hello_label
 		.label No
 		.text-size 45
-		.align center
+		.text-align center
 		.text-color dark-grey

@@ -144,4 +144,4 @@ class Renderer:
 				self.buildElements()
 				self._refresh()
 				self.need_update = False
-			# sdl2.SDL_Delay(1)
+			sdl2.SDL_Delay(1)
