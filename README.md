@@ -3,7 +3,11 @@
 
 _Early development_
 
+_Windows only for the moment_
+
 # Installation
+
+Simply type the following command on a command line:
 
 `pip install antlia`
 
@@ -12,6 +16,10 @@ _Early development_
 See the full doc [here](https://antlia.data-ensta.fr/).
 
 # Hello World!
+
+This examples demonstrate how easy it is to come up with a nice-looking GUI with Antlia.
+
+![Hello World](https://antlia.data-ensta.fr/_images/hello_world.png)
 
 `hello_world.py` :
 
