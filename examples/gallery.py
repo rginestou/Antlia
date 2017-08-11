@@ -15,8 +15,16 @@ GUI = Antlia("examples/gallery_layout", "examples/gallery_style")
 # GUI.bind("play-pause_button", "click", playPauseClickHandler)
 # GUI.bind("stop_button", "click", stopClickHandler)
 
+def foo():
+	print("change")
+	GUI.change("attributes_0.title_label", "label", "GALLLL")
+
+GUI.onStart(foo)
+
+
 # Open the GUI
 GUI.start()
+
 
 # urllib.request.urlretrieve("https://source.unsplash.com/200x200/?nature,water", "examples/gallery_pics/water_1.jpg")
 

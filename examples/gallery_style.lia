@@ -10,6 +10,7 @@ grid attribute
 		.font roboto-regular
 	empty _
 	progress attribute_progress
+		.thickness 6px
 	label check_label
 		.label #check_circle#
 		.text-size 26

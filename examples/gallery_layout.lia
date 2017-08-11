@@ -40,10 +40,10 @@ grid main-grid
 		.padding 15px 10% 15px 10%
 		.background-color asphalt
 
-		attribute list_of_attributes
-		attribute list_of_attributes
-		attribute list_of_attributes
-		attribute list_of_attributes
+		attribute attributes_0
+		attribute attributes_1
+		attribute attributes_2
+		attribute attributes_3
 
 	label void
 		.label

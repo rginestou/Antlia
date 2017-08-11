@@ -46,11 +46,14 @@ class Antlia:
 		# The Parser that will read all informations from both
 		# the layout and style files
 		self.parser = Parser(self.layout_file_name, self.style_file_name)
-		self.handlers = self.parser.getHandlers()
 		self.layout_elements = self.parser.getLayoutElements()
 		self.layout_tree = self.parser.getLayoutTree()
 		self.layout_table = self.parser.getLayoutTable()
 		self.layout_rects = None
+
+		# Handlers
+		self.handlers = self.parser.getHandlers()
+		self.startHandler = None
 
 		# Fetch window parameters
 		window_parameters = self.layout_elements[0].getAttributes()
@@ -80,6 +83,10 @@ class Antlia:
 		# Give the info to the renderer
 		self._update()
 
+		# Fire start handler
+		if self.startHandler is not None:
+			self.startHandler()
+
 	def bind(self, element_name, event_type, handler, arg=None):
 		"""
 		Binds an element of the GUI with an handler.
@@ -90,6 +97,9 @@ class Antlia:
 			self.handlers[element_name][event_type] = (handler, arg)
 		except KeyError:
 			log(WARNING, element_name + " does not exist in the layout")
+
+	def onStart(self, handler):
+		self.startHandler = handler
 
 	def change(self, element_name, parameter, value):
 		"""

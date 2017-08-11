@@ -76,7 +76,7 @@ class Parser:
 		last_element_indent = -1
 		n_element = offset
 
-		def _loadLineInfo(line_number, line, n_lines, off_indent=0):
+		def _loadLineInfo(line_number, line, n_lines, off_indent=0, prefix=""):
 			# Access out of scope variables
 			nonlocal layout_elements, layout_tree, layout_table
 			nonlocal root_indices, root_att, index_pile
@@ -133,7 +133,7 @@ class Parser:
 			else:
 				# Look for new element
 				element_type = data[0]
-				element_name = data[1]
+				element_name = prefix + data[1]
 
 				# Parse this new element
 				if element_type in EL_TABLE:
@@ -161,7 +161,7 @@ class Parser:
 				if element_type in style_chunks:
 					definition = style_chunks[element_type]
 					for style_line in definition[1:]:
-						_loadLineInfo(line_number, style_line, n_lines, off_indent=indent)
+						_loadLineInfo(line_number, style_line, n_lines, off_indent=indent, prefix=element_name + ".")
 
 		# Open and read the file
 		with open(layout_name + ".lia", "r") as layout_file:
