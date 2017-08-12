@@ -30,11 +30,11 @@ group theme
 		.padding 0px 20px
 
 		label theme_icon
-			.label #add#
-			.text-size 20
+			!icon label #add#
+			.text-size 24
 			.text-color peter-river
 		label theme_label
-			.label No Name
+			!label label No Name
 			.text-size 20
 			.text-color dark-grey
 			.font roboto-regular

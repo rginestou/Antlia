@@ -1,4 +1,6 @@
 from ..message import log, ERROR, WARNING, OK
+from .color import Color, lighthen
+from ast import literal_eval
 
 def toArrayOfSizes(arg, length=None):
 	"""
@@ -81,8 +83,13 @@ def toBoolean(arg):
 		return False
 
 def toColor(arg):
+	try:
+		color = Color[arg]
+		return color
+	except Exception as e:
+		pass
 	if type(arg) == tuple:
-		return arg, None
+		return arg
 	elif arg.startswith("#"):
 		hexa = arg[1:]
 		if len(hexa) == 6:
@@ -90,10 +97,13 @@ def toColor(arg):
 			for i in range(0, 6, 2):
 				color.append(int(hexa[i:i+2], 16))
 			color.append(255)
-			return color, None
+			return color
 		else:
 			return None, "Not a valid color format"
 	elif arg.startswith("rgb("):
-		return tuple(arg[3:]), None
+		return tuple(arg[3:]), 255
+	elif arg.startswith("rgba("):
+		color = literal_eval(arg[4:])
+		return color
 	else:
-		return None, "Not a valid color format"
+		pass

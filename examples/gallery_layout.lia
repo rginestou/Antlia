@@ -22,7 +22,7 @@ grid main_grid
 	grid theme_list
 		.rows 14
 		.background-color clouds
-		.padding 20px 0px
+		.padding 20px 25px
 
 		label THEMES
 			.text-color grey
@@ -30,9 +30,17 @@ grid main_grid
 			.font roboto-regular
 			.padding 0px 20px
 		theme theme_nature
+			.icon #wb_sunny#
+			.label Nature
 		theme theme_sport
+			.icon #directions_run#
+			.label Sport
 		theme theme_music
+			.icon #library_music#
+			.label Music
 		theme theme_science
+			.icon #explore#
+			.label Science
 	grid display_grid
 		.rows 35% 65%
 		.cols 1
@@ -48,7 +56,6 @@ grid main_grid
 		.background-color asphalt
 
 		attribute attribute_0
-			.label Randomqsqs
 		attribute attribute_1
 		attribute attribute_2
 		attribute attribute_3

@@ -1,8 +1,9 @@
+from .translate import toColor
 from ..blueprint.rectangle import Rectangle
 from ..blueprint.text import Text
 from .element import Element
-from .color import Color, lighthen
 from .const import *
+from .color import Color, lighthen
 
 class Button(Element):
 	def __init__(self, name):
@@ -27,10 +28,10 @@ class Button(Element):
 
 		# Fetch colors
 		colors = {
-			"released-color": Color[self.attributes["released-color"]],
-			"pressed-color": Color[self.attributes["pressed-color"]],
-			"hovered-color": lighthen(Color[self.attributes["hovered-color"]]),
-			"text-color": Color[self.attributes["text-color"]]
+			"released-color": toColor(self.attributes["released-color"]),
+			"pressed-color": toColor(self.attributes["pressed-color"]),
+			"hovered-color": lighthen(toColor(self.attributes["hovered-color"])),
+			"text-color": toColor(self.attributes["text-color"])
 		}
 
 		# Bluid blueprint

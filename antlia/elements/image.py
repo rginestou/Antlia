@@ -11,13 +11,17 @@ class Image(Element):
 		self.attributes = {
 			"source": "",
 			"adjust": "fill",
+			"padding": "0px"
 		}
 
 	def build(self, renderer, rect):
 		self._clearBlueprint()
 
+		# Apply padding
+		img_rect = rect.getPaddingRect(self.attributes["padding"])
+
 		# Bluid blueprint
 		if self.attributes["source"] != "":
 			I = Picture(self.attributes["source"], self.attributes["adjust"])
-			I.build(renderer, rect, None)
+			I.build(renderer, img_rect, None)
 			self.blueprint.append(I)
