@@ -7,6 +7,7 @@ class Element:
 	def __init__(self, name):
 		# Set the name
 		self.name = name
+		self.type = "none"
 
 		# Specific to the current element
 		self.attributes = {}

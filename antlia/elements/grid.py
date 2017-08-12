@@ -8,6 +8,7 @@ from .const import *
 
 class Grid(Element):
 	def __init__(self, name):
+		self.type = "grid"
 		super(Grid, self).__init__(name)
 		# Specific to the Grid element
 		self.attributes = {
@@ -19,6 +20,9 @@ class Grid(Element):
 		}
 
 	def placeChildren(self, rect, n_child):
+		# Reset children
+		self.child_rects = []
+
 		# Apply padding
 		grid_rect = rect.getPaddingRect(self.attributes["padding"])
 

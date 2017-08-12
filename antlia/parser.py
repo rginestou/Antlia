@@ -32,7 +32,28 @@ class Parser:
 			exit(1)
 
 		# Transform the user defined layout in array of elements
+		self.style_chunks = {}
+		self.style_element_type = {}
 		self._buildLayout(layout_file_name, style_file_name)
+
+	def addElement(self, element_type, element_name, parent, attributes):
+		"""
+		Add the given element to the existing layout
+		"""
+		layout_lines = [element_type + " " + element_name]
+		for a in attributes:
+			layout_lines.append("\t." + a + " " + attributes[a])
+		layout_lines.append("\n")
+		element_index = len(self.layout_elements)
+
+		# Get element layout
+		element_layout, element_tree, element_table, _, _ = self._loadLayout(layout_lines, len(layout_lines), offset=element_index)
+
+		# Append to general layout
+		self.layout_tree += element_tree
+		self.layout_tree[self.layout_table[parent]].append(element_index)
+		self.layout_elements += element_layout
+		self.layout_table.update(element_table)
 
 	def _buildLayout(self, layout_file_name, style_file_name):
 		"""
@@ -41,11 +62,16 @@ class Parser:
 
 		# Fetch the custom elements
 		if style_file_name is not None:
-			style_chunks = self._loadStyle(style_file_name)
-		else:
-			style_chunks = {}
+			self.style_chunks, self.style_attributes = self._loadStyle(style_file_name)
 
-		layout_elements, layout_tree, layout_table, root_indices, root_att = self._loadLayout(layout_file_name, style_chunks, offset=1)
+		# Open and read the file
+		with open(layout_file_name + ".lia", "r") as layout_file:
+			layout_lines = layout_file.readlines()
+			layout_lines.append("\n")
+
+		n_lines = len(layout_lines)
+
+		layout_elements, layout_tree, layout_table, root_indices, root_att = self._loadLayout(layout_lines, n_lines, offset=1)
 
 		# Add the window object
 		window = Window("window")
@@ -57,9 +83,9 @@ class Parser:
 		self.layout_table = layout_table
 		self.layout_table["window"] = 0
 
-	def _loadLayout(self, layout_name, style_chunks, offset=0):
+	def _loadLayout(self, layout_content, n_lines_content, offset=0):
 		"""
-		Load a template file and parse its content.
+		Load a template and parse its content.
 		The tree is generated according to the file's structure.
 		The elements with no indentation are the root of the file,
 		and the root_att are the attributes with no indentation.
@@ -71,12 +97,14 @@ class Parser:
 		layout_table = {}
 		root_indices = []
 		root_att = {}
+		style_element_indices = []
+		style_element_name = []
 
 		index_pile = []
 		last_element_indent = -1
 		n_element = offset
 
-		def _loadLineInfo(line_number, line, n_lines, off_indent=0, prefix=""):
+		def _loadLineInfo(line_number, line, n_lines, off_indent=0, prefix="", style_el_line=None):
 			# Access out of scope variables
 			nonlocal layout_elements, layout_tree, layout_table
 			nonlocal root_indices, root_att, index_pile
@@ -127,7 +155,32 @@ class Parser:
 
 				if len(index_pile) > 0:
 					# This attribute refers to a previous element
-					layout_elements[index_pile[-1]].setAttribute(attribute, attribute_value)
+					prev_element_index = index_pile[-1]
+
+					# See if the previous element was defined in the style
+					has_custom_style = False
+					if style_el_line != prev_element_index:
+						for s_index, i in enumerate(style_element_indices):
+							if prev_element_index == i:
+								has_custom_style = True
+								break
+
+					if has_custom_style:
+						# This is a custom element, custom attributes apply
+						prev_el_attributes = self.style_attributes[style_element_name[s_index]]
+						if attribute in prev_el_attributes:
+							_element_name = layout_elements[prev_element_index].name
+							block_element_name = prev_el_attributes[attribute][1]
+							el_name = _element_name + "." + block_element_name
+							block_element = layout_elements[layout_table[el_name]-offset]
+
+							# Add attribute
+							block_element.setAttribute(prev_el_attributes[attribute][0], attribute_value)
+						else:
+							log(ERROR, attribute + " not part of custom element")
+							exit(1)
+					else:
+						layout_elements[prev_element_index].setAttribute(attribute, attribute_value)
 				else:
 					root_att[attribute] = attribute_value
 			else:
@@ -139,10 +192,13 @@ class Parser:
 				if element_type in EL_TABLE:
 					# Regular element
 					layout_elements.append(EL_TABLE[element_type](element_name))
-				elif element_type in style_chunks:
-					# Curstomed defined element
-					definition = style_chunks[element_type]
+				elif element_type in self.style_chunks:
+					# Customed defined element
+					definition = self.style_chunks[element_type]
 					layout_elements.append(EL_TABLE[definition[0]](element_name))
+					style_element_indices.append(len(layout_elements)-1)
+					style_element_name.append(element_type)
+					self.style_element_type[element_name] = element_type
 				else:
 					# Does not exist
 					log(ERROR, element_type + " is not a valid element, line " + str(line_number))
@@ -158,26 +214,24 @@ class Parser:
 				n_element += 1
 
 				# Loop through the style if custom element
-				if element_type in style_chunks:
-					definition = style_chunks[element_type]
+				if element_type in self.style_chunks:
+					definition = self.style_chunks[element_type]
+
 					for style_line in definition[1:]:
-						_loadLineInfo(line_number, style_line, n_lines, off_indent=indent, prefix=element_name + ".")
-
-		# Open and read the file
-		with open(layout_name + ".lia", "r") as layout_file:
-			layout_lines = layout_file.readlines()
-			layout_lines.append("\n")
-
-		n_lines = len(layout_lines)
+						_loadLineInfo(line_number, style_line, n_lines, off_indent=indent, prefix=element_name + ".", style_el_line=len(layout_elements)-1)
 
 		# Loop through all the lines
-		for line_number, line in enumerate(layout_lines):
-			_loadLineInfo(line_number, line, n_lines)
+		for line_number, line in enumerate(layout_content):
+			_loadLineInfo(line_number, line, n_lines_content)
 
 		return layout_elements, layout_tree, layout_table, root_indices, root_att
 
 	def _loadStyle(self, style_file_name):
 		style_chunks = {}
+		style_attributes = {}
+
+		# TODO organise as a tree
+		last_element_name = None
 
 		# Open and read the file
 		with open(style_file_name + ".lia", "r") as style_file:
@@ -185,7 +239,7 @@ class Parser:
 			style_lines.append("\n")
 
 		n_lines = len(style_lines)
-		last_element_name = ""
+		style_element_name = ""
 
 		# Loop through all the lines
 		for line_number, line in enumerate(style_lines):
@@ -201,12 +255,47 @@ class Parser:
 
 			if indent == 0:
 				# New custom element
-				last_element_name = data[1]
-				style_chunks[last_element_name] = [data[0]]
+				style_element_name = data[1]
+				style_chunks[style_element_name] = [data[0]]
+				style_attributes[style_element_name] = {}
 			else:
-				style_chunks[last_element_name].append(line)
+				# Test if custom attribute
+				if data[0].startswith("!"):
+					# What follows the ! is the alias
+					full_data = data[1].split(" ", 1)
+					indentation = '\t' * indent
+					style_chunks[style_element_name].append(indentation + "." + data[1])
+					style_attributes[style_element_name][data[0][1:]] = [full_data[0], last_element_name]
+				else:
+					# Record the last element name
+					if not data[0].startswith("."):
+						last_element_name = data[1]
+					style_chunks[style_element_name].append(line)
 
-		return style_chunks
+		return style_chunks, style_attributes
+
+	def changeElement(self, element_name, attribute, value):
+		# This attribute refers to a previous element
+		element_index = self.layout_table[element_name]
+		element = self.layout_elements[element_index]
+
+		if element_name not in self.style_element_type:
+			# Regular element
+			element.setAttribute(attribute, value)
+		else:
+			# Custom element, custom attributes apply
+			element_attributes = self.style_attributes[self.style_element_type[element_name]]
+
+			if attribute in element_attributes:
+				block_element_name = element_attributes[attribute][1]
+				el_name = element_name + "." + block_element_name
+				block_element = self.layout_elements[self.layout_table[el_name]]
+
+				# Add attribute
+				block_element.setAttribute(element_attributes[attribute][0], value)
+			else:
+				log(ERROR, attribute + " not part of custom element")
+				exit(1)
 
 	def _parseLine(self, line):
 		indent = 0

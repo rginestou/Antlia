@@ -6,6 +6,7 @@ from .const import *
 
 class Button(Element):
 	def __init__(self, name):
+		self.type = "button"
 		super(Button, self).__init__(name)
 		# Specific to the Button element
 		self.attributes = {

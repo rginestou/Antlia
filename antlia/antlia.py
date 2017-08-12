@@ -98,22 +98,31 @@ class Antlia:
 		except KeyError:
 			log(WARNING, element_name + " does not exist in the layout")
 
-	def onStart(self, handler):
-		self.startHandler = handler
+	def onStart(self, handler, arg=None):
+		if arg is not None:
+			self.startHandler = handler(arg)
+		else:
+			self.startHandler = handler()
 
-	def change(self, element_name, parameter, value):
+	def change(self, element_name, attribute, value):
 		"""
 		Changes an element's parameter value
 		"""
-		# Fetch the element
-		try:
-			element_index = self.layout_table[element_name]
-		except KeyError:
-			log(WARNING, element_name + " does not exist in the layout")
-			return
-
 		# Change the parameter
-		self.layout_elements[element_index].setAttribute(parameter, value)
+		self.parser.changeElement(element_name, attribute, value)
+		self.layout_elements = self.parser.getLayoutElements()
+		self._update()
+
+	def add(self, element_type, element_name, parent, attributes={}):
+		self.parser.addElement(element_type, element_name, parent, attributes)
+
+		# Fetch new layout from parser
+		self.layout_elements = self.parser.getLayoutElements()
+		self.layout_tree = self.parser.getLayoutTree()
+		self.layout_table = self.parser.getLayoutTable()
+
+		# Rebuild layout
+		self.layout_rects = self.builder.computeLayoutRects(self.layout_elements, self.layout_tree)
 		self._update()
 
 	def getUserInfo(self):

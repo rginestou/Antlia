@@ -4,12 +4,13 @@ grid attribute
 	.cols 85% 15%
 
 	label title_label
-		.label No name
+		!label label No name
 		.text-size 16
 		.text-color white
 		.font roboto-regular
 	empty _
 	progress attribute_progress
+		!completed completed 20
 		.thickness 6px
 	label check_label
 		.label #check_circle#

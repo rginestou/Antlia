@@ -3,6 +3,7 @@ from .const import *
 
 class Group(Element):
 	def __init__(self, name):
+		self.type = "group"
 		super(Group, self).__init__(name)
 
 	def placeChildren(self, rect, n_child):

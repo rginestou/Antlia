@@ -24,14 +24,14 @@ class Builder(object):
 		# Each data chunk is ordered this way :
 		# X,	Y,    Z,	R,	G,	B,	A
 		global layout
-		layout_rects = []
+		layout_rects = [None] * len(layout_tree)
 
 		def _aux(subtree, node_index, rect):
 			global layout
 			node_element = layout_elements[node_index]
 
 			# Set the rect of the current element
-			layout_rects.append(rect)
+			layout_rects[node_index] = rect
 
 			# Compute the child rects
 			node_element.placeChildren(rect, len(subtree))

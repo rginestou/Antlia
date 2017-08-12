@@ -79,3 +79,21 @@ def toBoolean(arg):
 		return True
 	elif arg == "false":
 		return False
+
+def toColor(arg):
+	if type(arg) == tuple:
+		return arg, None
+	elif arg.startswith("#"):
+		hexa = arg[1:]
+		if len(hexa) == 6:
+			color = []
+			for i in range(0, 6, 2):
+				color.append(int(hexa[i:i+2], 16))
+			color.append(255)
+			return color, None
+		else:
+			return None, "Not a valid color format"
+	elif arg.startswith("rgb("):
+		return tuple(arg[3:]), None
+	else:
+		return None, "Not a valid color format"

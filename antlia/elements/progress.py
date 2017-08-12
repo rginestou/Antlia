@@ -8,6 +8,7 @@ from .color import Color
 
 class Progress(Element):
 	def __init__(self, name):
+		self.type = "progress"
 		super(Progress, self).__init__(name)
 		# Specific to the Button element
 		self.attributes = {

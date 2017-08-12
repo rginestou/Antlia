@@ -2,7 +2,7 @@
 .resolution 1400px 1000px
 .show-borders false
 
-grid main-grid
+grid main_grid
 	.rows 90px ? 70px
 	.cols 250px ? 280px
 	.background-color white
@@ -24,31 +24,43 @@ grid main-grid
 		.background-color clouds
 		.padding 20px 0px
 
-		theme nature_theme
-		theme nature_theme
-		theme nature_theme
-		theme nature_theme
+		label THEMES
+			.text-color grey
+			.text-size 16
+			.font roboto-regular
+			.padding 0px 20px
+		theme theme_nature
+		theme theme_sport
+		theme theme_music
+		theme theme_science
 	grid display_grid
 		.rows 35% 65%
 		.cols 1
 
 		image cover
 			.source examples/cover_gallery.png
-		label content
+		grid image_grid
+			.rows 3
+			.cols 4
 	grid attribute_list
 		.rows 14
 		.padding 15px 10% 15px 10%
 		.background-color asphalt
 
-		attribute attributes_0
-		attribute attributes_1
-		attribute attributes_2
-		attribute attributes_3
+		attribute attribute_0
+			.label Randomqsqs
+		attribute attribute_1
+		attribute attribute_2
+		attribute attribute_3
 
 	label void
 		.label
 		.background-color clouds
 	label credits
-	label end
-		.label
-		.background-color wet-asphalt
+	button leave_button
+		.label LEAVE
+		.text-size 22
+		.text-align center
+		.released-color wet-asphalt
+		.hovered-color asphalt
+		.pressed-color asphalt
