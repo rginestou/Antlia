@@ -22,7 +22,7 @@ def lighthen(color):
 	"""
 	Used to slightly lighten a specified color
 	"""
-	return (min(255, color[0] + 7),
-	 		min(255, color[1] + 7),
-			min(255, color[2] + 7),
+	return (min(255, color[0] + 10),
+	 		min(255, color[1] + 10),
+			min(255, color[2] + 10),
 			255)

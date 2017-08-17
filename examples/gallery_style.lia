@@ -16,6 +16,7 @@ grid attribute
 		.label #check_circle#
 		.text-size 26
 		.padding 7px
+		.text-color white
 
 # Theme selection
 group theme
@@ -31,10 +32,24 @@ group theme
 
 		label theme_icon
 			!icon label #add#
-			.text-size 24
+			.text-size 22
 			.text-color peter-river
 		label theme_label
 			!label label No Name
-			.text-size 20
+			.text-size 18
 			.text-color dark-grey
 			.font roboto-regular
+
+# Theme input
+grid theme-input
+	.cols 30px ?
+	.padding 0px 20px
+
+	label theme_icon
+		.label #add#
+		.text-size 22
+		.text-color peter-river
+	text-input theme-input
+		.placeholder SEARCH
+		.text-size 18
+		.character-limit 13

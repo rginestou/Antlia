@@ -5,8 +5,9 @@ from .const import *
 
 class Image(Element):
 	def __init__(self, name):
-		self.type = "image"
 		super(Image, self).__init__(name)
+		self.type = "image"
+		
 		# Specific to the Button element
 		self.attributes = {
 			"source": "",

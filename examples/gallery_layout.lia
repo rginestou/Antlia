@@ -11,12 +11,22 @@ grid main_grid
 		.label GALLERY
 		.text-size 26
 		.text-align center
+		.text-color white
 		.background-color peter-river
-	empty _
+	grid info_grid
+		.cols 50px ?
+		.padding 40px
+
+		label theme_info_label
+			.label NATURE
+			.font roboto-regular
+			.text-size 23
+			.text-color dark-grey
 	label attributes_label
 		.label ATTRIBUTES
 		.text-size 26
 		.text-align center
+		.text-color white
 		.background-color wet-asphalt
 
 	grid theme_list
@@ -31,16 +41,17 @@ grid main_grid
 			.padding 0px 20px
 		theme theme_nature
 			.icon #wb_sunny#
-			.label Nature
+			.label NATURE
 		theme theme_sport
 			.icon #directions_run#
-			.label Sport
+			.label SPORT
 		theme theme_music
 			.icon #library_music#
-			.label Music
+			.label MUSIC
 		theme theme_science
 			.icon #explore#
-			.label Science
+			.label SCIENCE
+		theme-input custom_theme
 	grid display_grid
 		.rows 35% 65%
 		.cols 1

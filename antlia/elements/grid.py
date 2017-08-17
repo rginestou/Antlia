@@ -8,8 +8,9 @@ from .const import *
 
 class Grid(Element):
 	def __init__(self, name):
-		self.type = "grid"
 		super(Grid, self).__init__(name)
+		self.type = "grid"
+		
 		# Specific to the Grid element
 		self.attributes = {
 			"rows": "1",

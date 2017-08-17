@@ -57,7 +57,7 @@ class Element:
 		pass
 
 	def onTextInput(self, text):
-		pass
+		return False
 
 	def setAttribute(self, att, value):
 		"""

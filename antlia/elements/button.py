@@ -7,8 +7,9 @@ from .color import Color, lighthen
 
 class Button(Element):
 	def __init__(self, name):
-		self.type = "button"
 		super(Button, self).__init__(name)
+		self.type = "button"
+		
 		# Specific to the Button element
 		self.attributes = {
 			"state": RELEASED,

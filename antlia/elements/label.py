@@ -7,15 +7,16 @@ from .const import *
 
 class Label(Element):
 	def __init__(self, name):
-		self.type = "label"
 		super(Label, self).__init__(name)
+		self.type = "label"
+		
 		# Specific to the Button element
 		self.attributes = {
 			"label": name,
 			"drag-window": False,
 			"background-color": "none",
 			"font": "lato-light",
-			"text-color": "white",
+			"text-color": "dark-grey",
 			"text-align": "left",
 			"text-size": 12,
 			"padding": "0px"

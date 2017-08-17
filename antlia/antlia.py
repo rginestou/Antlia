@@ -1,7 +1,8 @@
+import time as ti
+
 import os
 import threading
 import ctypes
-import time as ti
 import pkg_resources
 
 LIB_PATH = pkg_resources.resource_filename('antlia', 'lib/')
@@ -24,7 +25,9 @@ from .elements.translate import toBoolean
 from .message import log, ERROR, WARNING, OK
 from .user import User
 from .elements.const import *
+from .cursor import changeCursor
 from .dialog import getOpenFileName
+from .elements.const import *
 
 class Antlia:
 	"""
@@ -54,6 +57,7 @@ class Antlia:
 		# Handlers
 		self.handlers = self.parser.getHandlers()
 		self.startHandler = None
+		self.text_input_hovered = False
 
 		# Fetch window parameters
 		window_parameters = self.layout_elements[0].getAttributes()
@@ -169,14 +173,22 @@ class Antlia:
 
 	def _onEvent(self, event):
 		el_indices_to_rebuild = []
+		text_input = None
 
 		# QUIT event
 		if event.type == sdl2.SDL_QUIT:
 			self.user.want_to_stop = True
+		# KEYBOARD events
+		elif event.type == sdl2.SDL_KEYDOWN:
+			# A key has been pressed
+			if event.key.keysym.sym == sdl2.SDLK_ESCAPE:
+				self.user.want_to_stop = True
+			elif event.key.keysym.sym == sdl2.SDLK_BACKSPACE:
+				text_input = "BACKSPACE"
+			# print(sdl2.SDL_GetKeyName(event.key.keysym.sym))
 		elif event.type == sdl2.SDL_TEXTINPUT:
 			# Fire a text event to all elements
-			for el in self.layout_elements:
-				el.onTextInput(event.text.text.decode())
+			text_input = event.text.text.decode()
 		# MOUSE MOTION events
 		elif event.type == sdl2.SDL_MOUSEMOTION:
 			# Local mouse coordonates
@@ -192,6 +204,16 @@ class Antlia:
 
 			# Get the hovered elements
 			current_hovered = self._findHoveredElements(X, Y)
+
+			# Hovering text input ?
+			found_text_input = False
+			for h in current_hovered:
+				if self.layout_elements[h[0]].type == "text-input":
+					self.text_input_hovered = True
+					found_text_input = True
+			if not found_text_input:
+				self.text_input_hovered = False
+
 
 			# Look for draggable elements
 			if self.mouse.left_click:
@@ -270,19 +292,24 @@ class Antlia:
 
 				# Need to be rebuilt
 				el_indices_to_rebuild.append(i)
-		# KEYBOARD events
-		elif event.type == sdl2.SDL_KEYDOWN:
-			# A key has been pressed
-			if event.key.keysym.sym == sdl2.SDLK_ESCAPE:
-				self.user.want_to_stop = True
-			elif event.key.keysym.sym == sdl2.SDLK_SPACE:
-				pass
 		# WINDOW events
 		if event.type == sdl2.SDL_WINDOWEVENT:
 			if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_GAINED:
 				self.is_window_focused = True
 			if event.window.event == sdl2.SDL_WINDOWEVENT_FOCUS_LOST:
 				self.is_window_focused = False
+
+		# Textinput handling
+		if text_input is not None:
+			for i, el in enumerate(self.layout_elements):
+				if el.onTextInput(text_input):
+					el_indices_to_rebuild.append(i)
+
+		# Cursor changing
+		if self.text_input_hovered:
+			changeCursor(TEXT)
+		else:
+			changeCursor(ARROW)
 
 		# Rebuild if necessary
 		if len(el_indices_to_rebuild) > 0:
