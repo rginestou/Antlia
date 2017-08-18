@@ -41,6 +41,14 @@ class Element:
 			p.destroy()
 		self.blueprint = []
 
+	def _addNewPrimitive(self, primitive, renderer, rect, colors, args=None):
+		if args is None:
+			new_prim = primitive()
+		else:
+			new_prim = primitive(*args)
+		new_prim.build(renderer, rect, colors)
+		self.blueprint.append(new_prim)
+
 	def draw(self, renderer):
 		for e in self.blueprint: e.draw(renderer)
 

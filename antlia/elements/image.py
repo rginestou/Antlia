@@ -7,7 +7,7 @@ class Image(Element):
 	def __init__(self, name):
 		super(Image, self).__init__(name)
 		self.type = "image"
-		
+
 		# Specific to the Button element
 		self.attributes = {
 			"source": "",
@@ -16,13 +16,16 @@ class Image(Element):
 		}
 
 	def build(self, renderer, rect):
-		self._clearBlueprint()
-
 		# Apply padding
 		img_rect = rect.getPaddingRect(self.attributes["padding"])
 
-		# Bluid blueprint
-		if self.attributes["source"] != "":
-			I = Picture(self.attributes["source"], self.attributes["adjust"])
-			I.build(renderer, img_rect, None)
-			self.blueprint.append(I)
+		if self.attributes["source"] == "":
+			return
+
+		### Bluid blueprint ###
+		self._clearBlueprint()
+
+		self._addNewPrimitive(Picture, renderer, img_rect, None, args=(
+			self.attributes["source"],
+			self.attributes["adjust"]
+		))

@@ -13,6 +13,12 @@ is_running = True
 # Create a GUI based on a layout file and a style file
 GUI = Antlia("examples/gallery_layout", "examples/gallery_style")
 
+def onStart():
+	# Add empty images
+	for i in range(12):
+		GUI.add("image", "img" + str(i), "image_grid", {"padding": "20px"})
+	loadTheme(current_theme)
+
 def downloadImage(theme_name, i):
 	urllib.request.urlretrieve("https://source.unsplash.com/200x200/?" + theme_name, "examples/gallery_pics/" +theme_name+ str(i) + ".jpg")
 	GUI.change("img" + str(i), "source", "examples\gallery_pics\\" + theme_name+str(i) + ".jpg")
@@ -24,13 +30,14 @@ def loadTheme(theme_name):
 		t = threading.Thread(target=downloadImage, args=(theme_name,i))
 		t.start()
 
+# Define a handler for the buttons
 def themeClickHandler(theme_name):
 	global current_theme
 	if theme_name != current_theme:
 		loadTheme(theme_name)
 		current_theme = theme_name
+		GUI.change("theme_info_label", "label", theme_name.upper())
 
-# Define a handler for the button
 def quitClickHandler():
 	global is_running
 	is_running = False
@@ -41,14 +48,10 @@ for theme in ("nature", "sport", "music", "science"):
 	GUI.bind("theme_" + theme + ".theme_button",
 			"click", themeClickHandler, arg=theme)
 
-GUI.onStart(loadTheme, arg=current_theme)
+GUI.onStart(onStart)
 
 # Open the GUI
 GUI.start()
-
-# Add empty images
-for i in range(12):
-	GUI.add("image", "img" + str(i), "image_grid", {"padding": "20px"})
 
 GUI.change("attribute_0", "completed", 60)
 # Main loop, wait for stop event

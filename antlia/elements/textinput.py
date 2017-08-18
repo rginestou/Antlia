@@ -33,58 +33,61 @@ class TextInput(Element):
 		self.cursor_position = 0
 
 	def build(self, renderer, rect):
-		self._clearBlueprint()
-		colors = {
-			"background-color": Color[self.attributes["background-color"]],
-			"text-color": Color[self.attributes["text-color"]],
-			"placeholder-color": Color[self.attributes["placeholder-color"]],
-			"underline-color": Color[self.attributes["underline-color"]]
-		}
-
 		# Apply padding
 		text_rect = rect.getPaddingRect(self.attributes["padding"])
 
+		# Fetch colors
+		colors = {
+			"background": Color[self.attributes["background-color"]],
+			"text": Color[self.attributes["text-color"]],
+			"placeholder": Color[self.attributes["placeholder-color"]],
+			"underline": Color[self.attributes["underline-color"]]
+		}
+
 		text_size = int(self.attributes["text-size"])
 		character_limit = int(self.attributes["character-limit"])
-
-		# Bluid background
-		if colors["background-color"] is not None:
-			R = Rectangle(0.0, 0.0, 1.0, 1.0)
-			R.build(renderer, rect, colors["background-color"])
-			self.blueprint.append(R)
-
-		# Underline
-		U = Rectangle(0.0, 0.0, 1.0, 1.0)
 		t, _, _  = toArrayOfSizes(self.attributes["underline-thickness"], rect.h)
 		thickness = t[0]
-		r = Rect(rect.x, rect.y + rect.h/2+text_size*0.7 - thickness, rect.w, thickness)
-		U.build(renderer, r, colors["underline-color"])
-		self.blueprint.append(U)
+		underline_rect = Rect(rect.x, int(rect.y + rect.h/2 + text_size*0.7 - thickness), rect.w, thickness)
 
-		# Text
-		text_color = colors["text-color"]
+		text_align = self.attributes["align"]
 		text = self.attributes["label"]
+		text_color = colors["text"]
 		if text == "":
-			text_color = colors["placeholder-color"]
+			text_color = colors["placeholder"]
 			text = self.attributes["placeholder"]
 
-		x = 0.0
-		if self.attributes["align"] == "center":
-			x = 0.5
-		elif self.attributes["align"] == "right":
-			x = 1.0
 
-		T = Text(x, 0.5,
-				text,
-				self.attributes["font"],
-				text_size,
-				align=self.attributes["align"])
-		T.build(renderer, text_rect, text_color)
-		self.blueprint.append(T)
+		### Bluid blueprint ###
+		self._clearBlueprint()
+
+		if colors["background"] is not None:
+			self._addNewPrimitive(Rectangle, renderer, rect, colors["background"])
+
+		# Underline
+		self._addNewPrimitive(Rectangle, renderer, underline_rect, colors["underline"])
+
+		# Text
+		self._addNewPrimitive(Text, renderer, text_rect, text_color, args=(
+			text,
+			self.attributes["font"],
+			text_size,
+			text_align
+		))
+
+		# Compute cursor position based on glyphs length
+		if self.state == ACTIVE:
+			x_displacement = text_rect.x
+			y_position = int(text_rect.y + text_rect.h / 2 - text_size * 0.6)
+			for p in range(self.cursor_position):
+				char = text[p]
+				x_displacement += font_manager.getGlyphFromChar(T.getFontId(), char).advance
+			cursor_rect = Rect(x_displacement, y_position, 2, int(text_size * 1.2))
+
+			self._addNewPrimitive(Rectangle, renderer, cursor_rect, text_color)
 
 	def onHover(self, local_x, local_y):
 		print(local_x, local_y)
-		# print(font_manager.getGlyphFromChar(T.getFontId(), "H").advance)
 
 	def onTextInput(self, text):
 		character_limit = int(self.attributes["character-limit"])
@@ -92,9 +95,10 @@ class TextInput(Element):
 			# Special character
 			if text == "BACKSPACE":
 				self.attributes["label"] = self.attributes["label"][:-1]
+				self.cursor_position -= 1
 			elif len(self.attributes["label"]) < character_limit:
 				# Add text to the label
-				self.cursor_position
+				self.cursor_position += 1
 				self.attributes["label"] += text
 			return True
 		return False

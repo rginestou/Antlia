@@ -10,7 +10,7 @@ class Grid(Element):
 	def __init__(self, name):
 		super(Grid, self).__init__(name)
 		self.type = "grid"
-		
+
 		# Specific to the Grid element
 		self.attributes = {
 			"rows": "1",
@@ -41,13 +41,13 @@ class Grid(Element):
 
 		sr = grid_rect.y; sc = grid_rect.x
 		for r, row_ in enumerate(rows):
-			row = row_
+			row = int(row_)
 			if rows_typ[r] == "%":
-				row = row_ * grid_rect.h
+				row = int(row_ * grid_rect.h)
 			for c, col_ in enumerate(cols):
-				col = col_
+				col = int(col_)
 				if cols_typ[c] == "%":
-					col = col_ * grid_rect.w
+					col = int(col_ * grid_rect.w)
 
 				self.child_rects.append(Rect(sc, sr, col, row))
 				sc += col
@@ -55,14 +55,14 @@ class Grid(Element):
 			sc = grid_rect.x
 
 	def build(self, renderer, rect):
-		self._clearBlueprint()
-
+		# Fetch colors
 		colors = {
-			"background-color": Color[self.attributes["background-color"]]
+			"background": Color[self.attributes["background-color"]]
 		}
 
-		# Bluid blueprint
-		if colors["background-color"] is not None:
-			R = Rectangle(0.0, 0.0, 1.0, 1.0)
-			R.build(renderer, rect, colors["background-color"])
-			self.blueprint.append(R)
+
+		### Bluid blueprint ###
+		self._clearBlueprint()
+
+		if colors["background"] is not None:
+			self._addNewPrimitive(Rectangle, renderer, rect, colors["background"])

@@ -9,10 +9,10 @@ class Button(Element):
 	def __init__(self, name):
 		super(Button, self).__init__(name)
 		self.type = "button"
-		
+
 		# Specific to the Button element
 		self.attributes = {
-			"state": RELEASED,
+			"state": "released",
 			"label": name,
 			"text-align": "center",
 			"text-size": 12,
@@ -25,49 +25,45 @@ class Button(Element):
 		}
 
 	def build(self, renderer, rect):
-		self._clearBlueprint()
-
 		# Fetch colors
 		colors = {
-			"released-color": toColor(self.attributes["released-color"]),
-			"pressed-color": toColor(self.attributes["pressed-color"]),
-			"hovered-color": lighthen(toColor(self.attributes["hovered-color"])),
-			"text-color": toColor(self.attributes["text-color"])
+			"released":  toColor(self.attributes["released-color"]),
+			"pressed": toColor(self.attributes["pressed-color"]),
+			"hovered": lighthen(toColor(self.attributes["hovered-color"])),
+			"text": toColor(self.attributes["text-color"])
 		}
 
-		# Bluid blueprint
-		R = Rectangle(0.0, 0.0, 1.0, 1.0)
-		color = None
-		if self.attributes["state"] == RELEASED:
-			color = colors["released-color"]
-		elif self.attributes["state"] == HOVERED:
-			color = colors["hovered-color"]
-		elif self.attributes["state"] == PRESSED:
-			color = colors["pressed-color"]
-		R.build(renderer, rect, color)
-		self.blueprint.append(R)
+		# Button color based on its state
+		button_color = colors[self.attributes["state"]]
 
+		# Position the text using its alignment
+		text_align = self.attributes["text-align"]
 		x = 0.5
-		if self.attributes["text-align"] == "left":
+		if text_align == "left":
 			x = 0.0
-		elif self.attributes["text-align"] == "right":
+		elif text_align == "right":
 			x = 1.0
-		T = Text(x, 0.5,
-				self.attributes["label"],
-				self.attributes["font"],
-				self.attributes["text-size"],
-				self.attributes["text-align"])
-		T.build(renderer, rect, colors["text-color"])
-		self.blueprint.append(T)
+
+
+		### Bluid blueprint ###
+		self._clearBlueprint()
+
+		self._addNewPrimitive(Rectangle, renderer, rect, button_color)
+		self._addNewPrimitive(Text, renderer, rect, colors["text"], args=(
+			self.attributes["label"],
+			self.attributes["font"],
+			self.attributes["text-size"],
+			text_align
+		))
 
 	def onClick(self):
-		self.setAttribute("state", PRESSED)
+		self.setAttribute("state", "pressed")
 
 	def onRelease(self):
-		self.setAttribute("state", HOVERED)
+		self.setAttribute("state", "hovered")
 
 	def onHover(self, local_x, local_y):
-		self.setAttribute("state", HOVERED)
+		self.setAttribute("state", "hovered")
 
 	def onOut(self):
-		self.setAttribute("state", RELEASED)
+		self.setAttribute("state", "released")

@@ -10,7 +10,7 @@ class Progress(Element):
 	def __init__(self, name):
 		super(Progress, self).__init__(name)
 		self.type = "progress"
-		
+
 		# Specific to the Button element
 		self.attributes = {
 			"selectable": False,
@@ -22,70 +22,51 @@ class Progress(Element):
 		}
 
 	def build(self, renderer, rect):
-		self._clearBlueprint()
-
-		colors = {
-			"empty-color": Color[self.attributes["empty-color"]],
-			"full-color": Color[self.attributes["full-color"]]
-		}
-
 		# Apply padding
 		rect = rect.getPaddingRect(self.attributes["padding"])
 
+		# Fetch colors
+		colors = {
+			"empty": Color[self.attributes["empty-color"]],
+			"full": Color[self.attributes["full-color"]]
+		}
+
 		height = rect.h
 		width = rect.w
-
+		completion = toFloat(self.attributes["completed"])
 		t, typ_, err = toArrayOfSizes(self.attributes["thickness"])
 		if typ_[0] == "px":
 			thickness = t[0]
 		else:
 			thickness = int(t[0] * height)
+		comp_width = int((rect.w - thickness) * completion / 100.0)
 
-		Cleft = Circle(0.5, 0.5, 0.5)
-		Cleft.build(renderer, Rect(rect.x,
-								rect.y + int(height / 2 - thickness / 2),
-								thickness, thickness),
-				colors["empty-color"])
-		self.blueprint.append(Cleft)
-		Cright = Circle(0.5, 0.5, 0.5)
-		Cright.build(renderer, Rect(rect.x + width - thickness,
-								rect.y + int(height / 2 - thickness / 2),
-								thickness, thickness),
-				colors["empty-color"])
-		self.blueprint.append(Cright)
+		# Compute rects
+		left_circle_rect = Rect(rect.x, int(rect.y + int(height / 2 - thickness / 2)), thickness, thickness)
+		right_circle_rect = Rect(rect.x + width - thickness, left_circle_rect.y, thickness, thickness)
+		right_comp_circle_rect = Rect(rect.x + comp_width, left_circle_rect.y, thickness, thickness)
+		back_rect = Rect(
+			rect.x + int(thickness / 2),
+			left_circle_rect.y,
+			rect.w - thickness,
+			thickness+1) # For the circle to be aligned
+		front_rect = Rect(
+			back_rect.x,
+			back_rect.y,
+			comp_width,
+			back_rect.h)
 
-		# Bluid blueprint
-		R = Rectangle(0.0, 0.0, 1.0, 1.0)
-		R.build(renderer,
-				Rect(rect.x + int(thickness / 2),
-					rect.y + int(height / 2 - thickness / 2),
-					rect.w - thickness,
-					thickness+1), # For the circle to be aligned
-				colors["empty-color"])
-		self.blueprint.append(R)
 
-		completion = toFloat(self.attributes["completed"])
+		### Bluid blueprint ###
+		self._clearBlueprint()
+
+		# Background shape
+		self._addNewPrimitive(Circle, renderer, left_circle_rect, colors["empty"])
+		self._addNewPrimitive(Circle, renderer, right_circle_rect, colors["empty"])
+		self._addNewPrimitive(Rectangle, renderer, back_rect, colors["empty"])
+
 		if completion > 0.0:
-			comp_width = (rect.w - thickness) * completion / 100.0
-
-			Ccompleft = Circle(0.5, 0.5, 0.5)
-			Ccompleft.build(renderer, Rect(rect.x,
-									rect.y + int(height / 2 - thickness / 2),
-									thickness, thickness),
-					colors["full-color"])
-			self.blueprint.append(Ccompleft)
-			Ccompright = Circle(0.5, 0.5, 0.5)
-			Ccompright.build(renderer, Rect(rect.x + comp_width,
-									rect.y + int(height / 2 - thickness / 2),
-									thickness, thickness),
-					colors["full-color"])
-			self.blueprint.append(Ccompright)
-
-			S = Rectangle(0.0, 0.0, 1.0, 1.0)
-			S.build(renderer,
-					Rect(rect.x + int(thickness / 2),
-						rect.y + int(height / 2 - thickness / 2),
-						comp_width,
-						thickness+1),
-					colors["full-color"])
-			self.blueprint.append(S)
+			# Foreground shape
+			self._addNewPrimitive(Circle, renderer, left_circle_rect, colors["full"])
+			self._addNewPrimitive(Circle, renderer, right_comp_circle_rect, colors["full"])
+			self._addNewPrimitive(Rectangle, renderer, front_rect, colors["full"])

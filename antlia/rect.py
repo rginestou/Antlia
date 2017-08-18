@@ -67,7 +67,7 @@ class Rect:
 		h = self.h - pad_px[0] - pad_px[2]
 		w = self.w - pad_px[1] - pad_px[3]
 
-		return Rect(self.x + x, self.y + y, w, h)
+		return Rect(int(self.x + x), int(self.y) + y, int(w), int(h))
 
 	def getTuple(self):
 		return (self.x, self.y, self.w, self.h)

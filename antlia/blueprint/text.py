@@ -5,8 +5,8 @@ import re
 import time as ti
 
 class Text(Primitive):
-	def __init__(self, x, y, text, font_path, size, align="center"):
-		super(Text, self).__init__(x, y, 1.0, 1.0)
+	def __init__(self, text, font_path, size, align="center"):
+		super(Text, self).__init__()
 
 		self.text = text
 		self.size = int(size)
@@ -39,14 +39,12 @@ class Text(Primitive):
 			h = textSurface.contents.h
 
 			# Compute the square in absolute coordinates
-			text_rect = Rect(self.x, self.y, self.w, self.h)
-			_rect = Rect(*text_rect.fitRect(rect).getTuple())
-			X = _rect.x
-			Y = int(_rect.y - h/2)
+			X = rect.x
+			Y = int(rect.y + rect.h /2 - h/2)
 			if self.align == "center":
-				X = int(X - w/2)
+				X = int(X + rect.w /2 - w/2)
 			if self.align == "right":
-				X = int(X - w)
+				X = int(X + rect.w /2 - w)
 			self.abs_rect = sdl2.SDL_Rect(X, Y, w, h)
 
 			self.textTexture = sdl2.SDL_CreateTextureFromSurface(renderer, textSurface)
