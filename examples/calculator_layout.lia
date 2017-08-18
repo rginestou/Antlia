@@ -3,7 +3,6 @@
 
 grid main_grid
 	.rows 20% 80%
-	.cols 1
 
 	label result_label
 		.label 0

@@ -44,7 +44,7 @@ class Text(Primitive):
 			if self.align == "center":
 				X = int(X + rect.w /2 - w/2)
 			if self.align == "right":
-				X = int(X + rect.w /2 - w)
+				X = int(X + rect.w - w)
 			self.abs_rect = sdl2.SDL_Rect(X, Y, w, h)
 
 			self.textTexture = sdl2.SDL_CreateTextureFromSurface(renderer, textSurface)

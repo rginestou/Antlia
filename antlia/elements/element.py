@@ -78,6 +78,9 @@ class Element:
 		else:
 			log(WARNING, att + " is not an attribute of " + self.name)
 
+	def hasAttribute(self, att):
+		return att in self.attributes
+
 	def getAttributes(self):
 		return self.attributes
 

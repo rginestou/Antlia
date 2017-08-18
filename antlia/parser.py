@@ -176,6 +176,9 @@ class Parser:
 
 							# Add attribute
 							block_element.setAttribute(prev_el_attributes[attribute][0], attribute_value)
+						elif layout_elements[prev_element_index].hasAttribute(attribute):
+							# Add the attribute to the block main object if it exists
+							layout_elements[prev_element_index].setAttribute(attribute, attribute_value)
 						else:
 							log(ERROR, attribute + " not part of custom element")
 							exit(1)
