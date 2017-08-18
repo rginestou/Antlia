@@ -54,7 +54,6 @@ grid main_grid
 		theme-input custom_theme
 	grid display_grid
 		.rows 35% 65%
-		.cols 1
 
 		image cover
 			.source examples/cover_gallery.png

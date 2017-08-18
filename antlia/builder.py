@@ -1,3 +1,4 @@
+from .message import catch, ERROR, WARNING, OK
 from .elements.translate import toArrayOfSizes
 from .rect import Rect
 
@@ -7,10 +8,9 @@ class Builder(object):
 	will produce an array of rects for SDL2
 	"""
 	def __init__(self, params):
-		resolution, _, err = toArrayOfSizes(params["resolution"])
-		if err is not None:
-			log(ERROR, ".resolution: " + err)
-			exit(1)
+		resolution, _ = catch(
+			toArrayOfSizes, (params["resolution"],),
+			ERROR, "Invalid .resolution")
 		self.window_width, self.window_height = resolution
 
 	def computeLayoutRects(self, layout_elements, layout_tree):
@@ -20,9 +20,6 @@ class Builder(object):
 		The given elements have a parenting relation described by the tree,
 		and a relative positionning.
 		"""
-
-		# Each data chunk is ordered this way :
-		# X,	Y,    Z,	R,	G,	B,	A
 		global layout
 		layout_rects = [None] * len(layout_tree)
 

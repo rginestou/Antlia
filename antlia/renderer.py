@@ -1,5 +1,6 @@
-from .rect import Rect
 from .elements.translate import toArrayOfSizes, toBoolean
+from .message import catch, ERROR, WARNING, OK
+from .rect import Rect
 import os
 import sys
 import ctypes
@@ -35,10 +36,10 @@ class Renderer:
 		self.is_running = True
 
 		# Translation of the window parameters
-		resolution, _, err = toArrayOfSizes(self.params["resolution"])
-		if err is not None:
-			log(ERROR, ".resolution: ", err)
-			exit(1)
+		resolution, _ = catch(
+			toArrayOfSizes, (self.params["resolution"],),
+			ERROR, "Invalid .resolution")
+
 		self.window_width, self.window_height = resolution
 		self.show_borders = toBoolean(self.params["show-borders"])
 

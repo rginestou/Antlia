@@ -31,3 +31,12 @@ def log(typ, title, content=""):
 
 	print(col + header + title + bcolors._ENDC)
 	print("\t" + content)
+
+def catch(f, arguments, error_type, informations):
+	try:
+		results = f(*arguments)
+		return results
+	except Exception as e:
+		log(error_type, informations + ": " + e.args[0])
+		if error_type == ERROR:
+			exit(1)

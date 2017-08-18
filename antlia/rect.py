@@ -1,3 +1,4 @@
+from .message import catch, ERROR, WARNING, OK
 from .elements.translate import toArrayOfSizes
 
 class Rect:
@@ -27,9 +28,9 @@ class Rect:
 		of a padding on the self rect.
 		All possible input values are treated.
 		"""
-		pad_val, pad_typ, err = toArrayOfSizes(padding)
-		if err is not None:
-			return None, err
+		pad_val, pad_typ = catch(
+			toArrayOfSizes, (padding,),
+			ERROR, ".padding")
 
 		if len(pad_val) == 1:
 			# Apply to all direction

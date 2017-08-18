@@ -1,4 +1,5 @@
 from .translate import toArrayOfSizes, toFloat
+from ..message import catch, ERROR, WARNING, OK
 from ..blueprint.rectangle import Rectangle
 from ..blueprint.text import Text
 from ..blueprint.circle import Circle
@@ -34,7 +35,9 @@ class Progress(Element):
 		height = rect.h
 		width = rect.w
 		completion = toFloat(self.attributes["completed"])
-		t, typ_, err = toArrayOfSizes(self.attributes["thickness"])
+		t, typ_ = catch(
+			toArrayOfSizes, (self.attributes["thickness"],),
+			ERROR, self.name + " .thickness:")
 		if typ_[0] == "px":
 			thickness = t[0]
 		else:

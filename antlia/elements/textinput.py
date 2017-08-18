@@ -1,5 +1,6 @@
-from ..blueprint.rectangle import Rectangle
+from ..message import catch, ERROR, WARNING, OK
 from .translate import toArrayOfSizes
+from ..blueprint.rectangle import Rectangle
 from ..blueprint.text import Text
 from ..blueprint.primitive import font_manager
 from .element import Element
@@ -46,7 +47,9 @@ class TextInput(Element):
 
 		text_size = int(self.attributes["text-size"])
 		character_limit = int(self.attributes["character-limit"])
-		t, _, _  = toArrayOfSizes(self.attributes["underline-thickness"], rect.h)
+		t, _ = catch(
+			toArrayOfSizes, (self.attributes["underline-thickness"], rect.h),
+			ERROR, self.name + " .rows:")
 		thickness = t[0]
 		underline_rect = Rect(rect.x, int(rect.y + rect.h/2 + text_size*0.7 - thickness), rect.w, thickness)
 

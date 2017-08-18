@@ -1,6 +1,6 @@
 from .translate import toArrayOfSizes
 from ..blueprint.rectangle import Rectangle
-from ..message import log, ERROR, WARNING, OK
+from ..message import catch, ERROR, WARNING, OK
 from .element import Element
 from ..rect import Rect
 from .color import Color
@@ -27,17 +27,13 @@ class Grid(Element):
 		# Apply padding
 		grid_rect = rect.getPaddingRect(self.attributes["padding"])
 
-		# Create rects based on the rows and columns proportions
-		s = 0.0
+		rows, rows_typ = catch(
+			toArrayOfSizes, (self.attributes["rows"], grid_rect.h),
+			ERROR, self.name + " .rows:")
 
-		rows, rows_typ, err = toArrayOfSizes(self.attributes["rows"], grid_rect.h)
-		if err is not None:
-			log(ERROR, self.name + " .rows:" + err)
-			exit(1)
-		cols, cols_typ, err = toArrayOfSizes(self.attributes["cols"], grid_rect.w)
-		if err is not None:
-			log(ERROR, self.name + " .cols: " + err)
-			exit(1)
+		cols, cols_typ = catch(
+			toArrayOfSizes, (self.attributes["cols"], grid_rect.w),
+			ERROR, self.name + " .cols:")
 
 		sr = grid_rect.y; sc = grid_rect.x
 		for r, row_ in enumerate(rows):

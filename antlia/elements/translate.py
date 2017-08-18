@@ -1,4 +1,3 @@
-from ..message import log, ERROR, WARNING, OK
 from .color import Color, lighthen
 from ast import literal_eval
 
@@ -6,10 +5,10 @@ def toArrayOfSizes(arg, length=None):
 	"""
 	Parse an attribute data to get an array of sizes.
 	Supported types : px, %, number, ?.
+	Raise a custom exception if an error occurs.
 	"""
 	if arg == "":
-		err = "The specified value is incorrect"
-		return None, None, err
+		raise Exception("Empty value"); return
 	array = arg.split(" ")
 
 	if array[0].isdigit():
@@ -47,32 +46,36 @@ def toArrayOfSizes(arg, length=None):
 				sum_px += int(v[:-2])
 			elif v == "?":
 				if length is None:
-					log(ERROR, "Can't use '?' in this context")
-					exit(1)
+					raise Exception("Can't use '?' in this context"); return
 				else:
 					unknown.append(i)
 					typ.append("px")
 					values.append(None)
 			else:
-				err = "The specified value has no known format"
-				return None, None, err
+				raise Exception("The specified value has no known format"); return
 
 		# Fill ? values
 		if length is not None and len(unknown) > 0:
 			v = (length - sum_px) / len(unknown)
 			for i in unknown:
 				values[i] = v
-	return values, typ, None
+	return values, typ
 
 def toInt(arg):
-	if type(arg) == int:
-		return arg
-	return int(arg)
+	res = None
+	try:
+		res = int(arg)
+	except:
+		raise Exception("Couldn't convert value to 'int'"); return
+	return res
 
 def toFloat(arg):
-	if type(arg) == float:
-		return arg
-	return float(arg)
+	res = None
+	try:
+		res = float(arg)
+	except:
+		raise Exception("Couldn't convert value to 'float'"); return
+	return res
 
 def toBoolean(arg):
 	if type(arg) == bool:
@@ -81,6 +84,8 @@ def toBoolean(arg):
 		return True
 	elif arg == "false":
 		return False
+	else:
+		raise Exception("Couldn't convert value to 'bool'")
 
 def toColor(arg):
 	try:
@@ -99,7 +104,7 @@ def toColor(arg):
 			color.append(255)
 			return color
 		else:
-			return None, "Not a valid color format"
+			raise Exception("Not a valid color format"); return
 	elif arg.startswith("rgb("):
 		return tuple(arg[3:]), 255
 	elif arg.startswith("rgba("):
