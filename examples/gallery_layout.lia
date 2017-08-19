@@ -13,9 +13,11 @@ grid main_grid
 		.text-align center
 		.text-color white
 		.background-color peter-river
+		.drag-window true
 	grid info_grid
 		.cols 50px ?
 		.padding 40px
+		.drag-window true
 
 		label theme_info_label
 			.label NATURE
@@ -28,6 +30,7 @@ grid main_grid
 		.text-align center
 		.text-color white
 		.background-color wet-asphalt
+		.drag-window true
 
 	grid theme_list
 		.rows 14

@@ -22,7 +22,7 @@ from .mouse import Mouse
 from .renderer import Renderer
 from .builder import Builder
 from .elements.translate import toBoolean
-from .message import log, ERROR, WARNING, OK
+from .message import catch, ERROR, WARNING, OK
 from .user import User
 from .elements.const import *
 from .cursor import changeCursor
@@ -222,7 +222,10 @@ class Antlia:
 				for h in current_hovered:
 					el = self.layout_elements[h[0]]
 
-					if toBoolean(el.getAttribute("drag-window")):
+
+					if el.hasAttribute("drag-window") and \
+							catch(toBoolean, (el.getAttribute("drag-window"),),
+							ERROR, el.name + " .drag-window"):
 						dx = global_X - self.mouse.global_X
 						dy = global_Y - self.mouse.global_Y
 						need_moving = True

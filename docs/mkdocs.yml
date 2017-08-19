@@ -1,0 +1,11 @@
+site_name: Antlia - Flat design GUI for Python
+theme: material
+markdown_extensions:
+  - codehilite
+pages:
+  - Home: 'index.md'
+  - Examples:
+    - Hello World: 'examples/helloworld.md'
+    - Calculator: 'examples/calculator.md'
+    - Music Player: 'examples/musicplayer.md'
+    - Gallery: 'examples/gallery.md'

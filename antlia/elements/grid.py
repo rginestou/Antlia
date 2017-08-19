@@ -29,11 +29,11 @@ class Grid(Element):
 
 		rows, rows_typ = catch(
 			toArrayOfSizes, (self.attributes["rows"], grid_rect.h),
-			ERROR, self.name + " .rows:")
+			ERROR, self.name + " .rows")
 
 		cols, cols_typ = catch(
 			toArrayOfSizes, (self.attributes["cols"], grid_rect.w),
-			ERROR, self.name + " .cols:")
+			ERROR, self.name + " .cols")
 
 		sr = grid_rect.y; sc = grid_rect.x
 		for r, row_ in enumerate(rows):

@@ -49,6 +49,17 @@ class Element:
 		new_prim.build(renderer, rect, colors)
 		self.blueprint.append(new_prim)
 
+		return new_prim
+
+	def _addNewElement(self, element, renderer, rect, attributes, args=None):
+		new_el = element("")
+		for a in attributes:
+			new_el.setAttribute(a, attributes[a])
+		new_el.build(renderer, rect)
+		self.blueprint.append(new_el)
+
+		return new_el
+
 	def draw(self, renderer):
 		for e in self.blueprint: e.draw(renderer)
 

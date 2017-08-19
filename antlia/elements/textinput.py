@@ -71,6 +71,7 @@ class TextInput(Element):
 		self._addNewPrimitive(Rectangle, renderer, underline_rect, colors["underline"])
 
 		# Text
+		text_prim =\
 		self._addNewPrimitive(Text, renderer, text_rect, text_color, args=(
 			text,
 			self.attributes["font"],
@@ -84,13 +85,14 @@ class TextInput(Element):
 			y_position = int(text_rect.y + text_rect.h / 2 - text_size * 0.6)
 			for p in range(self.cursor_position):
 				char = text[p]
-				x_displacement += font_manager.getGlyphFromChar(T.getFontId(), char).advance
+				x_displacement += font_manager.getGlyphFromChar(text_prim.getFontId(), char).advance
 			cursor_rect = Rect(x_displacement, y_position, 2, int(text_size * 1.2))
 
 			self._addNewPrimitive(Rectangle, renderer, cursor_rect, text_color)
 
 	def onHover(self, local_x, local_y):
-		print(local_x, local_y)
+		# print(local_x, local_y)
+		pass
 
 	def onTextInput(self, text):
 		character_limit = int(self.attributes["character-limit"])

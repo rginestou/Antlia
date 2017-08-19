@@ -180,7 +180,7 @@ class Parser:
 							# Add the attribute to the block main object if it exists
 							layout_elements[prev_element_index].setAttribute(attribute, attribute_value)
 						else:
-							log(ERROR, attribute + " not part of custom element")
+							log(ERROR, attribute + " not part of custom element " + layout_elements[prev_element_index].name)
 							exit(1)
 					else:
 						layout_elements[prev_element_index].setAttribute(attribute, attribute_value)
@@ -296,8 +296,11 @@ class Parser:
 
 				# Add attribute
 				block_element.setAttribute(element_attributes[attribute][0], value)
+			elif element.hasAttribute(attribute):
+				# Add the attribute to the block main object if it exists
+				element.setAttribute(attribute, value)
 			else:
-				log(ERROR, attribute + " not part of custom element")
+				log(ERROR, attribute + " not part of custom element " + element.name)
 				exit(1)
 
 	def _parseLine(self, line):

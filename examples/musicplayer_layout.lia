@@ -5,7 +5,6 @@
 # Main Layout
 grid main_grid
 	.rows 10% 80% 10%
-	.cols 1
 	.background-color asphalt
 
 	grid header_grid
@@ -22,12 +21,14 @@ grid main_grid
 				.text-size 22
 				.drag-window true
 				.background-color asphalt
+				.text-color clouds
 
 			label artist_label
 				.label
 				.text-size 16
 				.drag-window true
 				.background-color asphalt
+				.text-color clouds
 
 		styled-button quit_button
 			.label #exit_to_app#
