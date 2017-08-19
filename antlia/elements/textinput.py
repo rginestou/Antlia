@@ -30,8 +30,10 @@ class TextInput(Element):
 		}
 
 		# State of the input
-		self.state = ACTIVE # TODO
+		self.state = INACTIVE
 		self.cursor_position = 0
+		self.is_hovered = False
+		self.cursor_local_x = None
 
 	def build(self, renderer, rect):
 		# Apply padding
@@ -83,27 +85,61 @@ class TextInput(Element):
 		if self.state == ACTIVE:
 			x_displacement = text_rect.x
 			y_position = int(text_rect.y + text_rect.h / 2 - text_size * 0.6)
-			for p in range(self.cursor_position):
-				char = text[p]
-				x_displacement += font_manager.getGlyphFromChar(text_prim.getFontId(), char).advance
-			cursor_rect = Rect(x_displacement, y_position, 2, int(text_size * 1.2))
+			if self.attributes["label"] != "":
+				if self.cursor_local_x is not None:
+					# Determine cursor character position
+					print(x_displacement, self.cursor_local_x + rect.x)
+					p = 0
+					for c in text:
+						next_displacement = font_manager.getGlyphFromChar(text_prim.getFontId(), c).advance
+						if x_displacement + next_displacement > self.cursor_local_x + rect.x:
+							# If the cursor is closer to the next intersection, wait
+							if 2 * x_displacement + next_displacement >= 2 * (self.cursor_local_x + rect.x):
+								break
+						x_displacement += next_displacement
+						p += 1
+					self.cursor_position = p
+					self.cursor_local_x = None
+				else:
+					for p in range(self.cursor_position):
+						char = text[p]
+						x_displacement += font_manager.getGlyphFromChar(text_prim.getFontId(), char).advance
 
+			cursor_rect = Rect(x_displacement, y_position, 2, int(text_size * 1.2))
 			self._addNewPrimitive(Rectangle, renderer, cursor_rect, text_color)
 
 	def onHover(self, local_x, local_y):
-		# print(local_x, local_y)
-		pass
+		self.is_hovered = True
+		return False
+
+	def onClick(self, local_x, local_y):
+		self.state = ACTIVE
+		self.cursor_local_x = local_x
+		return True
+
+	def onOut(self):
+		self.is_hovered = False
+		self.mouse_position = None
+		return False
+
+	def onWindowClick(self):
+		if not self.is_hovered:
+			self.state = INACTIVE
+			return True
+		return False
 
 	def onTextInput(self, text):
 		character_limit = int(self.attributes["character-limit"])
 		if self.state == ACTIVE:
 			# Special character
+			label = self.attributes["label"]
+			p = self.cursor_position
 			if text == "BACKSPACE":
-				self.attributes["label"] = self.attributes["label"][:-1]
+				self.attributes["label"] = label[:p-1] + label[p:]
 				self.cursor_position -= 1
 			elif len(self.attributes["label"]) < character_limit:
 				# Add text to the label
 				self.cursor_position += 1
-				self.attributes["label"] += text
+				self.attributes["label"] = label[:p] + text + label[p:]
 			return True
 		return False

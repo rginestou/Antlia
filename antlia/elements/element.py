@@ -63,17 +63,20 @@ class Element:
 	def draw(self, renderer):
 		for e in self.blueprint: e.draw(renderer)
 
-	def onClick(self):
-		pass
+	def onClick(self, local_x, local_y):
+		return False
 
 	def onRelease(self):
-		pass
+		return False
 
 	def onHover(self, local_x, local_y):
-		pass
+		return False
 
 	def onOut(self):
-		pass
+		return False
+
+	def onWindowClick(self):
+		return False
 
 	def onTextInput(self, text):
 		return False

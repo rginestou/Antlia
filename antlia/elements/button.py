@@ -56,14 +56,18 @@ class Button(Element):
 			text_align
 		))
 
-	def onClick(self):
+	def onClick(self, local_x, local_y):
 		self.setAttribute("state", "pressed")
+		return True
 
 	def onRelease(self):
 		self.setAttribute("state", "hovered")
+		return True
 
 	def onHover(self, local_x, local_y):
 		self.setAttribute("state", "hovered")
+		return True
 
 	def onOut(self):
 		self.setAttribute("state", "released")
+		return True

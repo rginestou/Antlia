@@ -243,7 +243,7 @@ class Antlia:
 			new_hovered = [x for x in current_hovered if x[0] not in self.hovered_indices]
 			old_indices = []
 
-			for o in self.hovered_indices:
+			for o,_,_ in self.hovered_indices:
 				still = False
 				for n in current_hovered:
 					if n[0] == o:
@@ -273,7 +273,7 @@ class Antlia:
 			# Update hovered indices
 			self.hovered_indices = []
 			for h in current_hovered:
-				self.hovered_indices.append(h[0])
+				self.hovered_indices.append(h)
 
 			# Update mouse position
 			self.mouse.X = X
@@ -283,16 +283,22 @@ class Antlia:
 			self.mouse.global_Y = global_Y
 		elif event.type == sdl2.SDL_MOUSEBUTTONDOWN:
 			self.mouse.left_click = True
-			for i in self.hovered_indices:
-				el = self.layout_elements[i]
+
+			# Fire a windowClick event to everyone
+			for i, el in enumerate(self.layout_elements):
+				if el.onWindowClick():
+					el_indices_to_rebuild.append(i)
+
+			for h in self.hovered_indices:
+				el = self.layout_elements[h[0]]
 				self._callHandler(el.name, "click")
-				el.onClick()
+				el.onClick(h[1], h[2])
 
 				# Need to be rebuilt
 				el_indices_to_rebuild.append(i)
 		elif event.type == sdl2.SDL_MOUSEBUTTONUP:
 			self.mouse.left_click = False
-			for i in self.hovered_indices:
+			for i,_,_ in self.hovered_indices:
 				el = self.layout_elements[i]
 				self._callHandler(el.name, "release")
 				el.onRelease()
