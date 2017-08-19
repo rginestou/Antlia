@@ -28,12 +28,15 @@ class Renderer:
 	Renderer.refresh()
 	Renderer.quit()
 	"""
-	def __init__(self, onEvent, params):
-		self.onEvent = onEvent
+	def __init__(self, params):
 		self.is_window_created = False
 		self.need_update = False
 		self.params = params
 		self.is_running = True
+
+		# Handlers
+		self.onEvent = None
+		self.onStart = None
 
 		# Translation of the window parameters
 		resolution, _ = catch(
@@ -42,6 +45,9 @@ class Renderer:
 
 		self.window_width, self.window_height = resolution
 		self.show_borders = toBoolean(self.params["show-borders"])
+
+		# List of element index to be built
+		self.indices_to_be_built = []
 
 	def createWindow(self):
 		# Create the window context
@@ -69,6 +75,13 @@ class Renderer:
 		# Build the GUI
 		self.buildElements()
 
+		# onStart handler
+		if self.onStart is not None:
+			if self.onStart[1] is None:
+				self.onStart[0]()
+			else:
+				self.onStart[0](self.onStart[1])
+
 		# look for events
 		self._loopForEvents()
 
@@ -77,15 +90,16 @@ class Renderer:
 		self.layout_rects = layout_rects
 		self.need_update = True
 
+	def addElementIndexToBuild(self, element_index):
+		self.indices_to_be_built.append(element_index)
+		self.need_update = True
+
 	def buildElements(self):
 		for i, el in enumerate(self.layout_elements):
 			el.build(self.renderer, self.layout_rects[i])
 
 	def buildElement(self, i):
 		self.layout_elements[i].build(self.renderer, self.layout_rects[i])
-
-	def setUpdateNeed(self, b):
-		self.need_update = b
 
 	def getWindowPosition(self):
 		# Use pointers
@@ -109,6 +123,12 @@ class Renderer:
 		sdl2.SDL_DestroyWindow(self.window)
 		sdl2.SDL_Quit()
 
+	def setOnEvent(self, onEvent):
+		self.onEvent = onEvent
+
+	def setOnStart(self, onStart, args=None):
+		self.onStart = (onStart, args)
+
 	def _refreshElement(self, i):
 		"""
 		Only draw one element
@@ -124,6 +144,7 @@ class Renderer:
 		sdl2.SDL_SetRenderDrawColor(self.renderer, 255, 255, 255, 255);
 		sdl2.SDL_RenderClear(self.renderer)
 
+		# TODO
 		# For each element of the layout, call its draw method
 		for el in self.layout_elements:
 			el.draw(self.renderer)
@@ -142,7 +163,12 @@ class Renderer:
 
 			# Look for layout changes
 			if self.need_update:
-				self.buildElements()
+				# Rebuilt only what is needed
+				for i in self.indices_to_be_built:
+					self.buildElement(i)
+				self.indices_to_be_built = []
+
+				# Draw the elements
 				self._refresh()
 				self.need_update = False
 			sdl2.SDL_Delay(1)

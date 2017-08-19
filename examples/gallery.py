@@ -11,7 +11,7 @@ current_theme = "nature"
 is_running = True
 
 # Create a GUI based on a layout file and a style file
-GUI = Antlia("examples/gallery_layout", "examples/gallery_style")
+GUI = Antlia("gallery_layout", "gallery_style")
 
 def onStart():
 	# Add empty images
@@ -20,8 +20,8 @@ def onStart():
 	loadTheme(current_theme)
 
 def downloadImage(theme_name, i):
-	urllib.request.urlretrieve("https://source.unsplash.com/200x200/?" + theme_name, "examples/gallery_pics/" +theme_name+ str(i) + ".jpg")
-	GUI.change("img" + str(i), "source", "examples\gallery_pics\\" + theme_name+str(i) + ".jpg")
+	urllib.request.urlretrieve("https://source.unsplash.com/200x200/?" + theme_name, "gallery_pics/" +theme_name+ str(i) + ".jpg")
+	GUI.change("img" + str(i), "source", "gallery_pics\\" + theme_name+str(i) + ".jpg")
 
 def loadTheme(theme_name):
 	print("Loading " + theme_name)

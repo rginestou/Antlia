@@ -63,7 +63,8 @@ class Antlia:
 		window_parameters = self.layout_elements[0].getAttributes()
 
 		# The Renderer will take a reference to the layout to display it
-		self.renderer = Renderer(self._onEvent, params=window_parameters)
+		self.renderer = Renderer(params=window_parameters)
+		self.renderer.setOnEvent(self._onEvent)
 
 		# The layout structure is passed to the builder to construct
 		# the vertex buffer data displayed by OpenGL
@@ -87,9 +88,8 @@ class Antlia:
 		# Give the info to the renderer
 		self._update()
 
-		# Fire start handler
-		if self.startHandler is not None:
-			self.startHandler()
+		# Give time to create the window
+		ti.sleep(1)
 
 	def bind(self, element_name, event_type, handler, arg=None):
 		"""
@@ -102,23 +102,24 @@ class Antlia:
 		except KeyError:
 			log(WARNING, element_name + " does not exist in the layout")
 
-	def onStart(self, handler, arg=None):
-		if arg is not None:
-			self.startHandler = handler(arg)
-		else:
-			self.startHandler = handler()
+	def onStart(self, handler, args=None):
+		self.renderer.setOnStart(handler, args)
 
 	def change(self, element_name, attribute, value):
 		"""
 		Changes an element's parameter value
 		"""
 		# Change the parameter
-		self.parser.changeElement(element_name, attribute, value)
+		element_index = self.parser.changeElement(element_name, attribute, value)
 		self.layout_elements = self.parser.getLayoutElements()
+		self.layout_tree = self.parser.getLayoutTree()
+
+		# TODO change oly the element's tree
 		self._update()
+		self._buildElement(element_index)
 
 	def add(self, element_type, element_name, parent, attributes={}):
-		self.parser.addElement(element_type, element_name, parent, attributes)
+		element_index = self.parser.addElement(element_type, element_name, parent, attributes)
 
 		# Fetch new layout from parser
 		self.layout_elements = self.parser.getLayoutElements()
@@ -128,6 +129,7 @@ class Antlia:
 		# Rebuild layout
 		self.layout_rects = self.builder.computeLayoutRects(self.layout_elements, self.layout_tree)
 		self._update()
+		self._buildElement(element_index)
 
 	def getUserInfo(self):
 		return self.user
@@ -165,11 +167,13 @@ class Antlia:
 		"""
 		self.renderer.update(self.layout_elements, self.layout_rects)
 
-	def _buildElements(self):
-		self.renderer.buildElements()
-
 	def _buildElement(self, element_index):
-		self.renderer.buildElement(element_index)
+		"""
+		The rendering routine takes place in another thread.
+		Therefore, only the indices are passed, and the renderer will
+		notice it must rebuild them.
+		"""
+		self.renderer.addElementIndexToBuild(element_index)
 
 	def _onEvent(self, event):
 		el_indices_to_rebuild = []
@@ -316,8 +320,8 @@ class Antlia:
 
 		# Rebuild if necessary
 		if len(el_indices_to_rebuild) > 0:
-			self._buildElements()
-			self.renderer.setUpdateNeed(True)
+			for i in el_indices_to_rebuild:
+				self._buildElement(i)
 
 	def _findHoveredElements(self, X, Y):
 		"""

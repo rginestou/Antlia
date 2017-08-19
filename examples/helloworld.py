@@ -6,7 +6,7 @@ from antlia import *
 import time as ti
 
 # Create a GUI based on a layout file and a style file
-GUI = Antlia("examples/helloworld_layout")
+GUI = Antlia("helloworld_layout")
 
 # Define a handler for the button
 def buttonClickHandler():

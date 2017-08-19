@@ -34,7 +34,7 @@ grid main_grid
 			.label #exit_to_app#
 
 	image cover_image
-		.source examples/default.png
+		.source default.png
 		.adjust fill
 
 	grid footer_grid

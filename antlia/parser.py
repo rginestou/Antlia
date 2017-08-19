@@ -55,6 +55,8 @@ class Parser:
 		self.layout_elements += element_layout
 		self.layout_table.update(element_table)
 
+		return element_index
+
 	def _buildLayout(self, layout_file_name, style_file_name):
 		"""
 		Build an array of element and their rects
@@ -302,6 +304,8 @@ class Parser:
 			else:
 				log(ERROR, attribute + " not part of custom element " + element.name)
 				exit(1)
+
+		return element_index
 
 	def _parseLine(self, line):
 		indent = 0

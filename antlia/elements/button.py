@@ -16,12 +16,12 @@ class Button(Element):
 			"label": name,
 			"font": "lato-light",
 			"text-size": 12,
-			"text-color": "white"
+			"text-color": "white",
 			"text-align": "center",
 			"released-color": "peter-river",
-			"pressed-color": "belize-hole",
 			"hovered-color": "peter-river",
-			"drag-window": False,
+			"pressed-color": "belize-hole",
+			"drag-window": False
 		}
 
 	def build(self, renderer, rect):

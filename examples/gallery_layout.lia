@@ -59,7 +59,7 @@ grid main_grid
 		.rows 35% 65%
 
 		image cover
-			.source examples/cover_gallery.png
+			.source cover_gallery.png
 		grid image_grid
 			.rows 3
 			.cols 4

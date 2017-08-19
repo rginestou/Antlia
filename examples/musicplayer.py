@@ -16,7 +16,7 @@ song_loaded = False
 is_running = True
 
 # Create a GUI based on a layout file and a style file
-GUI = Antlia("examples/musicplayer_layout", "examples/musicplayer_style")
+GUI = Antlia("musicplayer_layout", "musicplayer_style")
 
 # Define a handler for the button
 def quitClickHandler():
@@ -38,15 +38,15 @@ def openClickHandler():
 		# Try to get image as jpg
 		image_data = tags["APIC:"].data
 		if image_data:
-			out = open("examples/albumcover.jpg", "wb")
+			out = open("albumcover.jpg", "wb")
 			out.write(image_data)
 			out.close()
 
 			# Change the cover image
-			GUI.change("cover_image", "source", "examples/albumcover.jpg")
+			GUI.change("cover_image", "source", "albumcover.jpg")
 		else:
 			# Put the default background
-			GUI.change("cover_image", "source", "examples/default.png")
+			GUI.change("cover_image", "source", "default.png")
 
 		# Fetch song title and artist
 		title = str(tags["TIT2"])

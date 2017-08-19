@@ -5,7 +5,7 @@ from antlia import *
 import time as ti
 
 # Create a GUI based on a layout file and a style file
-GUI = Antlia("examples/calculator_layout", "examples/calculator_style")
+GUI = Antlia("calculator_layout", "calculator_style")
 
 # Store the expression to be calculated
 expression = [0]
