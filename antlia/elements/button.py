@@ -14,14 +14,14 @@ class Button(Element):
 		self.attributes = {
 			"state": "released",
 			"label": name,
-			"text-align": "center",
+			"font": "lato-light",
 			"text-size": 12,
-			"drag-window": False,
+			"text-color": "white"
+			"text-align": "center",
 			"released-color": "peter-river",
 			"pressed-color": "belize-hole",
 			"hovered-color": "peter-river",
-			"font": "lato-light",
-			"text-color": "white"
+			"drag-window": False,
 		}
 
 	def build(self, renderer, rect):
