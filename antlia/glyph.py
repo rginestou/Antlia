@@ -35,7 +35,7 @@ class GlyphTable:
 
 	def get(self, character):
 		c = ord(character)
-		if c < 32 or c > 126:
+		if c < 32 or c > 256:
 			return None
 		else:
 			return self.glyphs[c - 32]
@@ -48,7 +48,7 @@ class GlyphTable:
 		p_maxy = ctypes.pointer(ctypes.c_long(0))
 		p_advance = ctypes.pointer(ctypes.c_long(0))
 
-		for c in range(32, 127):
+		for c in range(32, 256):
 			sdl2ttf.TTF_GlyphMetrics(self.font, c, p_minx, p_maxx, p_miny, p_maxy, p_advance)
 
 			G = Glyph()

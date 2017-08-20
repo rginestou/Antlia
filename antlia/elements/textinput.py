@@ -18,6 +18,7 @@ class TextInput(Element):
 			"placeholder": name,
 			"label": "",
 			"align": "left",
+			"allow-wrapping": False,
 			"background-color": "none",
 			"font": "lato-light",
 			"text-color": "dark-grey",
@@ -88,7 +89,6 @@ class TextInput(Element):
 			if self.attributes["label"] != "":
 				if self.cursor_local_x is not None:
 					# Determine cursor character position
-					print(x_displacement, self.cursor_local_x + rect.x)
 					p = 0
 					for c in text:
 						next_displacement = font_manager.getGlyphFromChar(text_prim.getFontId(), c).advance

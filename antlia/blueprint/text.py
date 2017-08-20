@@ -29,12 +29,13 @@ class Text(Primitive):
 
 	def build(self, renderer, rect, color):
 		if self.text != "":
-			textSurface = sdl2ttf.TTF_RenderUTF8_Blended(self.font, self.text.encode(),
-														sdl2.SDL_Color(*color),
-														sdl2.SDL_Color(52,73,94,255))
+			textSurface = sdl2ttf.TTF_RenderUTF8_Blended_Wrapped(self.font, self.text.encode(),
+																sdl2.SDL_Color(*color),
+																rect.w)
 			errors = sdl2ttf.TTF_GetError()
 			if errors:
 				print("Text", errors)
+				exit(1)
 			w = textSurface.contents.w
 			h = textSurface.contents.h
 

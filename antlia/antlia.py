@@ -53,6 +53,7 @@ class Antlia:
 		self.layout_tree = self.parser.getLayoutTree()
 		self.layout_table = self.parser.getLayoutTable()
 		self.layout_rects = None
+		self.validation_ids = {}
 
 		# Handlers
 		self.handlers = self.parser.getHandlers()
@@ -96,6 +97,7 @@ class Antlia:
 		Binds an element of the GUI with an handler.
 		"""
 		try:
+			# TODO check if event type valid
 			if element_name not in self.handlers:
 				self.handlers[element_name] = {}
 			self.handlers[element_name][event_type] = (handler, arg)
@@ -165,6 +167,9 @@ class Antlia:
 		Fill the renderer with the layout elements to draw,
 		and the corresponding rects
 		"""
+		# Update validation ids
+		self.validation_ids = self.parser.buildFormValidation()
+
 		self.renderer.update(self.layout_elements, self.layout_rects)
 
 	def _buildElement(self, element_index):
@@ -290,9 +295,16 @@ class Antlia:
 					el_indices_to_rebuild.append(i)
 
 			for h in self.hovered_indices:
-				el = self.layout_elements[h[0]]
+				element_index = h[0]
+				el = self.layout_elements[element_index]
 				self._callHandler(el.name, "click")
 				el.onClick(h[1], h[2])
+
+				valid_form_index = self.validation_ids.get(element_index, None)
+				if valid_form_index is not None:
+					form_name = self.layout_elements[valid_form_index].name
+					fields = self.parser.buildFormFields(valid_form_index)
+					self._callHandler(form_name, "validation", extra_params=fields)
 
 				# Need to be rebuilt
 				el_indices_to_rebuild.append(i)
@@ -341,10 +353,13 @@ class Antlia:
 
 		return hovered_indices
 
-	def _callHandler(self, element_name, event_type):
+	def _callHandler(self, element_name, event_type, extra_params=None):
 		if element_name in self.handlers and event_type in self.handlers[element_name]:
 			params = self.handlers[element_name][event_type][1]
 			if params is not None:
 				self.handlers[element_name][event_type][0](params)
 			else:
-				self.handlers[element_name][event_type][0]()
+				if extra_params is not None:
+					self.handlers[element_name][event_type][0](extra_params)
+				else:
+					self.handlers[element_name][event_type][0]()

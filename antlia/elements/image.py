@@ -12,7 +12,8 @@ class Image(Element):
 		self.attributes = {
 			"source": "",
 			"adjust": "fill",
-			"padding": "0px"
+			"padding": "0px",
+			"drag-window": False,
 		}
 
 	def build(self, renderer, rect):

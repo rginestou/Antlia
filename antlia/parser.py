@@ -1,10 +1,11 @@
 import json
 import copy
 import os.path
+from .elements.translate import toArrayOfSizes, toBoolean
 from .message import log, ERROR, WARNING, OK
 from .elements.color import Color
 from .elements.const import *
-from .elements.table import EL_TABLE
+from .elements.table import EL_TABLE, FORM_TABLE
 from pprint import pprint
 
 # Elements
@@ -113,7 +114,7 @@ class Parser:
 			nonlocal last_element_indent, n_element
 
 			# Get indent and data of the line
-			indent, data = self._parseLine(line)
+			indent, data = self._parseLine(line.replace("    ", "\t"))
 			indent += off_indent
 
 			if line_number != n_lines-1:
@@ -173,7 +174,12 @@ class Parser:
 						if attribute in prev_el_attributes:
 							_element_name = layout_elements[prev_element_index].name
 							block_element_name = prev_el_attributes[attribute][1]
-							el_name = _element_name + "." + block_element_name
+
+							if block_element_name is not None:
+								el_name = _element_name + "." + block_element_name
+							else:
+								# The attribute concerns the root
+								el_name = _element_name
 							block_element = layout_elements[layout_table[el_name]-offset]
 
 							# Add attribute
@@ -278,6 +284,49 @@ class Parser:
 					style_chunks[style_element_name].append(line)
 
 		return style_chunks, style_attributes
+
+	def buildFormValidation(self):
+		"""
+		By reading the layout tree, fetch the valitation elements
+		and bind them with the form's index they refer to.
+		"""
+		form_validation = {}
+		form_pile = []
+		def _aux(element_index):
+			element = self.layout_elements[element_index]
+			if element.type == "form":
+				form_pile.append(element_index)
+			elif element.type == "button" and toBoolean(element.getAttribute("form-validation")):
+				# This button validates a form
+				if len(form_pile) > 0:
+					form_validation[element_index] = form_pile[-1]
+					form_pile.pop()
+
+			for child_index in self.layout_tree[element_index]:
+				_aux(child_index)
+		_aux(0)
+
+		return form_validation
+
+	def buildFormFields(self, form_index):
+		"""
+		Given the index of a form, builds a dictionnary of all the informations
+		filled in the form.
+		"""
+		form_fields = {}
+		def _aux(element_index):
+			element = self.layout_elements[element_index]
+			attribute = FORM_TABLE.get(element.type, None)
+			if attribute is not None:
+				# This element is relevant to the form
+				form_fields[element.name] = element.getAttribute(attribute)
+
+			for child_index in self.layout_tree[element_index]:
+				_aux(child_index)
+
+		_aux(form_index)
+
+		return form_fields
 
 	def changeElement(self, element_name, attribute, value):
 		# This attribute refers to a previous element

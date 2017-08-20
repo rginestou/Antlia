@@ -21,7 +21,8 @@ class Button(Element):
 			"released-color": "peter-river",
 			"hovered-color": "peter-river",
 			"pressed-color": "belize-hole",
-			"drag-window": False
+			"drag-window": False,
+			"form-validation": False
 		}
 
 	def build(self, renderer, rect):

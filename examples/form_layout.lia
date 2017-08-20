@@ -1,0 +1,36 @@
+.title Form Demo
+.resolution 350px 650px
+.show-borders false
+
+grid main_grid
+	.rows 10px ?
+	.background-color asphalt
+
+	image top_image
+		.source top.png
+		.drag-window true
+	form main_form
+		.rows 100px ? 70px
+		.padding 20px
+
+		label _
+			.label Please fill the form below
+			.text-size 30
+			.font roboto-light
+			.text-color clouds
+
+		grid input_grid
+			.rows 4
+			.padding 50px 0px
+
+			form-text-input name-input
+				.label NAME
+				.placeholder Enter your name
+			form-text-input username-input
+				.label USERNAME
+				.placeholder Enter your username
+			form-text-input email-input
+				.label E-MAIL
+				.placeholder Enter your e-mail
+
+		form-validation-button

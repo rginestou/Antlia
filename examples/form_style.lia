@@ -1,0 +1,23 @@
+grid form-text-input
+	.rows 30% 70%
+	.padding 10px 0px
+
+	label label
+		!label label
+		.text-color clouds
+		.text-size 14
+		.font roboto-regular
+	text-input input
+		.text-color clouds
+		.text-size 25
+		!placeholder placeholder
+
+button form-validation-button
+	.label VALIDATE
+	.text-color clouds
+	.text-size 30
+	.font roboto-light
+	.released-color emerald
+	.hovered-color emerald
+	.pressed-color nephritis
+	.form-validation true
