@@ -10,12 +10,13 @@ GUI = Antlia("form_layout", "form_style")
 
 def onFormValidationHandler(form_values):
 	is_form_filled = True
+	print(form_values)
 	for field in form_values:
 		if form_values[field] == '':
 			# Value missing
 			is_form_filled = False
 			GUI.change(field, "underline-color", "alizarin")
-		else:
+		elif field.endswith("input"):
 			GUI.change(field, "underline-color", "peter-river")
 
 	if is_form_filled:

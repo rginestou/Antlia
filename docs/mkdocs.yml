@@ -9,4 +9,7 @@ pages:
     - Calculator: 'examples/calculator.md'
     - Music Player: 'examples/musicplayer.md'
     - Gallery: 'examples/gallery.md'
-  - Elements: 'elements.md'
+  - Elements:
+    - Grid: 'elements/grid.md'
+    - Form: 'elements/form.md'
+    - Other: 'elements/other.md'

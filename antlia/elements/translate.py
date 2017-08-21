@@ -13,7 +13,7 @@ def toArrayOfSizes(arg, length=None):
 
 	if array[0].isdigit():
 		# Number
-		n = int(arg)
+		n = int(array[0])
 		if len(array) == 1:
 			t = "%"
 			v = 1.0 / n

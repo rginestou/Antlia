@@ -20,17 +20,21 @@ grid main_grid
 			.text-color clouds
 
 		grid input_grid
-			.rows 4
+			.rows 4 80px
 			.padding 50px 0px
 
-			form-text-input name-input
+			form-text-input name_input
 				.label NAME
 				.placeholder Enter your name
-			form-text-input username-input
+			form-text-input username_input
 				.label USERNAME
 				.placeholder Enter your username
-			form-text-input email-input
+			form-text-input email_input
 				.label E-MAIL
 				.placeholder Enter your e-mail
 
+			form-check-box age
+				.label I'm above 20 years old
+
 		form-validation-button
+			.label VALIDATION

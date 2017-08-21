@@ -12,8 +12,11 @@ grid form-text-input
 		.text-size 25
 		!placeholder placeholder
 
+check-box form-check-box
+	.text-color clouds
+	.text-size 21
+
 button form-validation-button
-	.label VALIDATE
 	.text-color clouds
 	.text-size 30
 	.font roboto-light
