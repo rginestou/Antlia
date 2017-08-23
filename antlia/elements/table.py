@@ -9,6 +9,7 @@ from .grid import Grid
 from .dropdown import DropDown
 from .form import Form
 from .checkbox import CheckBox
+from .radio import Radio
 from .empty import Empty
 from .group import Group
 
@@ -22,6 +23,7 @@ EL_TABLE = {
 	"progress": Progress,
 	"slider": Slider,
 	"check-box": CheckBox,
+	"radio": Radio,
 	"drop-down": DropDown,
 	"group": Group,
 	"empty": Empty

@@ -159,6 +159,9 @@ class Antlia:
 
 		return file_path
 
+	def minimizeWindow(self):
+		self.renderer.minimizeWindow()
+
 	def isRunning(self):
 		return self.is_running
 
@@ -307,7 +310,7 @@ class Antlia:
 					self._callHandler(form_name, "validation", extra_params=fields)
 
 				# Need to be rebuilt
-				el_indices_to_rebuild.append(i)
+				el_indices_to_rebuild.append(element_index)
 		elif event.type == sdl2.SDL_MOUSEBUTTONUP:
 			self.mouse.left_click = False
 			for i,_,_ in self.hovered_indices:
@@ -338,7 +341,7 @@ class Antlia:
 
 		# Rebuild if necessary
 		if len(el_indices_to_rebuild) > 0:
-			for i in el_indices_to_rebuild:
+			for i in list(set(el_indices_to_rebuild)):
 				self._buildElement(i)
 
 	def _findHoveredElements(self, X, Y):

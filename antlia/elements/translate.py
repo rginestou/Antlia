@@ -11,48 +11,48 @@ def toArrayOfSizes(arg, length=None):
 		raise Exception("Empty value"); return
 	array = arg.split(" ")
 
-	if array[0].isdigit():
-		# Number
-		n = int(array[0])
-		if len(array) == 1:
-			t = "%"
-			v = 1.0 / n
-		elif len(array) == 2:
-			if array[1].endswith("%"):
-				# Percentage
-				t = "%"
-				v = float(array[1][:-1]) / 100.0
-			elif array[1].endswith("px"):
-				# Pixels
-				t = "px"
-				v = int(array[1][:-2])
-		typ = [t] * n
-		values = [v] * n
-	else:
-		# Look for ?
-		typ = []
-		values = []
-		unknown = []
-		sum_px = 0
-		for i, v in enumerate(array):
-			if v.endswith("%"):
-				# Percentage
+	typ = []
+	values = []
+	unknown = []
+	sum_px = 0
+	multiple = 1
+	j = 0
+	for i, v in enumerate(array):
+		if v.isdigit():
+			# Number
+			n = int(v)
+			if i == len(array) - 1:
+				typ += ["%"] * n
+				values += [1.0 / n] * n
+			else:
+				multiple = n
+		elif v.endswith("%"):
+			# Percentage
+			for m in range(multiple):
 				typ.append("%")
 				values.append(float(v[:-1]) / 100.0)
-			elif v.endswith("px"):
-				# Pixels
+				j += 1
+			multiple = 1
+		elif v.endswith("px"):
+			# Pixels
+			for m in range(multiple):
 				typ.append("px")
 				values.append(int(v[:-2]))
 				sum_px += int(v[:-2])
-			elif v == "?":
-				if length is None:
-					raise Exception("Can't use '?' in this context"); return
-				else:
-					unknown.append(i)
+				j += 1
+			multiple = 1
+		elif v == "?":
+			if length is None:
+				raise Exception("Can't use '?' in this context"); return
+			else:
+				for m in range(multiple):
+					unknown.append(j)
 					typ.append("px")
 					values.append(None)
-			else:
-				raise Exception("The specified value has no known format"); return
+					j += 1
+				multiple = 1
+		else:
+			raise Exception("The specified value has no known format"); return
 
 		# Fill ? values
 		if length is not None and len(unknown) > 0:

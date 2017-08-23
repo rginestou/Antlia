@@ -85,6 +85,9 @@ class Renderer:
 		# look for events
 		self._loopForEvents()
 
+	def minimizeWindow(self):
+		sdl2.SDL_MinimizeWindow(self.window)
+
 	def update(self, layout_elements, layout_rects):
 		self.layout_elements = layout_elements
 		self.layout_rects = layout_rects

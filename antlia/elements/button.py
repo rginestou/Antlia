@@ -45,7 +45,6 @@ class Button(Element):
 		elif text_align == "right":
 			x = 1.0
 
-
 		### Bluid blueprint ###
 		self._clearBlueprint()
 
@@ -66,7 +65,8 @@ class Button(Element):
 		return True
 
 	def onHover(self, local_x, local_y):
-		self.setAttribute("state", "hovered")
+		if self.attributes["state"] != "pressed":
+			self.setAttribute("state", "hovered")
 		return True
 
 	def onOut(self):

@@ -3,15 +3,27 @@
 .show-borders false
 
 grid main_grid
-	.rows 10px ?
+	.rows 10px 30px ?
 	.background-color asphalt
 
 	image top_image
 		.source top.png
 		.drag-window true
+
+	grid _
+		.cols ? 30px 30px
+
+		empty _
+		window-button minimize_button
+			.label #remove#
+			.pressed-color wet-asphalt
+		window-button close_button
+			.label #close#
+			.pressed-color alizarin
+
 	form main_form
-		.rows 100px ? 70px
-		.padding 20px
+		.rows 70px ? 70px
+		.padding 0px 30px 30px 30px
 
 		label _
 			.label Please fill the form below
@@ -20,18 +32,30 @@ grid main_grid
 			.text-color clouds
 
 		grid input_grid
-			.rows 4 80px
-			.padding 50px 0px
+			.rows 2 80px 140px 80px
+			.padding 20px 0px
 
 			form-text-input name_input
 				.label NAME
 				.placeholder Enter your name
-			form-text-input username_input
-				.label USERNAME
-				.placeholder Enter your username
 			form-text-input email_input
 				.label E-MAIL
 				.placeholder Enter your e-mail
+
+			grid favorite_color_grid
+				.rows 4
+
+				form-label pick_color_label
+					.label CHOOSE A COLOR
+				form-radio favorite_color_red
+					.scope favorite_color
+					.label Red
+				form-radio favorite_color_green
+					.scope favorite_color
+					.label Green
+				form-radio favorite_color_blue
+					.scope favorite_color
+					.label Blue
 
 			form-check-box age
 				.label I'm above 20 years old

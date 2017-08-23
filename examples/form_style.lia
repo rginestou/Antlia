@@ -1,12 +1,14 @@
+label form-label
+	.text-color clouds
+	.text-size 14
+	.font roboto-regular
+
 grid form-text-input
 	.rows 30% 70%
 	.padding 10px 0px
 
-	label label
+	form-label label
 		!label label
-		.text-color clouds
-		.text-size 14
-		.font roboto-regular
 	text-input input
 		.text-color clouds
 		.text-size 25
@@ -15,6 +17,12 @@ grid form-text-input
 check-box form-check-box
 	.text-color clouds
 	.text-size 21
+	.font roboto-light
+
+radio form-radio
+	.text-color clouds
+	.text-size 21
+	.font roboto-light
 
 button form-validation-button
 	.text-color clouds
@@ -24,3 +32,9 @@ button form-validation-button
 	.hovered-color emerald
 	.pressed-color nephritis
 	.form-validation true
+
+button window-button
+	.text-color clouds
+	.text-size 25
+	.released-color asphalt
+	.hovered-color asphalt

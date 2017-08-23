@@ -10,7 +10,7 @@ from pygame import mixer
 # Init music player
 mixer.init()
 
-duration = 0
+duration = 1
 playing = False
 song_loaded = False
 is_running = True
@@ -108,16 +108,17 @@ GUI.start()
 while not GUI.getUserInfo().want_to_stop and is_running:
 	if song_loaded:
 		# Update the timer
-		sec_passed = mixer.music.get_pos() // 1000
+		ms_passed = mixer.music.get_pos()
+		sec_passed = ms_passed // 1000
 		elapsed = format(sec_passed // 60, '02') + ":" +\
 					format(sec_passed % 60, '02')
 
 		GUI.change("time_label", "label", elapsed)
 		GUI.change("time_progress", "completed",
-					float(sec_passed) / duration * 100.0)
+					float(ms_passed) / duration / 10.0)
 
 	# Give some rest to the CPU
-	ti.sleep(0.1)
+	ti.sleep(0.01)
 
 # Destroy the GUI properly
 GUI.quit()

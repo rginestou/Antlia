@@ -9,7 +9,8 @@ The `Form` element has the same attributes as the [grid](grid).
 These are the only elements and their attributes that will be listed in the fields of a form.
 
 	text-input (label)
-
+	check-box (status)
+	radio (status)
 
 ## Usage
 
