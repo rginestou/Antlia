@@ -13,3 +13,6 @@ pages:
     - Grid: 'elements/grid.md'
     - Form: 'elements/form.md'
     - Other: 'elements/other.md'
+  - Layout:
+    - Grid: 'layout/colors.md'
+    - Form: 'layout/icons.md'
