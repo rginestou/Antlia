@@ -14,5 +14,5 @@ pages:
     - Form: 'elements/form.md'
     - Other: 'elements/other.md'
   - Layout:
-    - Grid: 'layout/colors.md'
-    - Form: 'layout/icons.md'
+    - Colors: 'layout/colors.md'
+    - Icons: 'layout/icons.md'
