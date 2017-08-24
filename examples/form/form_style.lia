@@ -37,4 +37,3 @@ button window-button
 	.text-color clouds
 	.text-size 25
 	.released-color asphalt
-	.hovered-color asphalt
