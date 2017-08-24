@@ -54,6 +54,7 @@ class Antlia:
 		self.layout_table = self.parser.getLayoutTable()
 		self.layout_rects = None
 		self.validation_ids = {}
+		self.radio_scopes = {}
 
 		# Handlers
 		self.handlers = self.parser.getHandlers()
@@ -172,6 +173,7 @@ class Antlia:
 		"""
 		# Update validation ids
 		self.validation_ids = self.parser.buildFormValidation()
+		self.radio_scopes = self.parser.buildRadioScope()
 
 		self.renderer.update(self.layout_elements, self.layout_rects)
 
@@ -308,6 +310,14 @@ class Antlia:
 					form_name = self.layout_elements[valid_form_index].name
 					fields = self.parser.buildFormFields(valid_form_index)
 					self._callHandler(form_name, "validation", extra_params=fields)
+
+				# Radio
+				if el.type == "radio":
+					radio_indices = self.radio_scopes[el.getAttribute("scope")]
+					for ri in radio_indices:
+						el_indices_to_rebuild.append(ri)
+						self.layout_elements[ri].setAttribute("state", "unchecked")
+					self.layout_elements[element_index].setAttribute("state", "checked")
 
 				# Need to be rebuilt
 				el_indices_to_rebuild.append(element_index)

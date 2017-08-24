@@ -308,6 +308,23 @@ class Parser:
 
 		return form_validation
 
+	def buildRadioScope(self):
+		"""
+		By reading the layout tree, fetch the different scopes
+		of the radios.
+		"""
+		radio_scopes = {}
+		def _aux(element_index):
+			element = self.layout_elements[element_index]
+			if element.type == "radio":
+				radio_scopes.setdefault(element.getAttribute("scope"), []).append(element_index)
+
+			for child_index in self.layout_tree[element_index]:
+				_aux(child_index)
+		_aux(0)
+
+		return radio_scopes
+
 	def buildFormFields(self, form_index):
 		"""
 		Given the index of a form, builds a dictionnary of all the informations

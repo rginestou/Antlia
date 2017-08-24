@@ -31,5 +31,6 @@ EL_TABLE = {
 
 FORM_TABLE = {
 	"text-input": "label",
-	"check-box": "state"
+	"check-box": "state",
+	"radio": "state"
 }
