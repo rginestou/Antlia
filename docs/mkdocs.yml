@@ -7,6 +7,7 @@ pages:
   - Examples:
     - Hello World: 'examples/helloworld.md'
     - Calculator: 'examples/calculator.md'
+    - Form: 'examples/form.md'
     - Music Player: 'examples/musicplayer.md'
     - Gallery: 'examples/gallery.md'
   - Elements:

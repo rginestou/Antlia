@@ -16,10 +16,12 @@ grid main_grid
 		empty _
 		window-button minimize_button
 			.label #remove#
+			.hovered-color asphalt
 			.pressed-color wet-asphalt
 		window-button close_button
 			.label #close#
-			.pressed-color alizarin
+			.hovered-color alizarin
+			.pressed-color pomegranate
 
 	form main_form
 		.rows 70px ? 70px
@@ -50,6 +52,7 @@ grid main_grid
 				form-radio favorite_color_red
 					.scope favorite_color
 					.label Red
+					.state checked
 				form-radio favorite_color_green
 					.scope favorite_color
 					.label Green
