@@ -1,6 +1,6 @@
 # Local testing
 import sys, os
-sys.path.insert(1, os.path.join(sys.path[0], '..'))
+sys.path.insert(1, os.path.join(sys.path[0], '../..'))
 
 from antlia import *
 import time as ti
